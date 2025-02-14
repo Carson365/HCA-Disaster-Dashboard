@@ -1,0 +1,217 @@
+﻿@using static AISComp.Components.Pages.LoadMap
+@inject IJSRuntime jsRuntime
+
+
+
+<div class="menubar" style="grid-template-rows: @(gridlines);">
+
+	@if (loaded)
+	{
+
+		@for (int i = 1; i < 22; i++)
+		{
+			// i/2-1 is every second element starting after the first.
+			// using it to index where the filters are added to the grid.
+			if (i > 0 && i % 2 == 0 && i / 2 - 1 < options.Keys.Count)
+			{
+				string filter = options.Keys.ElementAt(i / 2 - 1);
+				<div style="overflow: hidden; pointer-events: auto; background: linear-gradient(90deg, var(--myColor1) 20%, var(--myColor2) 90%);" class="it @(filter.Replace(" ", ""))" @onclick="() => updateSelected(filter)">
+					<div style="height: calc(1/21*100vh); display:flex; align-items: center;">&emsp;@filter</div>
+					<div class="options@(filter.Replace(" ",""))" style="height: calc(6/21*100vh);">
+						@* THIS IS WHERE THE FILTERING TAKES PLACE*@
+						<div style="height: calc(1/6*100%); display: flex; padding-left: 10%;" @onclick:stopPropagation="true" >
+							<input class="searchbox" type="text" @oninput="FilterChangedAsync" placeholder="Search by @filter" />
+						</div>
+
+						<div style="height: calc(5/6*100%); align-items: center; overflow-y:auto; /* direction: rtl; */">
+							@foreach (var val in filters[options[filter]])
+							{
+								@* @: <input type="checkbox" style="height: calc(1/6*100%); display:flex; align-items: center; direction: ltr;">@val.Item1</input> *@
+								@* 								<InputCheckbox @bind-Value="placeHolder" style="height: calc(1/6*100%); display:flex; align-items: center; direction: ltr;">&emsp;&emsp;@val.ShortName</InputCheckbox>
+ *@								<div style="height: calc(1/6*100%); display:flex; align-items: center; direction: ltr;">&emsp;&emsp;@val.ShortName</div>
+
+							}
+						</div>
+					</div>
+				</div>
+			}
+			else
+			{
+				<div class="it inactive @i"> </div>
+			}
+		}
+	}
+
+</div>
+
+
+@foreach (string f in options.Keys)
+{
+	<style>
+		@if (index == -1 || f != options.Keys.ElementAt(index))
+		{
+			@: .it@($".{f.Replace(" ", "")}") { 	--myColor1: rgba(200,220,230, 90%); --myColor2: rgba(255,255,255, 0%); width: 100%; grid-template-rows: 1fr 0fr;}
+		}
+		else
+		{
+			@: .it@($".{f.Replace(" ", "")}") { 	--myColor1: rgba(200,220,230, 90%); --myColor2: rgba(200,220,230, 90%); width: 95%; grid-template-rows: 1fr 6fr; }
+		}
+	</style>
+}
+
+
+
+
+
+
+
+
+
+
+
+@code
+{
+	protected override Task OnAfterRenderAsync(bool first)
+	{
+		if (first)
+		{
+			foreach (string f in options.Values)
+			{
+				string categoryToAdd = f;
+				List<Filters> abc = new();
+
+				if (f.Equals("SettingsManual"))
+				{
+					// Settings get added separately-
+				}
+				else if (f.Equals("FacTypeManual"))
+				{
+					abc.Add(new Filters { Toggled = false, ShortName = "Supply Chain Center", LongName = String.Empty });
+					abc.Add(new Filters { Toggled = false, ShortName = "Shared Service Center", LongName = String.Empty });
+					abc.Add(new Filters { Toggled = false, ShortName = "Division Office", LongName = String.Empty });
+					abc.Add(new Filters { Toggled = false, ShortName = "Hospital", LongName = String.Empty });
+				}
+				else
+				{
+					// if filters[index] == contains an underscore (_) need to separate into filters for each item separated by it
+					// (i.e if the filter is "ABC_DEF" need to get the properties ABC and DEF)
+					string[] searchKeys = f.Split(" ");
+					abc = locations.Select(x => new Filters
+						{
+							Toggled = false,
+							ShortName = x.GetType().GetProperty(searchKeys[0])?.GetValue(x)?.ToString() ?? string.Empty,
+							LongName = (searchKeys.ElementAtOrDefault(1) is null) ? string.Empty : x.GetType().GetProperty(searchKeys[1])?.GetValue(x)?.ToString() ?? string.Empty
+
+						}).ToList();
+				}
+
+				// Convert abbreviations to full names (keep old values in a tuple with the new value for the filter))
+				if (f == options["State"])
+				{
+					abc = new(abc.Select(x => new Filters { Toggled = x.Toggled, ShortName = stateNames.First(y => y.Item1 == x.ShortName).Item2, LongName = x.LongName }));
+				}
+				else if (f == options["Time Zone"])
+				{
+					abc = new(abc.Select(x => new Filters { Toggled = x.Toggled, ShortName = timeZoneNames.FirstOrDefault(y => y.Item1?.ToLower() == x.ShortName).Item2, LongName = x.ShortName.ToUpper() }));
+				}
+
+				// Only add filgters with distinct values for their ShortName property
+				filters.Add(categoryToAdd, abc.GroupBy(x => x.ShortName).Select(x => x.First()).ToList());
+			}
+
+		}
+		loaded = true;
+		StateHasChanged();
+		return Task.CompletedTask;
+	}
+
+		static HashSet<(string, string)> stateNames = new()
+		{
+			("AL","Alabama"), ("AK","Alaska"), ("AR","Arkansas"), ("AZ","Arizona"), ("CA","California"),
+			("CO","Colorado"), ("CT","Connecticut"), ("DE","Delaware"), ("FL","Florida"), ("GA","Georgia"),
+			("HI","Hawaii"), ("ID","Idaho"),("IL","Illinois"),("IN","Indiana"), ("IA","Iowa"),
+			("KS","Kansas"), ("KY","Kentucky"), ("LA","Louisiana"), ("ME","Maine"), ("MD","Maryland"),
+			("MA","Massachusetts"), ("MI","Michigan"), ("MN","Minnesota"), ("MS","Mississippi"), ("MO","Missouri"),
+			("MT","Montana"), ("NE","Nebraska"), ("NV","Nevada"), ("NH","New Hampshire"), ("NJ","New Jersey"),
+			("NM","New Mexico"), ("NY","New York"), ("NC","North Carolina"), ("ND","North Dakota"), ("OH","Ohio"),
+			("OK","Oklahoma"), ("OR","Oregon"), ("PA","Pennsylvania"), ("RI","Rhode Island"), ("SC","South Carolina"),
+			("SD","South Dakota"), ("TN","Tennessee"), ("TX","Texas"), ("UT","Utah"), ("VT","Vermont"),
+			("VA","Virginia"), ("WA","Washington"), ("WV","West Virginia"), ("WI","Wisconsin"), ("WY","Wyoming")
+		};
+		static HashSet<(string, string)> timeZoneNames = new()
+		{
+			("EST","Eastern Standard Time"),
+			("CST","Central Standard Time"),
+			("MST","Mountain Standard Time"),
+			("PST","Pacific Standard Time"),
+			("AKST","Alaska Standard Time")
+		};
+		static Dictionary<string, string> options = new() {
+					["State"] = "FacState",
+				["Time Zone"] = "TimeZone",
+			["Facility Type"] = "FacTypeManual",
+				 ["EMR Name"] = "EmrName EmrMnem",
+				 ["Division"] = "DivName DivMnem",
+				  ["Network"] = "NetworkMeditech",
+				 ["Settings"] = "SettingsManual"
+		};
+
+		class Filters
+		{
+			public bool Toggled { get; set; }
+			public required string ShortName { get; set; }
+			public required string LongName { get; set; }
+		}
+
+		Dictionary<string, List<Filters>> filters = new();
+
+		public int index = -1;
+
+		bool ran = false;
+
+
+		@* bool placeHolder = false; *@
+		bool loaded = false;
+
+
+		private string gridlines = "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
+
+		private async void FilterChangedAsync(ChangeEventArgs args)
+		{
+			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
+
+			string? input = args.Value?.ToString();
+			if (input != null)
+			{
+				if (input.Length > 1)
+				{
+					ran = true;
+					_ = jsModule.InvokeVoidAsync("filterLocations", locations.Where(i => i.FacState.ToLower().Contains(input.ToLower())));
+
+				}
+				else if (input.Length == 0 && ran)
+				{
+					ran = false;
+					Console.WriteLine(locations.Where(x=>true).Count());
+					await jsModule.InvokeVoidAsync("filterLocations", locations.Where(x=>true));
+				}
+			}
+		}
+
+		private void updateSelected(string filter)
+		{
+			if (index == -1 || options.Keys.ElementAt(index) != filter) index = options.Keys.ToList().IndexOf(filter);
+			else index = -1;
+
+			gridlines = "";
+			foreach (string f in options.Keys)
+			{
+				if (index != -1 && f == filter) gridlines += "1fr 7fr ";
+				else gridlines += "1fr 1fr ";
+			}
+			if (index == -1) gridlines += "1fr 1fr 1fr 1fr 1fr 1fr 1fr";
+			else gridlines += "1fr 0fr 0fr 0fr 0fr 0fr 0fr";
+
+			StateHasChanged();
+		}
+	}

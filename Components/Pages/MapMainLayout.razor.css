@@ -1,0 +1,100 @@
+.page {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1;
+}
+
+.sidebar {
+/*	width: 200px;
+*/	height: 100vh;
+	position: fixed;
+/*	top: 0;
+	float: left;*/
+}
+
+.top-row {
+	float: right;
+	background: green;/*linear-gradient(90deg, rgba(255,255,255,0%) 0%, rgba(200,220,230, 70%));*/
+	justify-content: flex-end;
+	height: calc(calc(1/21)*100%);
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+	.top-row ::deep a, .top-row ::deep .btn-link {
+		white-space: nowrap;
+		margin-left: 1.5rem;
+		text-decoration: none;
+	}
+
+		.top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+			text-decoration: underline;
+		}
+
+		.top-row ::deep a:first-child {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+
+
+.page {
+	flex-direction: row;
+}
+
+.top-row {
+	position: sticky;
+	top: 0;
+}
+
+	.top-row.auth ::deep a:first-child {
+		flex: 1;
+		text-align: right;
+		width: 0;
+	}
+
+
+/*#map {
+	background-color: lightgray;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}*/
+
+
+.leaflet-zoom-anim
+.leaflet-zoom-animated {
+	transition-timing-function: linear;
+	transition-duration: 100ms;
+}
+
+#key{
+	display: flex;
+position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 30px;
+	background-color: rgba(200,220,230, 80%);
+	z-index: 50;
+}
+
+#red{
+	color: red;
+}
+#yellow{
+	color: yellow;
+}
+#green{
+	color: green;
+}
+#blue{
+	color: blue;
+}
+
+

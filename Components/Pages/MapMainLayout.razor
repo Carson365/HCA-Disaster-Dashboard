@@ -1,0 +1,58 @@
+﻿@page "/"
+@inject IJSRuntime jsRuntime
+@using AISComp.Tools
+
+<div class="page" style="height:100vh; width: 100vw;">
+		<div class="sidebar" style="pointer-events: none; z-index: 200;">
+		<MenuBar />
+
+	</div>
+
+	<main style="height:100%; width:100%;">
+
+		<LoadMap />
+		<div id="key">
+			<div>&emsp;</div>
+			<div id="red">Hospital</div>
+			<div>&emsp;</div>
+			<div id="yellow">Hub Site</div>
+			<div>&emsp;</div>
+			<div id="green">Shared Service Center</div>
+			<div>&emsp;</div>
+			<div id="blue">Supply Chain Center</div>
+			<div>&emsp;</div>
+			<NavLink href="view" class="underline"> View </NavLink>
+			<div>&emsp;</div>
+			<NavLink href="org" class="underline"> Org </NavLink>
+			<div>&emsp;</div>
+			<NavLink href="" class="underline"> Home </NavLink>
+		</div>
+	</main>
+</div>
+
+
+@code {
+
+	public static MapMainLayout? Instance { get; private set; }
+
+	protected override void OnInitialized()
+	{
+		Instance = this;
+	}
+
+	[JSInvokable("InvokeIt")]
+	public async Task InvokeIt(Location input)
+	{
+		await InvokeAsync(() =>
+			{
+				selectedLocation = input;
+				StateHasChanged();
+				Console.WriteLine("ran");
+			});
+	}
+
+	public float lat = 0;
+	public float lon = 0;
+
+	public Location? selectedLocation;
+}

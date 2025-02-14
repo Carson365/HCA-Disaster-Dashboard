@@ -1,0 +1,102 @@
+﻿@page "/org"
+@using AISComp.Tools
+@using AISComp.Components.Shared
+@inject EmployeeService employeeService
+@inject IJSRuntime JS
+
+<PageTitle>Home</PageTitle>
+
+
+<OrgMainLayout>
+	<div class="topFade"></div>
+
+	<form>
+		<input style="margin-top: 1em;" type="text" placeholder="Search an ID" @bind="employeeService.SearchId" @bind:event="oninput" @bind:after="SearchEmployee" />
+	</form>
+	<form>
+		<input type="text" placeholder="Search a Name" @bind="employeeService.SearchName" @bind:event="oninput" @bind:after="SearchEmployee" />
+	</form>
+
+	<body>
+		<div class="container">
+			@if (employeeService.IsLoading)
+			{
+				<p>Loading employees, please wait...</p>
+			}
+			else if (employeeService.SearchResults != null && visibleCount != 0)
+			{
+				foreach (Employee item in employeeService.SearchResults.Take(visibleCount))
+				{
+					<div class="box">
+						<EmployeeCard Employee="@item"></EmployeeCard>
+						@* <a href="view" @onclick="() => EmployeeService.selectedEmployee = item" class="underline">Expand</a> *@
+
+						<div class="nav-item">
+							<NavLink class="nav-link" href="view" @onclick="() => employeeService.SelectedEmployee = item">
+								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> View
+							</NavLink>
+						</div>
+					</div>
+				}
+				if (employeeService.SearchResults.Count == 0)
+				{
+					<p>No results</p>
+				}
+				if (employeeService.SearchResults.Count > 100 && employeeService.SearchResults.Count > visibleCount)
+				{
+					<div class="box" style="width:calc(90% + 30px); height:10%;">
+						<center>
+							Showing @Math.Min(employeeService.SearchResults.Count, visibleCount) of @employeeService.SearchResults.Count matching employees.<br />
+							<a class="underline" @onclick="() => visibleCount += 100">Click here to see more</a>
+						</center>
+					</div>
+				}
+			}
+		</div>
+	</body>
+
+	<div class="bottomFade"></div>
+
+</OrgMainLayout>
+
+
+@code {
+	private int visibleCount;
+
+	protected override Task OnInitializedAsync()
+	{
+		_ = LoadEmployeesInBackground();
+		return Task.CompletedTask;
+	}
+
+	private async Task LoadEmployeesInBackground()
+	{
+		Console.WriteLine("Org: LoadEmployeesInBackground");
+		await employeeService.LoadEmployeesAsync();
+		refreshSearch();
+	}
+
+	private void refreshSearch()
+	{
+		if (!string.IsNullOrEmpty(employeeService.SearchId) || !string.IsNullOrEmpty(employeeService.SearchName)) SearchEmployee();
+		StateHasChanged();
+	}
+
+	protected override Task OnAfterRenderAsync(bool first)
+	{
+		Console.WriteLine("here");
+		SearchEmployee();
+		StateHasChanged();
+		return Task.CompletedTask;
+		////////////////// This runs every tick which is horribly inefficient. Need to find a better option.
+	}
+
+	private void SearchEmployee()
+	{
+		Console.WriteLine("ran");
+		visibleCount = 100; // Reset visibleCount whenever a new search is made.
+		employeeService.SearchEmployees();
+
+		if (string.IsNullOrEmpty(employeeService.SearchId) && string.IsNullOrEmpty(employeeService.SearchName)) visibleCount = 0;
+	}
+}

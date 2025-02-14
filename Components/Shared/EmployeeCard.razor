@@ -1,0 +1,13 @@
+﻿@using AISComp.Tools
+
+
+<b style="font-size:0.9em;">@employee.Name</b> (@employee.ID)
+<br />
+<p style="font-size:0.75em; margin-bottom:0.5em;">@employee.Email</p>
+<text style="font-size:0.9em;">@employee.Position</text>
+<br />
+<span class="oi oi-map-marker" aria-hidden="true" style="font-size:0.9em;"></span> <text style="font-size:0.85em;">@EmployeeService.locationNames[employee.Location]</text>
+
+@code {
+    [Parameter] public Employee employee { get; set; } = default!;
+}

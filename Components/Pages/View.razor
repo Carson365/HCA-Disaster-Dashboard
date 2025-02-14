@@ -1,0 +1,81 @@
+﻿@page "/view"
+@using AISComp.Tools
+@using AISComp.Components.Shared
+@inject EmployeeService employeeService
+
+<PageTitle>View</PageTitle>
+
+<OrgMainLayout>
+<main>
+	@if (!employeeService.IsLoading)
+	{
+		<!-- Manager (Up) -->
+		<div class="container">
+@* 			<div class="leftFade"></div> *@
+			<div class="leftSpacer"></div>
+			@if (employeeService.SelectedEmployee?.Up != null)
+			{
+				<div class="box up">
+					<EmployeeCard Employee="@employeeService.SelectedEmployee.Up" />
+
+					<div class="nav-item">
+						<NavLink class="custom" @onclick="() => employeeService.SelectedEmployee = employeeService.SelectedEmployee.Up">
+							<span class="oi oi-magnifying-glass" aria-hidden="true"></span> &nbsp Expand
+						</NavLink>
+					</div>
+				</div>
+			}
+
+		</div>
+		<!-- Selected Employee and Siblings (Up.Downs) -->
+		<div class="container">
+			<div class="leftFade"></div>
+			<div class="leftSpacer"></div>
+			<div class="box primary">
+				<EmployeeCard Employee="@employeeService.SelectedEmployee" />
+			</div>
+
+			@if (employeeService.SelectedEmployee?.Up?.Downs != null)
+			{
+				foreach (var item in employeeService.SelectedEmployee.Up.Downs.Where(e => e != employeeService.SelectedEmployee))
+				{
+					<div class="box subprimary">
+						<EmployeeCard Employee="@item" />
+						<div class="nav-item">
+							<NavLink class="custom" @onclick="() => employeeService.SelectedEmployee = item">
+								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> &nbsp Expand
+							</NavLink>
+						</div>
+					</div>
+				}
+			}
+		</div>
+		<!-- Subordinates (Downs) -->
+		<div class="container">
+			<div class="leftFade"></div>
+			<div class="leftSpacer"></div>
+			@if (employeeService.SelectedEmployee?.Downs != null)
+			{
+				@foreach (var item in employeeService.SelectedEmployee.Downs)
+				{
+					<div class="box down">
+						<EmployeeCard Employee="@item" />
+						<div class="nav-item">
+							<NavLink class="custom" @onclick="() => employeeService.SelectedEmployee = item">
+								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> &nbsp Expand
+							</NavLink>
+						</div>
+					</div>
+				}
+			}
+		</div>
+	}
+</main>
+</OrgMainLayout>
+
+@code {
+	protected override void OnInitialized()
+	{
+		employeeService.OnEmployeesLoaded += () => StateHasChanged();
+	}
+}

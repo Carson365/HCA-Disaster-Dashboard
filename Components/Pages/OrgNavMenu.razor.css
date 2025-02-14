@@ -1,0 +1,62 @@
+.top-row {
+	height: 3.5em;
+	background-color: rgba(255,255,255,0.6);
+	width: 15vw;
+	mix-blend-mode: lighten;
+	overflow:visible;
+}
+
+.bottom-line {
+	height: 0.25em;
+	width: 15vw;
+	background-color: rgba(255,255,255,0.8);
+}
+
+.navbar-brand {
+	font-size: 1.5rem;
+	color: #000;
+}
+	.navbar-brand:hover {
+		color: #FFF;
+	}
+
+.nav-body {
+	background-color: rgba(255, 255, 255, 0.3);
+	mix-blend-mode: lighten;
+	height: calc(100vh - 3.75em);
+	min-height: calc(100vh - 3.75em);
+	width: 15vw;
+}
+
+.oi {
+	width: 2rem;
+	font-size: 1.1rem;
+	vertical-align: text-top;
+	top: -2px;
+}
+
+.nav-item {
+	font-size: 1em;
+	margin-top: 1em;
+}
+
+	.nav-item ::deep a {
+		color: #FFF;
+		border-radius: 4px;
+		height: 3rem;
+		display: flex;
+		align-items: center;
+		line-height: 3rem;
+		background-color: rgba(255,255,255,0.3);
+		mix-blend-mode: lighten;
+	}
+
+	.nav-item.nav-item ::deep a.active {
+		background-color: rgba(255,255,255,0.9);
+		color: #000;
+	}
+
+	.nav-item ::deep a:hover {
+		background-color: rgba(255,255,255,0.6);
+		color: #000;
+	}
