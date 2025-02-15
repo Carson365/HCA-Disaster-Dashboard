@@ -35,17 +35,12 @@
 
 	public static MapMainLayout? Instance { get; private set; }
 
-	protected override void OnInitialized()
-	{
-		Instance = this;
-	}
-
 	[JSInvokable("InvokeIt")]
 	public async Task InvokeIt(Location input)
 	{
 		await InvokeAsync(() =>
 			{
-				selectedLocation = input;
+				CSVLoader.SelectedLocation = input;
 				StateHasChanged();
 				Console.WriteLine("ran");
 			});
@@ -54,5 +49,9 @@
 	public float lat = 0;
 	public float lon = 0;
 
-	public Location? selectedLocation;
+	protected override void OnInitialized()
+	{
+		Instance = this;
+		CSVLoader.SignalLoaded();
+	}
 }

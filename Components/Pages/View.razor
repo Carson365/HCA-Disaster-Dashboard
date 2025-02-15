@@ -76,6 +76,15 @@
 @code {
 	protected override void OnInitialized()
 	{
-		CSVLoader.OnEmployeesLoaded += () => StateHasChanged();
+		CSVLoader.OnLoaded += () => StateHasChanged();
+		// _ = LoadEmployeesInBackground();
+		// return Task.CompletedTask;
 	}
+
+	// private async Task LoadEmployeesInBackground()
+	// {
+	// 	await CSVLoader.LoadEmployeesAsync();
+	// 	// refreshSearch();
+	// 	StateHasChanged();
+	// }
 }

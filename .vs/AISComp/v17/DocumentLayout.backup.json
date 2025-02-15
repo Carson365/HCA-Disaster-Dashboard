@@ -3,28 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\carso\\Desktop\\AIS Git\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\org.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\org.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\view.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\view.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\mapmainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\mapmainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\shared\\employeecard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\shared\\employeecard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\tree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\tree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\view.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\view.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\org.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\org.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\runmapthings.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\runmapthings.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\shared\\employeecard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\shared\\employeecard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -41,14 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\menubar.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\menubar.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\mapmainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\mapmainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,24 +58,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
+              "Title": "Org.razor",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Org.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Org.razor",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Org.razor",
+              "RelativeToolTip": "Components\\Pages\\Org.razor",
+              "ViewState": "AgIAADMAAAAAAAAAAAAtwEMAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-14T21:58:18.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "View.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\View.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\View.razor",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\View.razor",
               "RelativeToolTip": "Components\\Pages\\View.razor",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAE4AAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAtwE4AAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-15T08:12:34.547Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 1,
+              "Title": "CSVLoader.cs",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
+              "RelativeDocumentMoniker": "Tools\\CSVLoader.cs",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
+              "RelativeToolTip": "Tools\\CSVLoader.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAmwA0AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-14T21:59:10.742Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "departments.csv",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Data\\departments.csv",
               "RelativeDocumentMoniker": "Data\\departments.csv",
@@ -83,12 +109,11 @@
               "RelativeToolTip": "Data\\departments.csv",
               "ViewState": "AgIAAMoEAAAAAAAAAAAAAPkEAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002120|",
-              "WhenOpened": "2025-02-15T07:50:17.33Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-15T07:50:17.33Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "EmployeeCard.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Shared\\EmployeeCard.razor",
               "RelativeDocumentMoniker": "Components\\Shared\\EmployeeCard.razor",
@@ -101,20 +126,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CSVLoader.cs",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
-              "RelativeDocumentMoniker": "Tools\\CSVLoader.cs",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
-              "RelativeToolTip": "Tools\\CSVLoader.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-14T21:59:10.742Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Fields.cs",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\Fields.cs",
               "RelativeDocumentMoniker": "Tools\\Fields.cs",
@@ -122,12 +134,11 @@
               "RelativeToolTip": "Tools\\Fields.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAkwBgAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-14T22:25:14.954Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-14T22:25:14.954Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -135,64 +146,50 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-14T22:08:01.118Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-14T22:08:01.118Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Org.razor",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Org.razor",
-              "RelativeDocumentMoniker": "Components\\Pages\\Org.razor",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Org.razor",
-              "RelativeToolTip": "Components\\Pages\\Org.razor",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAAEMAAAA5AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-14T21:58:18.551Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "Tree.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Tree.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\Tree.razor",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Tree.razor",
               "RelativeToolTip": "Components\\Pages\\Tree.razor",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAAAGEAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAtwEoAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-14T21:58:29.529Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "runMapThings.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\runMapThings.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\runMapThings.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\runMapThings.js",
               "RelativeToolTip": "wwwroot\\js\\runMapThings.js",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAkwFAAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-02-14T02:22:47.461Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 5,
               "Title": "LoadMap.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\LoadMap.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\LoadMap.razor",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\LoadMap.razor",
               "RelativeToolTip": "Components\\Pages\\LoadMap.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-14T02:17:33.746Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "MenuBar.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\MenuBar.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\MenuBar.razor",
@@ -205,15 +202,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 0,
               "Title": "MapMainLayout.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\MapMainLayout.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\MapMainLayout.razor",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\MapMainLayout.razor",
               "RelativeToolTip": "Components\\Pages\\MapMainLayout.razor",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAtwEAAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-14T02:15:19.458Z"
+              "WhenOpened": "2025-02-14T02:15:19.458Z",
+              "EditorCaption": ""
             }
           ]
         }

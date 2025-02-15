@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime jsRuntime
 @using AISComp.Tools
 @using FileHelpers;
-@inject CSVLoader data
+@* @inject CSVLoader data *@
 
 
 <link rel="stylesheet" href="/leaflet/leaflet.css" />
@@ -11,12 +11,12 @@
 	width: 100%;
 	height: 100%;
 	z-index: 1;"></div>
-@if (CSVLoader.selectedLocation != null)
+@if (CSVLoader.SelectedLocation != null)
 {
 	<div id="right">
-		<b>Facility Name:</b> @CSVLoader.selectedLocation.Name
+		<b>Facility Name:</b> @CSVLoader.SelectedLocation.Name
 		@* <br><b>Time Zone:</b> @CSVLoader.selectedLocation.TimeZone *@
-		<br><b>Location:</b> @CSVLoader.selectedLocation.City, @CSVLoader.selectedLocation.State
+		<br><b>Location:</b> @CSVLoader.SelectedLocation.City, @CSVLoader.SelectedLocation.State
 		@* <br><b>Division Name:</b> @CSVLoader.selectedLocation.DivName
 		<br><b>MediTech Network:</b> @CSVLoader.selectedLocation.NetworkMeditech *@
 		<br><NavLink href="org" class="underline"> Org </NavLink>
@@ -34,7 +34,7 @@
 			await jsModule.InvokeVoidAsync("runMapThings"); // Ensure the map is initialized
 			await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
 
-			var tasks = CSVLoader.locations.Select(i => assignPin(i, jsModule));
+			var tasks = CSVLoader.Locations.Select(i => assignPin(i, jsModule));
 			await Task.WhenAll(tasks);
 		}
 	}
@@ -58,7 +58,7 @@
 	[JSInvokable("InvokeIt")]
 	public Task InvokeIt(Location input)
 	{
-		CSVLoader.selectedLocation = input;
+		CSVLoader.SelectedLocation = input;
 		StateHasChanged();
 		return Task.CompletedTask;
 	}

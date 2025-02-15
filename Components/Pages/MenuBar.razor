@@ -186,14 +186,14 @@
 				if (input.Length > 1)
 				{
 					ran = true;
-					_ = jsModule.InvokeVoidAsync("filterLocations", CSVLoader.locations.Where(i => i.State.ToLower().Contains(input.ToLower())));
+					_ = jsModule.InvokeVoidAsync("filterLocations", CSVLoader.Locations.Where(i => i.State.ToLower().Contains(input.ToLower())));
 
 				}
 				else if (input.Length == 0 && ran)
 				{
 					ran = false;
 					// Console.WriteLine(locations.Where(x=>true).Count());
-					await jsModule.InvokeVoidAsync("filterLocations", CSVLoader.locations.ToList());
+					await jsModule.InvokeVoidAsync("filterLocations", CSVLoader.Locations.ToList());
 				}
 			}
 		}

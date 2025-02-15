@@ -6,7 +6,7 @@
 @* <p style="font-size:0.75em; margin-bottom:0.5em;">@employee.Email</p> *@
 <text style="font-size:0.9em;">@employee.Position</text>
 <br />
-<span class="oi oi-map-marker" aria-hidden="true" style="font-size:0.9em;"></span> <text style="font-size:0.85em;">@CSVLoader.locations.First(h => h.ID == employee.LocationID).Name</text>
+<span class="oi oi-map-marker" aria-hidden="true" style="font-size:0.9em;"></span> <text style="font-size:0.85em;">@CSVLoader.Locations.First(h => h.ID == employee.LocationID).Name</text>
 
 @code {
     [Parameter] public Employee employee { get; set; } = default!;

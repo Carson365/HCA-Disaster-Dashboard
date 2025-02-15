@@ -63,19 +63,18 @@
 @code {
 	private int visibleCount;
 
-	protected override Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
-		CSVLoader.OnEmployeesLoaded += () => StateHasChanged();
-		_ = LoadEmployeesInBackground();
-		return Task.CompletedTask;
+		CSVLoader.OnLoaded += () => StateHasChanged();
+		// _ = LoadEmployeesInBackground();
+		// return Task.CompletedTask;
 	}
 
-	private async Task LoadEmployeesInBackground()
-	{
-		Console.WriteLine("Org: LoadEmployeesInBackground");
-		await CSVLoader.LoadEmployeesAsync();
-		refreshSearch();
-	}
+	// private async Task LoadEmployeesInBackground()
+	// {
+	// 	await CSVLoader.LoadEmployeesAsync();
+	// 	refreshSearch();
+	// }
 
 	private void refreshSearch()
 	{
