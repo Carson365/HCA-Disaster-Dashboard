@@ -1,25 +1,25 @@
 ﻿@page "/view"
 @using AISComp.Tools
 @using AISComp.Components.Shared
-@inject EmployeeService employeeService
+@* @inject CSVLoader employeeService *@
 
 <PageTitle>View</PageTitle>
 
 <OrgMainLayout>
 <main>
-	@if (!employeeService.IsLoading)
+		@if (!CSVLoader.IsLoading)
 	{
 		<!-- Manager (Up) -->
 		<div class="container">
 @* 			<div class="leftFade"></div> *@
 			<div class="leftSpacer"></div>
-			@if (employeeService.SelectedEmployee?.Up != null)
+				@if (CSVLoader.SelectedEmployee?.Up != null)
 			{
 				<div class="box up">
-					<EmployeeCard Employee="@employeeService.SelectedEmployee.Up" />
+						<EmployeeCard Employee="@CSVLoader.SelectedEmployee.Up" />
 
 					<div class="nav-item">
-						<NavLink class="custom" @onclick="() => employeeService.SelectedEmployee = employeeService.SelectedEmployee.Up">
+							<NavLink class="custom" @onclick="() => CSVLoader.SelectedEmployee = CSVLoader.SelectedEmployee.Up">
 							<span class="oi oi-magnifying-glass" aria-hidden="true"></span> &nbsp Expand
 						</NavLink>
 					</div>
@@ -32,17 +32,17 @@
 			<div class="leftFade"></div>
 			<div class="leftSpacer"></div>
 			<div class="box primary">
-				<EmployeeCard Employee="@employeeService.SelectedEmployee" />
+					<EmployeeCard Employee="@CSVLoader.SelectedEmployee" />
 			</div>
 
-			@if (employeeService.SelectedEmployee?.Up?.Downs != null)
+				@if (CSVLoader.SelectedEmployee?.Up?.Downs != null)
 			{
-				foreach (var item in employeeService.SelectedEmployee.Up.Downs.Where(e => e != employeeService.SelectedEmployee))
+					foreach (var item in CSVLoader.SelectedEmployee.Up.Downs.Where(e => e != CSVLoader.SelectedEmployee))
 				{
 					<div class="box subprimary">
 						<EmployeeCard Employee="@item" />
 						<div class="nav-item">
-							<NavLink class="custom" @onclick="() => employeeService.SelectedEmployee = item">
+								<NavLink class="custom" @onclick="() => CSVLoader.SelectedEmployee = item">
 								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> &nbsp Expand
 							</NavLink>
 						</div>
@@ -54,14 +54,14 @@
 		<div class="container">
 			<div class="leftFade"></div>
 			<div class="leftSpacer"></div>
-			@if (employeeService.SelectedEmployee?.Downs != null)
+				@if (CSVLoader.SelectedEmployee?.Downs != null)
 			{
-				@foreach (var item in employeeService.SelectedEmployee.Downs)
+					@foreach (var item in CSVLoader.SelectedEmployee.Downs)
 				{
 					<div class="box down">
 						<EmployeeCard Employee="@item" />
 						<div class="nav-item">
-							<NavLink class="custom" @onclick="() => employeeService.SelectedEmployee = item">
+								<NavLink class="custom" @onclick="() => CSVLoader.SelectedEmployee = item">
 								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> &nbsp Expand
 							</NavLink>
 						</div>
@@ -76,6 +76,6 @@
 @code {
 	protected override void OnInitialized()
 	{
-		employeeService.OnEmployeesLoaded += () => StateHasChanged();
+		CSVLoader.OnEmployeesLoaded += () => StateHasChanged();
 	}
 }

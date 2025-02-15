@@ -224,7 +224,6 @@ var iconSelection = null;
 var tetherSelection = null;
 
 export function runCommon(color, place) {
-	console.log(color);
 	capitalizeFirstLetter(place);
 
 	// Ensure mapInstance is initialized before proceeding

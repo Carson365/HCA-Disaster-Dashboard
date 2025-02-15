@@ -22,10 +22,6 @@
   </ItemGroup>-->
 
   <ItemGroup>
-    <Content Include="Tools\Location.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\js\runMapThings.js" />
   </ItemGroup>
 

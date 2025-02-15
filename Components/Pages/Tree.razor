@@ -1,0 +1,102 @@
+﻿@page "/tree"
+@using AISComp.Tools
+@using AISComp.Components.Shared
+@* @inject CSVLoader employeeService *@
+@inject IJSRuntime JS
+
+<PageTitle>Home</PageTitle>
+
+
+<OrgMainLayout>
+	<div class="topFade"></div>
+
+	<form>
+		<input style="margin-top: 1em;" type="text" placeholder="Search an ID" @bind="CSVLoader.SearchId" @bind:event="oninput" @bind:after="SearchEmployee" />
+	</form>
+	<form>
+		<input type="text" placeholder="Search a Name" @bind="CSVLoader.SearchName" @bind:event="oninput" @bind:after="SearchEmployee" />
+	</form>
+
+	<body>
+		<div class="container">
+			@if (CSVLoader.IsLoading)
+			{
+				<p>Loading employees, please wait...</p>
+			}
+			else if (CSVLoader.SearchResults != null && visibleCount != 0)
+			{
+				foreach (Employee item in CSVLoader.SearchResults.Take(visibleCount))
+				{
+					<div class="box">
+						<EmployeeCard Employee="@item"></EmployeeCard>
+						@* <a href="view" @onclick="() => EmployeeService.selectedEmployee = item" class="underline">Expand</a> *@
+
+						<div class="nav-item">
+							<NavLink class="nav-link" href="view" @onclick="() => CSVLoader.SelectedEmployee = item">
+								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> View
+							</NavLink>
+						</div>
+					</div>
+				}
+				if (CSVLoader.SearchResults.Count == 0)
+				{
+					<p>No results</p>
+				}
+				if (CSVLoader.SearchResults.Count > 100 && CSVLoader.SearchResults.Count > visibleCount)
+				{
+					<div class="box" style="width:calc(90% + 30px); height:10%;">
+						<center>
+							Showing @Math.Min(CSVLoader.SearchResults.Count, visibleCount) of @CSVLoader.SearchResults.Count matching employees.<br />
+							<a class="underline" @onclick="() => visibleCount += 100">Click here to see more</a>
+						</center>
+					</div>
+				}
+			}
+		</div>
+	</body>
+
+	<div class="bottomFade"></div>
+
+</OrgMainLayout>
+
+
+@code {
+	private int visibleCount;
+
+	protected override Task OnInitializedAsync()
+	{
+		_ = LoadEmployeesInBackground();
+		return Task.CompletedTask;
+	}
+
+	private async Task LoadEmployeesInBackground()
+	{
+		Console.WriteLine("Org: LoadEmployeesInBackground");
+		await CSVLoader.LoadEmployeesAsync();
+		refreshSearch();
+	}
+
+	private void refreshSearch()
+	{
+		if (!string.IsNullOrEmpty(CSVLoader.SearchId) || !string.IsNullOrEmpty(CSVLoader.SearchName)) SearchEmployee();
+		StateHasChanged();
+	}
+
+	protected override Task OnAfterRenderAsync(bool first)
+	{
+		Console.WriteLine("here");
+		SearchEmployee();
+		StateHasChanged();
+		return Task.CompletedTask;
+		////////////////// This runs every tick which is horribly inefficient. Need to find a better option.
+	}
+
+	private void SearchEmployee()
+	{
+		Console.WriteLine("ran");
+		visibleCount = 100; // Reset visibleCount whenever a new search is made.
+		CSVLoader.SearchEmployees();
+
+		if (string.IsNullOrEmpty(CSVLoader.SearchId) && string.IsNullOrEmpty(CSVLoader.SearchName)) visibleCount = 0;
+	}
+}

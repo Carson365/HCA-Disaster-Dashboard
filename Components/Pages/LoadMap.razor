@@ -1,39 +1,30 @@
 ﻿@inject IJSRuntime jsRuntime
 @using AISComp.Tools
 @using FileHelpers;
+@inject CSVLoader data
 
 
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="/leaflet/leaflet.css" />
+<script src="leaflet/leaflet.js"></script>
 
 <div id="map" style="pointer-events: auto; background-color:  rgba(200,220,230, 80%);
 	width: 100%;
 	height: 100%;
 	z-index: 1;"></div>
-@if (selectedLocation != null)
+@if (CSVLoader.selectedLocation != null)
 {
 	<div id="right">
-		<b>Facility Name:</b> @selectedLocation.FacName
-		<br><b>Time Zone:</b> @selectedLocation.TimeZone
-		<br><b>Location:</b> @selectedLocation.FacCity, @selectedLocation.FacState
-		<br><b>Division Name:</b> @selectedLocation.DivName
-		<br><b>MediTech Network:</b> @selectedLocation.NetworkMeditech
+		<b>Facility Name:</b> @CSVLoader.selectedLocation.Name
+		@* <br><b>Time Zone:</b> @CSVLoader.selectedLocation.TimeZone *@
+		<br><b>Location:</b> @CSVLoader.selectedLocation.City, @CSVLoader.selectedLocation.State
+		@* <br><b>Division Name:</b> @CSVLoader.selectedLocation.DivName
+		<br><b>MediTech Network:</b> @CSVLoader.selectedLocation.NetworkMeditech *@
+		<br><NavLink href="org" class="underline"> Org </NavLink>
 	</div>
 }
 
 @code
 {
-
-	public Location? selectedLocation;
-
-	[Parameter] public static Location[] locations { get; set; } = InitializeLocations();
-
-	private static Location[] InitializeLocations()
-	{
-		FileHelperEngine<Location> engine = new FileHelperEngine<Location> { Options = { IgnoreFirstLines = 1 } };
-		return engine.ReadFile("Data\\hcaData.csv");
-	}
 
 	protected override async Task OnAfterRenderAsync(bool first)
 	{
@@ -43,7 +34,7 @@
 			await jsModule.InvokeVoidAsync("runMapThings"); // Ensure the map is initialized
 			await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
 
-			var tasks = locations.Select(i => assignPin(i, jsModule));
+			var tasks = CSVLoader.locations.Select(i => assignPin(i, jsModule));
 			await Task.WhenAll(tasks);
 		}
 	}
@@ -52,13 +43,14 @@
 	{
 		if (place == null) return;
 
-		string color = place.DivName switch
-		{
-			"Supply Chain" => "blue",
-			"HSC" => "green",
-			_ when place.FacName.Contains("Hub Sites") => "yellow",
-			_ => "red"
-		};
+		// string color = place.DivName switch
+		// {
+		// 	"Supply Chain" => "blue",
+		// 	"HSC" => "green",
+		// 	_ when place.Name.Contains("Hub Sites") => "yellow",
+		// 	_ => "red"
+		// };
+		string color = "green";
 
 		await jsModule.InvokeVoidAsync("runCommon", color, place);
 	}
@@ -66,7 +58,7 @@
 	[JSInvokable("InvokeIt")]
 	public Task InvokeIt(Location input)
 	{
-		selectedLocation = input;
+		CSVLoader.selectedLocation = input;
 		StateHasChanged();
 		return Task.CompletedTask;
 	}
