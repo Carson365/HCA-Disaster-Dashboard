@@ -1,65 +1,59 @@
-﻿@inject IJSRuntime jsRuntime
+﻿@page "/map"
+@inject IJSRuntime jsRuntime
+@inject HttpClient Http
 @using AISComp.Tools
-@using FileHelpers;
-@* @inject CSVLoader data *@
-
+@using FileHelpers
+@using System.Text.Json
 
 <link rel="stylesheet" href="/leaflet/leaflet.css" />
 <script src="leaflet/leaflet.js"></script>
 
-<div id="map" style="pointer-events: auto; background-color:  rgba(200,220,230, 80%);
-	width: 100%;
-	height: 100%;
-	z-index: 1;"></div>
+<div id="map" style="pointer-events: auto; background-color: rgba(200,220,230,80%);
+	width: 100%; height: 100%; z-index: 1;"></div>
+
 @if (CSVLoader.SelectedLocation != null)
 {
 	<div id="right">
 		<b>Facility Name:</b> @CSVLoader.SelectedLocation.Name
-		@* <br><b>Time Zone:</b> @CSVLoader.selectedLocation.TimeZone *@
 		<br><b>Location:</b> @CSVLoader.SelectedLocation.City, @CSVLoader.SelectedLocation.State
-		@* <br><b>Division Name:</b> @CSVLoader.selectedLocation.DivName
-		<br><b>MediTech Network:</b> @CSVLoader.selectedLocation.NetworkMeditech *@
-		<br><NavLink href="org" class="underline"> Org </NavLink>
+		<br><b>Size:</b> @CSVLoader.SelectedLocation.Size.ToString()
+		<br><NavLink href="tree" class="underline"> Tree </NavLink>
 	</div>
 }
 
-@code
-{
+@code {
+
+	// Options for JSON serialization.
+	private JsonSerializerOptions options = new JsonSerializerOptions
+		{
+			PropertyNamingPolicy = null,
+		};
 
 	protected override async Task OnAfterRenderAsync(bool first)
 	{
 		if (first)
 		{
 			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
-			await jsModule.InvokeVoidAsync("runMapThings"); // Ensure the map is initialized
+			await jsModule.InvokeVoidAsync("runMapThings"); // Initialize the map
 			await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
-
-			var tasks = CSVLoader.Locations.Select(i => assignPin(i, jsModule));
-			await Task.WhenAll(tasks);
+			// Call runCommon once to add initial hexes
+			await assignPins(CSVLoader.Locations, jsModule);
 		}
 	}
 
-	private async Task assignPin(Location? place, IJSObjectReference jsModule)
+	private async Task assignPins(List<Location> places, IJSObjectReference jsModule)
 	{
-		if (place == null) return;
-
-		// string color = place.DivName switch
-		// {
-		// 	"Supply Chain" => "blue",
-		// 	"HSC" => "green",
-		// 	_ when place.Name.Contains("Hub Sites") => "yellow",
-		// 	_ => "red"
-		// };
+		if (places == null || places.Count == 0) return;
 		string color = "green";
-
-		await jsModule.InvokeVoidAsync("runCommon", color, place);
+		string json = JsonSerializer.Serialize(places, options);
+		await jsModule.InvokeVoidAsync("runCommon", color, json);
 	}
 
+	// When a location is selected from the map (or hex is clicked),
 	[JSInvokable("InvokeIt")]
-	public Task InvokeIt(Location input)
+	public async Task InvokeIt(Location input)
 	{
 		CSVLoader.SelectedLocation = input;
 		StateHasChanged();
-		return Task.CompletedTask;
 	}
 }

@@ -9,6 +9,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddServerSideBlazor();
 
 builder.Services.AddSingleton<CSVLoader>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

@@ -1,102 +1,85 @@
 ﻿@page "/tree"
 @using AISComp.Tools
 @using AISComp.Components.Shared
-@* @inject CSVLoader employeeService *@
-@inject IJSRuntime JS
+@inject IJSRuntime jsRuntime
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Tree</PageTitle>
 
 
 <OrgMainLayout>
-	<div class="topFade"></div>
-
-	<form>
-		<input style="margin-top: 1em;" type="text" placeholder="Search an ID" @bind="CSVLoader.SearchId" @bind:event="oninput" @bind:after="SearchEmployee" />
-	</form>
-	<form>
-		<input type="text" placeholder="Search a Name" @bind="CSVLoader.SearchName" @bind:event="oninput" @bind:after="SearchEmployee" />
-	</form>
-
 	<body>
 		<div class="container">
-			@if (CSVLoader.IsLoading)
-			{
-				<p>Loading employees, please wait...</p>
-			}
-			else if (CSVLoader.SearchResults != null && visibleCount != 0)
-			{
-				foreach (Employee item in CSVLoader.SearchResults.Take(visibleCount))
-				{
-					<div class="box">
-						<EmployeeCard Employee="@item"></EmployeeCard>
-						@* <a href="view" @onclick="() => EmployeeService.selectedEmployee = item" class="underline">Expand</a> *@
-
-						<div class="nav-item">
-							<NavLink class="nav-link" href="view" @onclick="() => CSVLoader.SelectedEmployee = item">
-								<span class="oi oi-magnifying-glass" aria-hidden="true"></span> View
-							</NavLink>
-						</div>
-					</div>
-				}
-				if (CSVLoader.SearchResults.Count == 0)
-				{
-					<p>No results</p>
-				}
-				if (CSVLoader.SearchResults.Count > 100 && CSVLoader.SearchResults.Count > visibleCount)
-				{
-					<div class="box" style="width:calc(90% + 30px); height:10%;">
-						<center>
-							Showing @Math.Min(CSVLoader.SearchResults.Count, visibleCount) of @CSVLoader.SearchResults.Count matching employees.<br />
-							<a class="underline" @onclick="() => visibleCount += 100">Click here to see more</a>
-						</center>
-					</div>
-				}
-			}
 		</div>
 	</body>
-
-	<div class="bottomFade"></div>
-
 </OrgMainLayout>
 
 
 @code {
 	private int visibleCount;
 
-	protected override Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
-		_ = LoadEmployeesInBackground();
-		return Task.CompletedTask;
+		CSVLoader.OnLoaded += () => StateHasChanged();
+		CSVLoader.GetLocationOrgTree();
 	}
 
-	private async Task LoadEmployeesInBackground()
-	{
-		Console.WriteLine("Org: LoadEmployeesInBackground");
-		// await CSVLoader.LoadAsync();
-		refreshSearch();
-	}
+	private JsonSerializerOptions options = new JsonSerializerOptions
+		{
+			PropertyNamingPolicy = null,
+			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+		};
 
-	private void refreshSearch()
+	protected override async Task OnAfterRenderAsync(bool first)
 	{
-		if (!string.IsNullOrEmpty(CSVLoader.SearchId) || !string.IsNullOrEmpty(CSVLoader.SearchName)) SearchEmployee();
-		StateHasChanged();
-	}
+		if (first)
+		{
 
-	protected override Task OnAfterRenderAsync(bool first)
-	{
-		Console.WriteLine("here");
-		SearchEmployee();
-		StateHasChanged();
-		return Task.CompletedTask;
-		////////////////// This runs every tick which is horribly inefficient. Need to find a better option.
-	}
 
-	private void SearchEmployee()
-	{
-		Console.WriteLine("ran");
-		visibleCount = 100; // Reset visibleCount whenever a new search is made.
-		CSVLoader.SearchEmployees();
 
-		if (string.IsNullOrEmpty(CSVLoader.SearchId) && string.IsNullOrEmpty(CSVLoader.SearchName)) visibleCount = 0;
+			// Assume CSVLoader.SelectedEmployee is one of the employees in the location.
+			Employee startingEmployee = CSVLoader.SearchResults[0];
+			string locationId = CSVLoader.SelectedLocation.ID;
+
+			// Get the trimmed tree (only employees at the selected location).
+			Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, locationId);
+			// var emps = JsonSerializer.Serialize(trimmedSelectedEmployee, options);
+
+			Dictionary<string,Employee> allTopUps = new();
+
+			foreach (Employee emp in CSVLoader.SearchResults)
+			{
+				var e = CSVLoader.GetTrimmedSelectedEmployee(emp, locationId);
+				allTopUps.TryAdd(e.ID, e);
+			}
+
+			Console.WriteLine("All top ups: " + allTopUps.Count());
+
+			Employee dummyEmployee = new Employee()
+				{
+					ID = "a",
+					Name = "a",
+					Position = "a",
+					LocationID = locationId,
+					HireDate = DateTime.Now.ToString(),
+					Up = null,
+					Downs = new List<Employee>(allTopUps.Values)
+				};
+
+			Console.WriteLine("Total: " + "a");
+
+			var emps = JsonSerializer.Serialize(dummyEmployee, options);
+
+
+
+			// var sel = CSVLoader.SearchResults[0];
+			// while (sel.Up != null) sel = sel.Up;
+			// var emps = JsonSerializer.Serialize(sel, options);
+
+
+			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+			await jsModule.InvokeVoidAsync("runTree", emps); // Ensure the map is initialized
+		}
 	}
 }

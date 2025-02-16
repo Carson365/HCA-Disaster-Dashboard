@@ -37,6 +37,17 @@ namespace AISComp.Tools
 	}
 
 	[DelimitedRecord(",")]
+	public class CSVLocation
+	{
+		public required string ID { get; set; }
+		public required string Name { get; set; }
+		public required string City { get; set; }
+		public required string State { get; set; }
+		public required string Zip { get; set; }
+		public required string Latitude { get; set; }
+		public required string Longitude { get; set; }
+	}
+
 	public class Location
 	{
 		public required string ID { get; set; }
@@ -46,5 +57,6 @@ namespace AISComp.Tools
 		public required string Zip { get; set; }
 		public required string Latitude { get; set; }
 		public required string Longitude { get; set; }
+		public required int Size { get; set; }
 	}
 }

@@ -35,20 +35,6 @@
 
 	public static MapMainLayout? Instance { get; private set; }
 
-	[JSInvokable("InvokeIt")]
-	public async Task InvokeIt(Location input)
-	{
-		await InvokeAsync(() =>
-			{
-				CSVLoader.SelectedLocation = input;
-				StateHasChanged();
-				Console.WriteLine("ran");
-			});
-	}
-
-	public float lat = 0;
-	public float lon = 0;
-
 	protected override void OnInitialized()
 	{
 		Instance = this;
