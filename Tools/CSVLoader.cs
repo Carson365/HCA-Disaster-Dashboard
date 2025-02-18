@@ -4,6 +4,7 @@ namespace AISComp.Tools
 {
 	public class CSVLoader
 	{
+		public static string Fip { get; set; } = string.Empty;
 		public static bool IsLoading { get; private set; } = true;
 
 		// Persistent search state

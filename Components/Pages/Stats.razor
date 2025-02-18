@@ -1,0 +1,43 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime jsRuntime
+@page "/stats"
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Data Visualization</title>
+	<link rel="stylesheet" href="./css/stats.css" />
+</head>
+
+<div id="main"></div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+@code {
+	protected override async Task OnAfterRenderAsync(bool first)
+	{
+		if (first)
+		{
+
+			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "./js/stats/data.json");
+			string fileContents;
+
+			if (File.Exists(filePath))
+			{
+					fileContents = await File.ReadAllTextAsync(filePath);
+			}
+			else
+			{
+				fileContents = "[]";
+			}
+
+
+
+
+
+
+			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/stats/script.js");
+			// await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
+			await jsModule.InvokeVoidAsync("handleOnLoad", CSVLoader.Fip, fileContents);
+		}
+	}
+}

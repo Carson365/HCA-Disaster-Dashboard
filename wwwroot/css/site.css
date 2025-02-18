@@ -15,8 +15,8 @@ html, body {
     --secondary: #849FCB;
     --accent: #a970ff;
     --text: #000;
-    color: var(--text);
-    background-color: var(--background);
+/*    color: var(--text);
+    background-color: var(--background);*/
 }
 
 ::selection {

@@ -1,4 +1,6 @@
-﻿import { sendToDotNet, mapInstance }  from "./runMapThings.js";
+﻿import { sendToDotNet, mapInstance } from "./runMapThings.js";
+import { countyLayer } from "./countyUtils.js";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 export class Hex {
     constructor(color, place, anchorX, anchorY) {
@@ -17,7 +19,8 @@ export class Hex {
     select() {
         this.selected = true;
         this.currentColor = "white";
-        sendToDotNet(this.place);
+        const fipCode = this.getFipCode();
+        sendToDotNet(fipCode, this.place);
     }
 
     deselect() {
@@ -44,4 +47,29 @@ export class Hex {
         this.anchorX = pt.x;
         this.anchorY = pt.y;
     }
+
+    getFipCode() {
+        if (!countyLayer) return null;
+        const lat = this.place.Latitude;
+        const lon = this.place.Longitude;
+
+        let foundFipCode = null;
+        countyLayer.eachLayer((layer) => {
+            if (d3.geoContains(layer.feature, [lon, lat])) {
+                const props = layer.feature.properties;
+                foundFipCode = `${props.STATEFP}${props.COUNTYFP}`;
+            }
+        });
+
+        return foundFipCode;
+    }
+}
+
+export function generateHexagon(x, y, size) {
+    const angle = Math.PI / 3;
+    return Array.from({ length: 6 }, (_, i) => {
+        const px = x + size * Math.cos(angle * i);
+        const py = y + size * Math.sin(angle * i);
+        return `${px},${py}`;
+    }).join(" ");
 }

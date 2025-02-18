@@ -4,6 +4,7 @@
 @using AISComp.Tools
 @using FileHelpers
 @using System.Text.Json
+@inject NavigationManager NavigationManager
 
 <link rel="stylesheet" href="/leaflet/leaflet.css" />
 <script src="leaflet/leaflet.js"></script>
@@ -45,7 +46,7 @@
 	private async Task assignPins(List<Location> places, IJSObjectReference jsModule)
 	{
 		if (places == null || places.Count == 0) return;
-		string color = "green";
+		string color = "#03173E";
 		string json = JsonSerializer.Serialize(places, options);
 		await jsModule.InvokeVoidAsync("runCommon", color, json);
 	}
@@ -57,4 +58,12 @@
 		CSVLoader.SelectedLocation = input;
 		StateHasChanged();
 	}
+
+	[JSInvokable("County")]
+	public async Task County(string fip)
+	{
+		Console.WriteLine(fip);
+		CSVLoader.Fip = fip;
+		NavigationManager.NavigateTo("/Stats");
+    }
 }
