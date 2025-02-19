@@ -319,7 +319,6 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
             displayedDisasterNumbers.add(disaster.disasterNumber); // Mark as displayed
         }
     });
-    console.log(disastersInCounty)
 
     // Display county-specific disasters
     if (disastersInCounty.length > 0) {
