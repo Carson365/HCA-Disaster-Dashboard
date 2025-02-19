@@ -41,7 +41,7 @@ export function runTree(employeeJson) {
         .style("background", "#333")
         .style("color", "#FFF")
         .style("padding", "5px")
-        .style("border", "1px solid red") // temporary border for debugging
+        .style("border", "1px solid white") // temporary border for debugging
         .style("border-radius", "5px")
         .style("font-size", "12px")
         .style("display", "none");

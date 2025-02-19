@@ -194,11 +194,11 @@ td {
 
 /* Alternating Row Colors */
 tr:nth-child(odd) {
-	background-color: #ffffff; /* White for odd rows */
+	background-color: #ffffff !important; /* White for odd rows */
 }
 
 tr:nth-child(even) {
-	background-color: #f1f1f1; /* Light gray for even rows */
+	background-color: #f1f1f1 !important; /* Light gray for even rows */
 }
 
 /* Table Border and Spacing */
