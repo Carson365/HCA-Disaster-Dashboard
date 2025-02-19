@@ -29,10 +29,18 @@ export function displayFemaPoints(mapInstance, svg) {
 
     const topLeft = mapInstance.latLngToLayerPoint(mapInstance.getBounds().getNorthWest());
 
+    // If a group exists but belongs to an old SVG, remove it.
+    if (femaGroup && femaGroup.node().ownerSVGElement !== svg.node()) {
+        femaGroup.remove();
+        femaGroup = null;
+    }
+
+    // Create a new group if needed.
     if (!femaGroup) {
         femaGroup = svg.insert("g", ":first-child")
             .attr("class", "fema-layer")
-            .style("pointer-events", "none"); // Allows interactions to pass through empty space
+            .style("pointer-events", "none")
+            .style("display", "none");
     }
 
     let circles = femaGroup.selectAll("circle.fema").data(femaData, (d) => d.Name);
@@ -43,8 +51,8 @@ export function displayFemaPoints(mapInstance, svg) {
         .append("circle")
         .attr("class", "fema")
         .attr("r", 5)
-        .attr("fill", (d) => getFemaColor(d.Status)) // Color based on status
-        .style("pointer-events", "auto") // Only the circles are interactive
+        .attr("fill", (d) => getFemaColor(d.Status))
+        .style("pointer-events", "auto")
         .merge(circles)
         .attr("cx", (d) => {
             let pt = mapInstance.latLngToLayerPoint([d.Latitude, d.Longitude]);
@@ -56,7 +64,7 @@ export function displayFemaPoints(mapInstance, svg) {
         })
         .on("mouseover", function (event, d) {
             L.popup({ closeButton: false })
-                .setLatLng([d.Latitude, d.Longitude]) // Correct popup positioning
+                .setLatLng([d.Latitude, d.Longitude])
                 .setContent(`
                   <b>${d.Name}</b><br>
                   ${d.Address}<br>

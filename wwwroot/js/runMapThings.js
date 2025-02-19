@@ -112,12 +112,12 @@ export function runMapThings() {
     // Optionally, load FEMA data immediately.
     femaUtils.loadFemaData(mapInstance, svg);
 
-	femaUtils.showFemaPoints(mapInstance);
-
     // Manually update positions on initial load.
     d3Utils.repositionSVG(mapInstance, svg, group);
     updateAnchors();
     femaUtils.updateFemaPositions(mapInstance);
+
+    hideFemaPoints();
 }
 
 function updateAnchors(zooming = false) {
@@ -140,6 +140,7 @@ export function runCommon(color, placesJson) {
     d3Selections = d3Utils.updateD3Elements(hexes, group, mapInstance, simulation);
     simulation.alpha(1).restart();
     countyUtils.updateCountyStyles(countyPane, hexes);
+    hideFemaPoints();
 }
 
 export function reSelect(selectedLocationJson) {
@@ -175,6 +176,7 @@ export function reSelect(selectedLocationJson) {
     } else {
         console.warn("Selected location not found among hexes.");
     }
+    hideFemaPoints();
 }
 
 
