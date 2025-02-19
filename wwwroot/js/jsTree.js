@@ -34,16 +34,16 @@ export function runTree(employeeJson) {
 
     // Define a tooltip element for hover popups.
     const tooltip = d3.select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("pointer-events", "none")  // Prevent tooltip from capturing mouse events
-        .style("background", "#333")
-        .style("color", "#FFF")
-        .style("padding", "5px")
-        .style("border-radius", "5px")
-        .style("font-size", "12px")
-        .style("visibility", "hidden");
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "1000") // Bring tooltip to the front
+    .style("background", "#333")
+    .style("color", "#FFF")
+    .style("padding", "5px")
+    .style("border-radius", "5px")
+    .style("font-size", "12px")
+    .style("visibility", "hidden");
 
     // Add links (lines between nodes).
     const link = svg.append("g")

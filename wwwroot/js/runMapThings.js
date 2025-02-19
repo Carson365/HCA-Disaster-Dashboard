@@ -43,10 +43,10 @@ export function runMapThings() {
 
     // Create the Leaflet map instance.
     mapInstance = L.map("map", {
-        zoomControl: false,
+        zoomControl: true,
         smoothWheelZoom: true,
-        smoothSensitivity: 0.1,
-        zoomSnap: 0.1,
+        smoothSensitivity: 0.5,
+        zoomSnap: 0.5,
     }).setView([37, -95], 5);
 
     //mapInstance.createPane("countyPane");
