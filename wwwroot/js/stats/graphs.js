@@ -567,6 +567,7 @@ export async function loadStateMap(fipsCode) {
         .style("pointer-events", "none") // Prevents interference with mouse events
         .style("display", "none"); // Initially hidden
 
+
     // Load U.S. Counties GeoJSON
     const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
 
