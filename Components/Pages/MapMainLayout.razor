@@ -11,14 +11,21 @@
         <LoadMap />
         <div id="key">
             <div>&emsp;</div>
-            <NavLink href="" class="underline" @onclick="() => Run(false)"> Hide Food Banks </NavLink>
-            <div>&emsp;</div>
-            <NavLink href="" class="underline" @onclick="() => Run(true)"> Show Food Banks </NavLink>
+            <NavLink href="" class="underline" @onclick="() => Run()"> Toggle Food Bank Visibility </NavLink>
+            @*             <div>&emsp;</div>
+            <NavLink href="" class="underline" @onclick="() => Run(true)"> Show Food Banks </NavLink> *@
         </div>
     </main>
 </div>
 
 @code {
+
+
+
+
+
+
+
     // Declare as nullable so the compiler knows it might be null initially.
     private IJSObjectReference? _jsModule;
 
@@ -35,8 +42,12 @@
         }
     }
 
-    protected async Task Run(bool show)
+    bool show = false;
+
+    protected async Task Run()
     {
+
+        show ^= true;
         // If the module hasn't been loaded yet, import it.
         if (_jsModule is null)
         {
@@ -54,12 +65,4 @@
             await _jsModule.InvokeVoidAsync("hideFemaPoints");
         }
     }
-
-    // public async ValueTask DisposeAsync()
-    // {
-    //     if (_jsModule is not null)
-    //     {
-    //         await _jsModule.DisposeAsync();
-    //     }
-    // }
 }

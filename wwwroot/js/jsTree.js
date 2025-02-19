@@ -74,12 +74,15 @@ export function runTree(employeeJson) {
         .attr("stroke", "#FFF")  // White outline
         .attr("stroke-width", 0.3)
         .on("mouseenter", function (event, d) {
+            var moreDetails = (d.data.HireDate !== "") ?
+            `<p style="margin:0.5em;"></p>
+            ${d.data.Position}
+            <br>Hired ${d.data.HireDate}` : ""
+
             tooltip.html(`
             <b>${d.data.Name}</b>
             <br>(${d.data.ID})
-            <p style="margin:0.5em;"></p>
-            ${d.data.Position}
-            <br>Hired ${d.data.HireDate}
+            ${moreDetails}
             `)
                 .style("display", "block");
 

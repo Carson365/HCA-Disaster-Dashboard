@@ -146,7 +146,7 @@ const fipsToAbbreviation = {
 
 export async function getCountyNameByFips(stateFips, countyFips) {
     const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
-    let name = 'Unkown'
+    let name = 'Unknown'
     const geoData = await d3.json(geojsonUrl);
 
     Object.values(geoData.features).forEach(obj => {
@@ -335,7 +335,7 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
             let allCountiesAffected = getAllCountiesAffected(fipsStateCode, disaster.disasterNumber);
 
 
-            console.log(disaster.declarationDate);
+            //console.log(disaster.declarationDate);
             var options = { year: 'numeric', month: 'long', day: 'numeric' };
             var Beg = new Date(Date.parse(disaster.declarationDate)).toLocaleDateString("en-US", options)
             var End = new Date(Date.parse(disaster.incidentEndDate)).toLocaleDateString("en-US", options)
@@ -408,9 +408,15 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
         `;
             displayedDisasterNumbers.add(disaster.disasterNumber); // Mark as displayed
             let allCountiesAffected = getAllCountiesAffected(fipsStateCode, disaster.disasterNumber);
-            let disasterBegandEnd = disaster.incidentEndDate !== 'Not Listed'
-                ? `Disaster began on ${disaster.declarationDate} and ended on ${disaster.incidentEndDate}.`
-                : `Disaster began on ${disaster.incidentDeclarationDate}, the end date is not listed.`;
+
+            //let disasterBegandEnd = disaster.incidentEndDate !== 'Not Listed'
+            //    ? `Disaster began on ${disaster.declarationDate} and ended on ${disaster.incidentEndDate}.`
+            //    : `Disaster began on ${disaster.incidentDeclarationDate}, the end date is not listed.`;
+
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            var Beg = new Date(Date.parse(disaster.declarationDate)).toLocaleDateString("en-US", options)
+            var End = new Date(Date.parse(disaster.incidentEndDate)).toLocaleDateString("en-US", options)
+            let disasterBegandEnd = ` ${Beg} - ${End}`
 
             // Modal
             modals += `
