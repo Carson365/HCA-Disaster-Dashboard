@@ -19,8 +19,8 @@ export class Hex {
     select() {
         this.selected = true;
         this.currentColor = "white";
-        const fipCode = this.getFipCode();
-        sendToDotNet(fipCode, this.place);
+        const [fipCode, countyName] = this.getFipCodeAndCountyName();
+        sendToDotNet(this.place, fipCode, countyName);
     }
 
     deselect() {
@@ -48,20 +48,22 @@ export class Hex {
         this.anchorY = pt.y;
     }
 
-    getFipCode() {
+    getFipCodeAndCountyName() {
         if (!countyLayer) return null;
         const lat = this.place.Latitude;
         const lon = this.place.Longitude;
 
         let foundFipCode = null;
+        let foundCountyName = null;
         countyLayer.eachLayer((layer) => {
             if (d3.geoContains(layer.feature, [lon, lat])) {
                 const props = layer.feature.properties;
                 foundFipCode = `${props.STATEFP}${props.COUNTYFP}`;
+				foundCountyName = `${props.NAME}`;
             }
         });
 
-        return foundFipCode;
+        return [foundFipCode, foundCountyName];
     }
 }
 

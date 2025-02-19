@@ -15,11 +15,28 @@
 @if (CSVLoader.SelectedLocation != null)
 {
 	<div id="right">
-		<b>Facility Name:</b> @CSVLoader.SelectedLocation.Name
-		<br><b>Location:</b> @CSVLoader.SelectedLocation.City, @CSVLoader.SelectedLocation.State
-		<br><b>Size:</b> @CSVLoader.SelectedLocation.Size.ToString()
-		<br><NavLink href="tree" class="underline"> Tree </NavLink>
-		<br><NavLink href="stats" class="underline"> Stats </NavLink>
+		<br><h3><b>@CSVLoader.SelectedLocation.Name</b></h3>
+		@CSVLoader.SelectedLocation.City, @CSVLoader.SelectedLocation.State (@CSVLoader.County County)
+		<br>@CSVLoader.SelectedLocation.Size.ToString() Employees
+@* 		<br><NavLink href="tree" class="underline"> View Organization Chart </NavLink>
+		<br><NavLink href="stats" class="underline"> See State and County Disaster Statistics </NavLink> *@
+
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="tree" Match="NavLinkMatch.All">
+				<span class="oi oi-people" aria-hidden="true"></span> View Organization Chart
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="stats" Match="NavLinkMatch.All">
+				<span class="oi oi-pie-chart" aria-hidden="true"></span> See State and County Disaster Statistics
+			</NavLink>
+		</div>
+
+@* 		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="org" Match="NavLinkMatch.All">
+				<span class="oi oi-home" aria-hidden="true"></span> Home
+			</NavLink>
+		</div> *@
 	</div>
 }
 
@@ -57,9 +74,10 @@
 
 	// When a location is selected from the map (or hex is clicked),
 	[JSInvokable("InvokeIt")]
-	public async Task InvokeIt(Location input, string fip)
+	public async Task InvokeIt(Location input, string fip, string County)
 	{
-		if(fip != null) CSVLoader.Fip = fip;
+		if (fip != null) CSVLoader.Fip = fip;
+		if (County != null) CSVLoader.County = County;
 		CSVLoader.SelectedLocation = input;
 		StateHasChanged();
 	}

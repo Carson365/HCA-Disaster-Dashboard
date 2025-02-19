@@ -9,8 +9,11 @@ export function runTree(employeeJson) {
     const totalNodes = root.descendants().length;
 
     // Define dimensions and parameters.
-    const width = 1200;
-    const height = 750;
+    //const width = 1200;
+    //const height = 750;
+    const width = document.querySelector('.container').offsetWidth;
+    const height = document.querySelector('.container').offsetHeight;
+
     const spacing = 50; // radial spacing between levels
 
     // Place the root at the center.
@@ -71,7 +74,13 @@ export function runTree(employeeJson) {
         .attr("stroke", "#FFF")  // White outline
         .attr("stroke-width", 0.3)
         .on("mouseenter", function (event, d) {
-            tooltip.html(`<b>${d.data.Name}</b><br><b>ID:</b> ${d.data.ID}`)
+            tooltip.html(`
+            <b>${d.data.Name}</b>
+            <br>(${d.data.ID})
+            <p style="margin:0.5em;"></p>
+            ${d.data.Position}
+            <br>Hired ${d.data.HireDate}
+            `)
                 .style("display", "block");
 
             console.log(tooltip)
@@ -114,14 +123,6 @@ export function runTree(employeeJson) {
             .attr("cy", d => d.y);
     }
 
-    /**
-     * Recursively allocate angular slices to a node’s children.
-     *
-     * @param {object} node - The current node (a d3.hierarchy node).
-     * @param {number} arcStart - The starting angle (in radians) of the allocated arc.
-     * @param {number} arcEnd - The ending angle of the allocated arc.
-     * @param {number} spacing - The radial distance from parent to child.
-     */
     function assignArcs(node, arcStart, arcEnd, spacing) {
         if (node.children && node.children.length > 0) {
             // For each child, define a weight based on the number of children

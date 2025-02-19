@@ -8,7 +8,7 @@ import { createPieChartForCountyTypes } from "./graphs.js"
 
 export async function handleOnLoad(fip, data) {
     console.log(fip);
-    let insertFullFipCode = fip;// '12097';
+    let insertFullFipCode = fip;
     console.log(insertFullFipCode);
     let stateCode = insertFullFipCode[0] + insertFullFipCode[1]
     console.log(stateCode);

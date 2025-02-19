@@ -9,10 +9,10 @@ export function setDotNetHelper(instance) {
     storedInstance = instance;
 }
 
-export function sendToDotNet(fip, place) {
+export function sendToDotNet(place, fip, county) {
 /*    console.log("FIP Code:", fip);*/
     if (storedInstance) {
-        storedInstance.invokeMethodAsync("InvokeIt", place, fip);
+        storedInstance.invokeMethodAsync("InvokeIt", place, fip, county);
     }
 }
 
@@ -111,6 +111,8 @@ export function runMapThings() {
 
     // Optionally, load FEMA data immediately.
     femaUtils.loadFemaData(mapInstance, svg);
+
+	femaUtils.showFemaPoints(mapInstance);
 
     // Manually update positions on initial load.
     d3Utils.repositionSVG(mapInstance, svg, group);
