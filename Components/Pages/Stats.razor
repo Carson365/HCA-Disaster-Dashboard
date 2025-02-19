@@ -23,7 +23,7 @@
 
 			if (File.Exists(filePath))
 			{
-					fileContents = await File.ReadAllTextAsync(filePath);
+				fileContents = await File.ReadAllTextAsync(filePath);
 			}
 			else
 			{
@@ -37,6 +37,7 @@
 
 			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/stats/script.js");
 			// await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
+			Console.WriteLine($"Fip: {CSVLoader.Fip}");
 			await jsModule.InvokeVoidAsync("handleOnLoad", CSVLoader.Fip, fileContents);
 		}
 	}

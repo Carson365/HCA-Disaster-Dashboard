@@ -7,7 +7,6 @@ export function runTree(employeeJson) {
     const root = d3.hierarchy(rootData, d => d.Downs);
 
     const totalNodes = root.descendants().length;
-    console.log(totalNodes);
 
     // Define dimensions and parameters.
     const width = 1200;
@@ -38,6 +37,7 @@ export function runTree(employeeJson) {
         .append("div")
         .attr("class", "tooltip")
         .style("position", "absolute")
+        .style("pointer-events", "none")  // Prevent tooltip from capturing mouse events
         .style("background", "#333")
         .style("color", "#FFF")
         .style("padding", "5px")
@@ -48,34 +48,55 @@ export function runTree(employeeJson) {
     // Add links (lines between nodes).
     const link = svg.append("g")
         .attr("stroke", "#FFF")
+        .style("pointer-events", "auto")
         .selectAll("line")
         .data(links)
         .enter()
         .append("line")
         .attr("stroke-width", 0.3);
 
-    const depthColors = ["#FFF", "#FFF", "#07F", "#0F0", "#FF0", "#FFA500", "#F00", "#FFC0CB", "#800080"];
+    const depthColors = ["#777", "#FFF", "#07F", "#0F0", "#FF0", "#FFA500", "#F00", "#FFC0CB", "#800080"];
 
+    // Add nodes as circles and attach tooltip event handlers.
     const node = svg.append("g")
         .selectAll("circle")
         .data(nodes)
         .enter()
         .append("circle")
         .attr("r", 2.5)  // increased radius for easier interaction
+        .style("pointer-events", "all")
         .attr("fill", d => depthColors[Math.min(d.depth, depthColors.length - 1)])  // Cap depth at last color
-            .attr("stroke", "#FFF")  // White outline
-        .attr("stroke-width", 0.3); // Thin outline
-
+        .attr("stroke", "#FFF")  // White outline
+        .attr("stroke-width", 0.3)
+        .on("mouseover", function (event, d) {
+            // Update the tooltip content.
+            tooltip.html(`
+                <b>${d.data.Name}</b><br>
+                <b>ID:</b> ${d.data.ID}
+            `)
+                .style("visibility", "visible");
+        })
+        .on("mousemove", function (event) {
+            // Position the tooltip near the cursor.
+            tooltip.style("top", (event.pageY + 10) + "px")
+                .style("left", (event.pageX + 10) + "px");
+        })
+        .on("mouseout", function () {
+            tooltip.style("visibility", "hidden");
+        });
 
     // (Optional) Set up a force simulation.
-    const simulation = d3.forceSimulation(nodes)
+    d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.data.ID).distance(25).strength(0.8))
         .force("charge", d3.forceManyBody().strength(-8))
-        .force("radial", d3.forceRadial(d => (d.depth ** 0.5 - (0.05 * d3.max(nodes, d => d.depth))) * 100, width / 2, height / 2).strength(0.2))
-        .force("collide", d3.forceCollide().radius(3).strength(0.1)) // Dialled
-        .force("toParent", forceToParent(0.25))  // Dialled
-        .force("border", borderForce(width-50, height-50, 100)) // Custom border collision force
-
+        .force("radial", d3.forceRadial(
+            d => (d.depth ** 0.5 - (0.05 * d3.max(nodes, d => d.depth))) * 100,
+            width / 2,
+            height / 2
+        ).strength(0.2))
+        .force("collide", d3.forceCollide().radius(3).strength(0.1))
+        .force("toParent", forceToParent(0.25))
+        .force("border", borderForce(width - 50, height - 50, 100))
         .on("tick", ticked);
 
     // Fix the root at the center.
@@ -132,17 +153,17 @@ export function runTree(employeeJson) {
         }
     }
 
-    // Custom force to attract nodes to their parent positions
+    // Custom force to attract nodes to their parent positions.
     function forceToParent(strength = 0.1) {
         let nodes;
         function force(alpha) {
             for (let i = 0, n = nodes.length; i < n; ++i) {
                 const node = nodes[i];
-                if (node.parent) { // Only if there is a parent
-                    // Calculate the difference between parent's and child's positions
+                if (node.parent) { // Only if there is a parent.
+                    // Calculate the difference between parent's and child's positions.
                     const dx = node.parent.x - node.x;
                     const dy = node.parent.y - node.y;
-                    // Adjust velocities to pull the node toward its parent
+                    // Adjust velocities to pull the node toward its parent.
                     node.vx += dx * strength * alpha;
                     node.vy += dy * strength * alpha;
                 }
@@ -154,22 +175,18 @@ export function runTree(employeeJson) {
         return force;
     }
 
+    // Custom force to keep nodes within a border.
     function borderForce(width, height, padding = 10) {
         return function (alpha) {
             nodes.forEach(node => {
-                const r = 5; // Node radius
-
-                // Push back if node is beyond left or right bounds
+                const r = 5; // Node radius.
+                // Push back if node is beyond left or right bounds.
                 if (node.x - r < padding) node.vx += (padding - (node.x - r)) * alpha;
                 if (node.x + r > width - padding) node.vx -= ((node.x + r) - (width - padding)) * alpha;
-
-                // Push back if node is beyond top or bottom bounds
+                // Push back if node is beyond top or bottom bounds.
                 if (node.y - r < padding) node.vy += (padding - (node.y - r)) * alpha;
                 if (node.y + r > height - padding) node.vy -= ((node.y + r) - (height - padding)) * alpha;
             });
         };
-    };
-
-
-
+    }
 }

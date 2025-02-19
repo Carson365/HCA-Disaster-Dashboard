@@ -13,7 +13,7 @@ export class Hex {
         this.y = anchorY;
         this.selected = false;
         this.hidden = false;
-        this.size = (place.Size ** 0.25) * 2;
+        this.size = Math.max(5, (place.Size ** 0.25) * 2);
     }
 
     select() {

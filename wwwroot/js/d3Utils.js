@@ -51,12 +51,16 @@ export function updateD3Elements(hexes, group, mapInstance, simulation) {
         .attr("class", "hexagon")
         .attr("points", (d) => generateHexagon(d.x, d.y, d.size || 6))
         .style("cursor", "pointer")
-        .style("pointer-events", "auto"); // Now hexes themselves can capture events
+        .style("pointer-events", "auto") // Now hexes themselves can capture events
+        .style("stroke", (d) => d.defaultColor)
+        .style("stroke-width", "1.5px");
 
     iconSelection = hexEnter.merge(iconSelection);
 
     iconSelection
         .style("fill", (d) => d.currentColor)
+        .style("stroke", (d) => d.defaultColor)
+        .style("stroke-width", "1.5px")
         .on("mouseover", function (event, d) {
 
 

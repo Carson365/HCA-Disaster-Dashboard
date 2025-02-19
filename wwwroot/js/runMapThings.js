@@ -12,12 +12,13 @@ export function setDotNetHelper(instance) {
 export function sendToDotNet(fip, place) {
 /*    console.log("FIP Code:", fip);*/
     if (storedInstance) {
-        storedInstance.invokeMethodAsync("InvokeIt", place);
+        storedInstance.invokeMethodAsync("InvokeIt", place, fip);
     }
 }
 
 export function dotNetCountyClick(fip) {
     if (storedInstance) {
+        //console.log("dNCC: " + fip);
         storedInstance.invokeMethodAsync("County", fip);
     }
 }
@@ -46,7 +47,7 @@ export function runMapThings() {
         smoothWheelZoom: true,
         smoothSensitivity: 0.1,
         zoomSnap: 0.1,
-    }).setView([37.8, -96], 4);
+    }).setView([37, -95], 5);
 
     //mapInstance.createPane("countyPane");
     //mapInstance.getPane("countyPane").style.zIndex = 400;
@@ -138,6 +139,42 @@ export function runCommon(color, placesJson) {
     simulation.alpha(1).restart();
     countyUtils.updateCountyStyles(countyPane, hexes);
 }
+
+export function reSelect(selectedLocationJson) {
+    // Parse the JSON to get the selected location object.
+    const selectedLocation = JSON.parse(selectedLocationJson);
+
+    if (!mapInstance) {
+        console.error("Error: mapInstance is not initialized.");
+        return;
+    }
+
+    // First, deselect all currently selected hexes.
+    hexes.forEach(hex => {
+        if (hex.selected) {
+            hex.deselect();
+        }
+    });
+
+    // Find the hex that matches the selected location.
+    // Here, we compare Latitude and Longitude; adjust if you have a unique ID.
+    const targetHex = hexes.find(hex =>
+        hex.place.Latitude === selectedLocation.Latitude &&
+        hex.place.Longitude === selectedLocation.Longitude
+    );
+
+    if (targetHex) {
+        // Select the target hex using its select() method.
+        targetHex.select();
+
+        // Update the D3 elements and restart the simulation to reflect the selection.
+        d3Selections = d3Utils.updateD3Elements(hexes, group, mapInstance, simulation);
+        simulation.alpha(1).restart();
+    } else {
+        console.warn("Selected location not found among hexes.");
+    }
+}
+
 
 export function filterLocations(places) {
     hexes.forEach((hex) => {

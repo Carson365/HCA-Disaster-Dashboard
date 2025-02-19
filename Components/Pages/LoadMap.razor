@@ -8,8 +8,7 @@
 
 <link rel="stylesheet" href="/leaflet/leaflet.css" />
 <script src="leaflet/leaflet.js"></script>
-@* <script src="leaflet/leaflet-event-forwarder.js"></script>
- *@
+
 <div id="map" style="pointer-events: auto; background-color: rgba(200,220,230,80%);
 	width: 100%; height: 100%; z-index: 1;"></div>
 
@@ -20,6 +19,7 @@
 		<br><b>Location:</b> @CSVLoader.SelectedLocation.City, @CSVLoader.SelectedLocation.State
 		<br><b>Size:</b> @CSVLoader.SelectedLocation.Size.ToString()
 		<br><NavLink href="tree" class="underline"> Tree </NavLink>
+		<br><NavLink href="stats" class="underline"> Stats </NavLink>
 	</div>
 }
 
@@ -49,12 +49,17 @@
 		string color = "#03173E";
 		string json = JsonSerializer.Serialize(places, options);
 		await jsModule.InvokeVoidAsync("runCommon", color, json);
+		if (CSVLoader.SelectedLocation != null)
+		{
+			await jsModule.InvokeVoidAsync("reSelect", JsonSerializer.Serialize(CSVLoader.SelectedLocation, options));
+		}
 	}
 
 	// When a location is selected from the map (or hex is clicked),
 	[JSInvokable("InvokeIt")]
-	public async Task InvokeIt(Location input)
+	public async Task InvokeIt(Location input, string fip)
 	{
+		if(fip != null) CSVLoader.Fip = fip;
 		CSVLoader.SelectedLocation = input;
 		StateHasChanged();
 	}
@@ -62,7 +67,6 @@
 	[JSInvokable("County")]
 	public async Task County(string fip)
 	{
-		Console.WriteLine(fip);
 		CSVLoader.Fip = fip;
 		NavigationManager.NavigateTo("/Stats");
     }

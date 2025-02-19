@@ -7,8 +7,11 @@ import { loadStateMap } from './graphs.js';
 import { createPieChartForCountyTypes } from "./graphs.js"
 
 export async function handleOnLoad(fip, data) {
+    console.log(fip);
     let insertFullFipCode = fip;// '12097';
+    console.log(insertFullFipCode);
     let stateCode = insertFullFipCode[0] + insertFullFipCode[1]
+    console.log(stateCode);
     let html = `
      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +20,7 @@ export async function handleOnLoad(fip, data) {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="./index.html">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
             </ul>
         </div>
@@ -137,7 +140,8 @@ const fipsToAbbreviation = {
     "37": "North Carolina", "38": "North Dakota", "39": "Ohio", "40": "Oklahoma", "41": "Oregon",
     "42": "Pennsylvania", "44": "Rhode Island", "45": "South Carolina", "46": "South Dakota",
     "47": "Tennessee", "48": "Texas", "49": "Utah", "50": "Vermont", "51": "Virginia",
-    "53": "Washington", "54": "West Virginia", "55": "Wisconsin", "56": "Wyoming"
+    "53": "Washington", "54": "West Virginia", "55": "Wisconsin", "56": "Wyoming",
+    "72": "Puerto Rico", "66": "Guam", "60": "American Samoa", "78": "Virgin Islands"
 };
 
 export async function getCountyNameByFips(stateFips, countyFips) {

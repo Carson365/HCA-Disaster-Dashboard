@@ -54,7 +54,7 @@
 				allTopUps.TryAdd(e.ID, e);
 			}
 
-			Console.WriteLine("All top ups: " + allTopUps.Count());
+			// Console.WriteLine("All top ups: " + allTopUps.Count());
 
 			Employee dummyEmployee = new Employee()
 				{
@@ -67,7 +67,7 @@
 					Downs = new List<Employee>(allTopUps.Values)
 				};
 
-			Console.WriteLine("Total: " + "a");
+			// Console.WriteLine("Total: " + "a");
 
 			var emps = JsonSerializer.Serialize(dummyEmployee, options);
 

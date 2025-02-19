@@ -3,40 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\carso\\Desktop\\AIS Git\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\stats\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\stats\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\stats.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\stats.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\jstree.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\jstree.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\stats\\apis.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\stats\\apis.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\runmapthings.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\runmapthings.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\css\\stats.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\css\\stats.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\fields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\fields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\stats.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\stats.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\countyutils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -47,12 +31,36 @@
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\stats.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\fields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\fields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\stats\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\stats\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\d3utils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\d3utils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\hex.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\hex.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\tree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\tree.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\css\\stats.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\css\\stats.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\stats\\apis.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\stats\\apis.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -66,26 +74,50 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
+              "Title": "Tree.razor",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Tree.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Tree.razor",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Tree.razor",
+              "RelativeToolTip": "Components\\Pages\\Tree.razor",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAEUAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-18T23:52:53.333Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "jsTree.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\jsTree.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\jsTree.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\jsTree.js",
+              "RelativeToolTip": "wwwroot\\js\\jsTree.js",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAAwFgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-02-18T23:47:39.339Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "apis.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\stats\\apis.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\stats\\apis.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\stats\\apis.js",
               "RelativeToolTip": "wwwroot\\js\\stats\\apis.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-02-18T22:16:47.393Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-18T22:16:47.393Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 8,
               "Title": "script.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\stats\\script.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\stats\\script.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\stats\\script.js",
               "RelativeToolTip": "wwwroot\\js\\stats\\script.js",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAAD8AAAAGAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-02-18T22:11:07.434Z",
               "EditorCaption": ""
@@ -98,14 +130,14 @@
               "RelativeDocumentMoniker": "Tools\\CSVLoader.cs",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
               "RelativeToolTip": "Tools\\CSVLoader.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-18T22:09:39.371Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "Fields.cs",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\Fields.cs",
               "RelativeDocumentMoniker": "Tools\\Fields.cs",
@@ -118,98 +150,94 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 10,
               "Title": "Hex.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Hex.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\Hex.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Hex.js",
               "RelativeToolTip": "wwwroot\\js\\Hex.js",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAQwDkAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-02-18T21:58:54.799Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-18T21:58:54.799Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 9,
               "Title": "d3Utils.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\d3Utils.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\d3Utils.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\d3Utils.js",
               "RelativeToolTip": "wwwroot\\js\\d3Utils.js",
-              "ViewState": "AgIAAFAAAAAAAAAAAAAgwFoAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwDUAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-02-18T21:58:32.927Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-18T21:58:32.927Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "runMapThings.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\runMapThings.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\runMapThings.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\runMapThings.js",
               "RelativeToolTip": "wwwroot\\js\\runMapThings.js",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAtwBQAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAgwBQAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-02-18T21:57:43.217Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 5,
               "Title": "countyUtils.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\countyUtils.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\countyUtils.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\countyUtils.js",
               "RelativeToolTip": "wwwroot\\js\\countyUtils.js",
-              "ViewState": "AgIAABsAAAAAAAAAAAAuwC0AAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2025-02-18T21:57:11.564Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "LoadMap.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\LoadMap.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\LoadMap.razor",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\LoadMap.razor",
               "RelativeToolTip": "Components\\Pages\\LoadMap.razor",
-              "ViewState": "AgIAACkAAAAAAAAAAAAQwD4AAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAAwEUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-18T21:56:50.458Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 12,
               "Title": "stats.css",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\css\\stats.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\stats.css",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\css\\stats.css",
               "RelativeToolTip": "wwwroot\\css\\stats.css",
-              "ViewState": "AgIAAPEAAAAAAAAAAAAUwBsBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAABsBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-02-18T21:47:17.382Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-18T21:47:17.382Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 13,
               "Title": "site.css",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\css\\site.css",
               "RelativeToolTip": "wwwroot\\css\\site.css",
-              "ViewState": "AgIAAKwAAAAAAAAAAAAAABAAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAIUAAAAAAAAAAAAAABAAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-02-18T21:43:35.782Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-18T21:43:35.782Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 6,
               "Title": "Stats.razor.css",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor.css",
               "RelativeDocumentMoniker": "Components\\Pages\\Stats.razor.css",
@@ -222,13 +250,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Stats.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\Stats.razor",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
               "RelativeToolTip": "Components\\Pages\\Stats.razor",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACcAAABPAAAAAAAAAA==",
+              "ViewState": "AgIAABoAAAAAAAAAAAAAwCcAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-18T21:35:53.884Z",
               "EditorCaption": ""

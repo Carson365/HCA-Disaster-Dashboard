@@ -17,7 +17,7 @@ namespace AISComp.Tools
 			if (IsLoading) OnLoaded?.Invoke();
 			IsLoading = false;
 		}
-		 
+
 		//public static void SearchEmployees()
 		//{
 		//	SearchResults = EmployeeList
@@ -38,7 +38,7 @@ namespace AISComp.Tools
 		private static List<Employee> InitializeEmployees()
 		{
 			var engine = new FileHelperEngine<CSVEmployee> { Options = { IgnoreFirstLines = 1 } };
-			CSVEmployee?[] records = engine.ReadFile("Data\\employees.csv");
+			CSVEmployee?[] records = engine.ReadFile(Path.Combine("Data", "employees.csv"));
 
 			List<Employee> employees = [];
 			foreach (CSVEmployee? record in records)
@@ -82,7 +82,7 @@ namespace AISComp.Tools
 		private static List<Location> InitializeLocations()
 		{
 			FileHelperEngine<CSVLocation> engine = new() { Options = { IgnoreFirstLines = 1 } };
-			List<CSVLocation> locs = [.. engine.ReadFile("Data\\locations.csv")];
+			List<CSVLocation> locs = [.. engine.ReadFile(Path.Combine("Data", "locations.csv"))];
 
 			List<Location> save = [];
 
@@ -112,7 +112,7 @@ namespace AISComp.Tools
 		private static List<Department> InitializeDepartments()
 		{
 			FileHelperEngine<Department> engine = new() { Options = { IgnoreFirstLines = 1 } };
-			return [.. engine.ReadFile("Data\\departments.csv")];
+			return [.. engine.ReadFile(Path.Combine("Data", "departments.csv"))];
 		}
 
 
