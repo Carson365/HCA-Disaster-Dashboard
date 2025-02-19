@@ -33,17 +33,19 @@ export function runTree(employeeJson) {
         .attr("height", height);
 
     // Define a tooltip element for hover popups.
-    const tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("position", "absolute")
-    .style("z-index", "1000") // Bring tooltip to the front
-    .style("background", "#333")
-    .style("color", "#FFF")
-    .style("padding", "5px")
-    .style("border-radius", "5px")
-    .style("font-size", "12px")
-    .style("visibility", "hidden");
+    const tooltip = d3.select(".container")
+        .append("div")
+        .attr("class", "tooltipDiv")
+        .style("position", "absolute")
+        .style("z-index", "100000")
+        .style("background", "#333")
+        .style("color", "#FFF")
+        .style("padding", "5px")
+        .style("border", "1px solid red") // temporary border for debugging
+        .style("border-radius", "5px")
+        .style("font-size", "12px")
+        .style("display", "none");
+
 
     // Add links (lines between nodes).
     const link = svg.append("g")
@@ -68,21 +70,19 @@ export function runTree(employeeJson) {
         .attr("fill", d => depthColors[Math.min(d.depth, depthColors.length - 1)])  // Cap depth at last color
         .attr("stroke", "#FFF")  // White outline
         .attr("stroke-width", 0.3)
-        .on("mouseover", function (event, d) {
-            // Update the tooltip content.
-            tooltip.html(`
-                <b>${d.data.Name}</b><br>
-                <b>ID:</b> ${d.data.ID}
-            `)
-                .style("visibility", "visible");
+        .on("mouseenter", function (event, d) {
+            tooltip.html(`<b>${d.data.Name}</b><br><b>ID:</b> ${d.data.ID}`)
+                .style("display", "block");
+
+            console.log(tooltip)
         })
         .on("mousemove", function (event) {
-            // Position the tooltip near the cursor.
             tooltip.style("top", (event.pageY + 10) + "px")
                 .style("left", (event.pageX + 10) + "px");
+            
         })
-        .on("mouseout", function () {
-            tooltip.style("visibility", "hidden");
+        .on("mouseleave", function () {
+            tooltip.style("display", "none");
         });
 
     // (Optional) Set up a force simulation.
