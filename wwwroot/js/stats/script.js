@@ -286,7 +286,7 @@ export function disasterTypesByFipsCounty(fipsStateCode, fipsCountyCode) {
 
 function populateDataRows(fipsStateCode, fipsCountyCode) {
     const disastersInCounty = [];
-    const stateDisasters = disastersByFips[fipsStateCode]
+    let stateDisasters = disastersByFips[fipsStateCode]
         ? disastersByFips[fipsStateCode]
         : [];
     const displayedDisasterNumbers = new Set(); // To track displayed disaster numbers
@@ -309,7 +309,7 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
     let modals = ``; // Store modals
 
     // Sort disasters by date
-    Object.values(stateDisasters).sort((a, b) => new Date(b.declarationDate) - new Date(a.declarationDate));
+    stateDisasters = Object.values(stateDisasters).sort((a, b) => new Date(b.declarationDate) - new Date(a.declarationDate));
 
     // Filter unique county-specific disasters
     Object.values(stateDisasters).forEach(disaster => {
