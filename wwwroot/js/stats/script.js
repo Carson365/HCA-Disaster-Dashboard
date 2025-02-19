@@ -333,9 +333,17 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
         </tr>
         `;
             let allCountiesAffected = getAllCountiesAffected(fipsStateCode, disaster.disasterNumber);
-            let disasterBegandEnd = disaster.incidentEndDate !== 'Not Listed'
-                ? `Disaster began on ${disaster.declarationDate} and ended on ${disaster.incidentEndDate}.`
-                : `Disaster began on ${disaster.incidentDeclarationDate}, the end date is not listed.`;
+
+            let disasterBegandEnd;
+            if(disaster.incidentEndDate !== 'Not Listed' && disaster.incidentDeclarationDate != undefined){
+                disasterBegandEnd = `Disaster began on ${disaster.declarationDate} and ended on ${disaster.incidentEndDate}.`
+            }else if(disaster.incidentEndDate == 'Not Listed' && disaster.incidentDeclarationDate == undefined){
+                disasterBegandEnd = `It's unknown when the disaster began or ended.`
+            } else if(disaster.incidentDeclarationDate == undefined){
+                disasterBegandEnd = `It's unknown when the disaster started, however it ended on ${disaster.incidentEndDate}.`
+            } else {
+                disasterBegandEnd = `Disaster began on ${disaster.incidentDeclarationDate}, the end date is not listed.`
+            }
 
             // Modal
             modals += `
