@@ -9,10 +9,10 @@ function cleanFEMADisasterData(disaster) {
             ? disaster.fipsCountyCode.toString().padStart(3, '0')
             : 'Unknown',
         incidentType: disaster.incidentType ? disaster.incidentType.trim() : 'Unknown',
-        year: disaster.declarationDate ? new Date(disaster.declarationDate).getFullYear() : 'Unknown',
+        year: disaster.incidentBeginDate ? new Date(disaster.incidentBeginDate).getFullYear() : 'Unknown',
         designatedArea: disaster.designatedArea ? disaster.designatedArea.trim() : 'Unknown',
         disasterNumber: disaster.disasterNumber || 'N/A',
-        declarationDate: disaster.incidentBeginDate ? formatDate(disaster.declarationDate) : 'Not Listed',
+        declarationDate: disaster.incidentBeginDate ? formatDate(disaster.incidentBeginDate) : 'Not Listed',
         incidentEndDate: disaster.incidentEndDate ? formatDate(disaster.incidentEndDate) : 'Not Listed',
         declarationTitle: disaster.declarationTitle ? disaster.declarationTitle.trim() : 'Unknown'
     };

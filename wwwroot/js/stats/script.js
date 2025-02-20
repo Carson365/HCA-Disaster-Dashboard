@@ -64,11 +64,11 @@ export async function handleOnLoad(fip, data) {
     //console.log(JSON.parse(data));
 
     Object.assign(disastersByFips, JSON.parse(data));
-    //else await fetchAllAPIData()
+    await fetchAllAPIData()
 
     //console.log(disastersByFips);
 
-    //exportData();
+    exportData();
 
     displayAllData(insertFullFipCode)
 }
@@ -329,7 +329,7 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
             <td>${disaster.incidentType}</td>
             <td>${disaster.designatedArea}</td>
             <td>${disaster.declarationTitle}</td>
-            <td>${disaster.declarationDate}</td>
+            <td>${new Date(Date.parse(disaster.declarationDate)).toLocaleDateString("en-US", options)}</td>
         </tr>
         `;
             let allCountiesAffected = getAllCountiesAffected(fipsStateCode, disaster.disasterNumber);
@@ -403,7 +403,7 @@ function populateDataRows(fipsStateCode, fipsCountyCode) {
             <td>${disaster.incidentType}</td>
             <td>${disaster.designatedArea}</td>
             <td>${disaster.declarationTitle}</td>
-            <td>${disaster.declarationDate}</td>
+            <td>${new Date(Date.parse(disaster.declarationDate)).toLocaleDateString("en-US", options)}</td>
         </tr>
         `;
             displayedDisasterNumbers.add(disaster.disasterNumber); // Mark as displayed
