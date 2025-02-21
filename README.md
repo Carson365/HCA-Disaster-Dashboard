@@ -11,3 +11,8 @@ Installation & Usage:
 3. Run the following command: dotnet run
 4. After the program starts, copy the provided localhost link from the terminal output.
 5. Paste the link into your browser to access the application.
+
+--
+
+Link to the presentation video:
+https://drive.google.com/file/d/1Tdm6cWOOvYVcXGQi3O-xQGUDDnqbYB9m/view
