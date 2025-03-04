@@ -1,30 +1,17 @@
 ﻿@page "/"
 @inject IJSRuntime jsRuntime
-@* @implements IAsyncDisposable
- *@
-<div class="page" style="height:100vh; width:100vw;">
-    <div class="sidebar" style="pointer-events: none; z-index: 200;">
-        <MenuBar />
-    </div>
 
+<div class="page" style="height:100vh; width:100vw;">
     <main style="height:100%; width:100%;">
         <LoadMap />
         <div id="key">
             <div>&emsp;</div>
             <NavLink href="" class="underline" @onclick="() => Run()"> Toggle Food Bank Visibility </NavLink>
-            @*             <div>&emsp;</div>
-            <NavLink href="" class="underline" @onclick="() => Run(true)"> Show Food Banks </NavLink> *@
         </div>
     </main>
 </div>
 
 @code {
-
-
-
-
-
-
 
     // Declare as nullable so the compiler knows it might be null initially.
     private IJSObjectReference? _jsModule;
@@ -46,7 +33,6 @@
 
     protected async Task Run()
     {
-
         show ^= true;
         // If the module hasn't been loaded yet, import it.
         if (_jsModule is null)

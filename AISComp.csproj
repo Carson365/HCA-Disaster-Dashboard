@@ -29,4 +29,8 @@
     <PackageReference Include="FileHelpers" Version="3.5.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Shared\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
-@page "/stats"
+@page "/stats/{Fip}"
+@* @inject CSVLoader CSVLoaderInstance *@
 
 <head>
 	<meta charset="UTF-8">
@@ -13,6 +14,9 @@
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
 @code {
+
+	[Parameter] public string Fip { get; set; }
+
 	protected override async Task OnAfterRenderAsync(bool first)
 	{
 		if (first)
@@ -37,7 +41,7 @@
 
 			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/stats/script.js");
 			// await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
-			await jsModule.InvokeVoidAsync("handleOnLoad", CSVLoader.Fip, fileContents);
+			await jsModule.InvokeVoidAsync("handleOnLoad", Fip, fileContents);
 		}
 	}
 }

@@ -1,9 +1,11 @@
-﻿@page "/tree"
+﻿@page "/tree/{LocID}"
 @using AISComp.Tools
-@using AISComp.Components.Shared
+@* @using AISComp.Components.Shared*@
 @inject IJSRuntime jsRuntime
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
+@* @inject CSVLoader CsvLoaderInstance *@
+
 
 <PageTitle>Tree</PageTitle>
 
@@ -17,12 +19,17 @@
 
 
 @code {
+
+	[Parameter] public string LocID { get; set; }
+
+	private List<Employee> SearchResults;
+
 	private int visibleCount;
 
 	protected override void OnInitialized()
 	{
 		CSVLoader.OnLoaded += () => StateHasChanged();
-		CSVLoader.GetLocationOrgTree();
+		SearchResults = CSVLoader.GetLocationOrgTree(LocID);
 	}
 
 	private JsonSerializerOptions options = new JsonSerializerOptions
@@ -35,22 +42,19 @@
 	{
 		if (first)
 		{
-
-
-
 			// Assume CSVLoader.SelectedEmployee is one of the employees in the location.
-			Employee startingEmployee = CSVLoader.SearchResults[0];
-			string locationId = CSVLoader.SelectedLocation.ID;
+			Employee startingEmployee = SearchResults[0];
+			// string locationId = CsvLoaderInstance.SelectedLocation.ID;
 
 			// Get the trimmed tree (only employees at the selected location).
-			Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, locationId);
+			Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID);
 			// var emps = JsonSerializer.Serialize(trimmedSelectedEmployee, options);
 
 			Dictionary<string,Employee> allTopUps = new();
 
-			foreach (Employee emp in CSVLoader.SearchResults)
+			foreach (Employee emp in SearchResults)
 			{
-				var e = CSVLoader.GetTrimmedSelectedEmployee(emp, locationId);
+				var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID);
 				allTopUps.TryAdd(e.ID, e);
 			}
 
@@ -61,7 +65,7 @@
 					ID = "Connected employees have no supervisor",
 					Name = "Organization Root",
 					Position = "",
-					LocationID = locationId,
+					LocationID = LocID,
 					HireDate = "",
 					Up = null,
 					Downs = new List<Employee>(allTopUps.Values)

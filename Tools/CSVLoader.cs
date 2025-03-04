@@ -1,40 +1,32 @@
-﻿using FileHelpers;
+﻿using AISComp.Components.Pages;
+using FileHelpers;
 
 namespace AISComp.Tools
 {
 	public class CSVLoader
 	{
-		public static string Fip { get; set; } = string.Empty;
-		public static string County { get; set; } = string.Empty;
-		public static bool IsLoading { get; private set; } = true;
+		public bool IsLoading { get; private set; } = true;
 
-		// Persistent search state
-		public static string SearchId { get; set; } = string.Empty;
-		public static string SearchName { get; set; } = string.Empty;
-		public static List<Employee> SearchResults { get; set; } = [];
+		//public string SearchId { get; set; } = string.Empty;
+		//public string SearchName { get; set; } = string.Empty;
+		//public List<Employee> SearchResults { get; set; } = [];
 		public static event Action? OnLoaded;
-		public static void SignalLoaded()
+
+		public void SignalLoaded()
 		{
 			if (IsLoading) OnLoaded?.Invoke();
 			IsLoading = false;
 		}
 
-		//public static void SearchEmployees()
-		//{
-		//	SearchResults = EmployeeList
-		//		.Where(employee =>
-		//			employee.ID.Contains(SearchId, StringComparison.OrdinalIgnoreCase) &&
-		//			employee.Name.Contains(SearchName, StringComparison.OrdinalIgnoreCase))
-		//		.ToList();
-		//}
-
-		public static void GetLocationOrgTree()
+		public static List<Employee> GetLocationOrgTree(string ID)
 		{
-			SearchResults = EmployeeList.Where(e => e.LocationID == SelectedLocation.ID).ToList();
+			if (ID != null)
+			{
+				return [.. EmployeeList.Where(e => e.LocationID == ID)];
+			}
+			else return [];
 		}
 
-
-		//public static Employee? SelectedEmployee { get; set; } 
 		public static List<Employee> EmployeeList { get; private set; } = InitializeEmployees();
 		private static List<Employee> InitializeEmployees()
 		{
@@ -78,8 +70,8 @@ namespace AISComp.Tools
 			return employees;
 		}
 
-		public static Location? SelectedLocation { get; set; }
-		public static List<Location> Locations { get; set; } = InitializeLocations();
+		public Location? SelectedLocation { get; set; }
+		public static List<Location> Locations { get; private set; } = InitializeLocations();
 		private static List<Location> InitializeLocations()
 		{
 			FileHelperEngine<CSVLocation> engine = new() { Options = { IgnoreFirstLines = 1 } };
@@ -109,7 +101,7 @@ namespace AISComp.Tools
 			return save;
 		}
 
-		public static List<Department> Departments { get; set; } = InitializeDepartments();
+		public static List<Department> Departments { get; private set; } = InitializeDepartments();
 		private static List<Department> InitializeDepartments()
 		{
 			FileHelperEngine<Department> engine = new() { Options = { IgnoreFirstLines = 1 } };
@@ -117,21 +109,6 @@ namespace AISComp.Tools
 		}
 
 
-
-
-
-
-
-
-
-
-
-		/// <summary>
-		/// Returns a trimmed copy of the employee tree so that every node’s LocationID equals the selected location.
-		/// </summary>
-		/// <param name="startingEmployee">Any employee known to work at the selected location.</param>
-		/// <param name="locationId">The location to filter by.</param>
-		/// <returns>A new Employee tree (a deep copy) containing only employees at that location.</returns>
 		public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId)
 		{
 			// First, climb upward—but only while the manager is in the same location.
@@ -145,13 +122,6 @@ namespace AISComp.Tools
 			return TrimTreeToLocation(topEmployee, locationId);
 		}
 
-		/// <summary>
-		/// Recursively creates a copy of an employee and its subordinate tree, but only includes nodes
-		/// whose LocationID matches the provided locationId.
-		/// </summary>
-		/// <param name="employee">The current employee node to process.</param>
-		/// <param name="locationId">The location to filter by.</param>
-		/// <returns>A new Employee node (with Downs filtered), or null if the node doesn’t match (should not occur for the root).</returns>
 		private static Employee TrimTreeToLocation(Employee employee, string locationId)
 		{
 			//// If this node does not belong to the location, skip it.
@@ -168,7 +138,7 @@ namespace AISComp.Tools
 				LocationID = employee.LocationID,
 				HireDate = employee.HireDate,
 				Up = null,
-				Downs = new List<Employee>()
+				Downs = []
 				// We intentionally leave Up null in the trimmed tree.
 			};
 
