@@ -7,9 +7,6 @@ namespace AISComp.Tools
 	{
 		public bool IsLoading { get; private set; } = true;
 
-		//public string SearchId { get; set; } = string.Empty;
-		//public string SearchName { get; set; } = string.Empty;
-		//public List<Employee> SearchResults { get; set; } = [];
 		public static event Action? OnLoaded;
 
 		public void SignalLoaded()
@@ -159,6 +156,23 @@ namespace AISComp.Tools
 
 			return trimmed;
 		}
+
+
+
+
+
+		////////////////////////////////
+
+
+
+
+		//public static List<Disaster> Disasters { get; private set; } = InitializeDisasters();
+
+		//private static List<Disaster> InitializeDisasters()
+		//{
+		//	FileHelperEngine<Disaster> engine = new() { Options = { IgnoreFirstLines = 1 } };
+		//	return [.. engine.ReadFile(Path.Combine("Data", "disasters.csv"))];
+		//}
 
 	}
 }

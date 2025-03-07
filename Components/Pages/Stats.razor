@@ -9,8 +9,62 @@
 	<link rel="stylesheet" href="./css/stats.css" />
 </head>
 
-<div id="main"></div>
-<script src="https://d3js.org/d3.v7.min.js"></script>
+@* <link href="charts.css" rel="stylesheet" type="text/css"> *@
+
+<body>
+	<div id="main">
+		<nav class="navbar">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item active">
+						<a class="nav-link" href="/">Home</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="Zcontent">
+
+			<div class="Zcolumn x2">
+				<div class="Zcard">
+					<div class="Zcard-content" id="stackedAreaChart"></div>
+				</div>
+				<div class="Zcard squish">
+					<div class="Zcard-content" id="statePieChart"></div>
+					<div class="Zcard-content" id="countyPieChart"></div>
+				</div>
+				<div class="Zcard">
+					<div class="Zcard-content" id="stackedBarChart"></div>
+				</div>
+				<div class="Zcard tall">
+					<div class="Zcard-content" id="stateHeatMap"></div>
+				</div>
+			</div>
+			<div class="Zcolumn x1">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col" colspan="4" class="text-center">County Data</th>
+						</tr>
+						<tr>
+							<th scope="col">Disaster Type</th>
+							<th scope="col">Area Affected</th>
+							<th scope="col">Declaration Title</th>
+							<th scope="col">Date</th>
+						</tr>
+					</thead>
+					<tbody id="disasterList"></tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</body>
+@* <script src="https://d3js.org/d3.v7.min.js"></script> *@
 
 @code {
 
@@ -38,9 +92,9 @@
 
 
 
-			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/stats/script.js");
+			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Charts/main.js");
 			// await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
-			await jsModule.InvokeVoidAsync("handleOnLoad", Fip, fileContents);
+			await jsModule.InvokeVoidAsync("createCharts", Fip, fileContents);
 		}
 	}
 }
