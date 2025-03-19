@@ -8,11 +8,6 @@ import { getStateAbbreviationByFips } from '../script.js';
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
     const data = fipsCountyCode ? disasterTypesByFipsCounty(fipsStateCode, fipsCountyCode) : disastersByFipsTypes(fipsStateCode);
 
-    if (!data || Object.keys(data).length === 0) {
-        console.warn("No data available for the given FIPS code");
-        return;
-    }
-
     const dataEntries = Object.entries(data).map(([type, count]) => ({ type, count }));
     const totalDisasters = dataEntries.reduce((sum, d) => sum + d.count, 0);
     const containerId = fipsCountyCode ? "#countyPieChart" : "#statePieChart";

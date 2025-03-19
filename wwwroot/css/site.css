@@ -9,20 +9,13 @@
 html, body {
     font-family: 'Atkinson';
     --background: #EAECEC;
-/*  --primary: #B6E2B6;
-    --secondary: #94AFDB;*/
     --primary: #A6D2A6;
     --secondary: #849FCB;
     --accent: #a970ff;
     --text: #000;
-/*    color: var(--text);
-    background-color: var(--background);*/
 }
 
-::selection {
-    background: black;
-    color: white;
-}
+
 
 h1:focus {
     outline: none;
