@@ -21,7 +21,7 @@ namespace AISComp.Tools
 
 
 		public static List<Employee> GetLocationOrgTree(string ID) =>
-	string.IsNullOrEmpty(ID) ? [] : [.. EmployeeList.Where(e => e.LocationID == ID)];
+			string.IsNullOrEmpty(ID) ? [] : [.. EmployeeList.Where(e => e.LocationID == ID)];
 
 
 		private static List<Employee> InitializeEmployees()
@@ -106,50 +106,19 @@ namespace AISComp.Tools
 			return departments;
 		}
 
-		//private static List<Disaster> InitializeDisasters()
-		//{
-		//	var time1 = DateTime.Now;
-		//	using var reader = File.OpenText(Path.Combine("Data", "disasters.csv"));
-		//	using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
-		//	var disasters = new List<Disaster>();
-
-		//	while (csv.Read())
-		//	{
-		//		var record = new Disaster
-		//		{
-		//			ID = csv.GetString("id"), // CSV header maps to property names
-		//			State = csv.GetString("state"),
-		//			FIPSStateCode = csv.GetString("fipsStateCode"),
-		//			FIPSCountyCode = csv.GetString("fipsCountyCode"),
-		//			IncidentType = csv.GetString("incidentType"),
-		//			Year = int.Parse(csv.GetString("fyDeclared")), // Assuming "fyDeclared" is the year
-		//			DesignatedArea = csv.GetString("designatedArea"),
-		//			DisasterNumber = int.Parse(csv.GetString("disasterNumber")),
-		//			DeclarationDate = csv.GetString("declarationDate"),
-		//			IncidentEndDate = csv.GetString("incidentEndDate"),
-		//			DeclarationTitle = csv.GetString("declarationTitle")
-		//		};
-
-		//		disasters.Add(record);
-		//	}
-
-		//	var time2 = DateTime.Now;
-
-		//	Console.WriteLine($"Disasters loaded in {(time2 - time1).TotalMilliseconds} ms");
-
-		//	return disasters;
-		//}
-
-
 		private static List<Disaster> InitializeDisasters()
 		{
 			using var reader = File.OpenText(Path.Combine("Data", "disasters.csv"));
 			using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
-			var disasters = new List<Disaster>();
+			var disasterDict = new Dictionary<int, List<Disaster>>();
 
 			while (csv.Read())
 			{
-				var disaster = new Disaster
+				var dn = int.TryParse(csv.GetString("disasterNumber"), out int disasterNumber) ? disasterNumber : 0;
+
+				if (!disasterDict.ContainsKey(dn)) disasterDict[dn] = [];
+
+				disasterDict[dn].Add(new Disaster
 				{
 					// Directly clean data while creating the Disaster object
 					ID = string.IsNullOrEmpty(csv.GetString("id")) ? "N/A" : csv.GetString("id"),
@@ -165,7 +134,7 @@ namespace AISComp.Tools
 					DesignatedArea = string.IsNullOrEmpty(csv.GetString("designatedArea"))
 						? "Unknown"
 						: csv.GetString("designatedArea").Trim(),
-					DisasterNumber = int.TryParse(csv.GetString("disasterNumber"), out int disasterNumber) ? disasterNumber : 0, // Defaults to 0 if parsing fails
+					DisasterNumber = dn, // Defaults to 0 if parsing fails
 					DeclarationDate = string.IsNullOrEmpty(csv.GetString("declarationDate"))
 						? "Not Listed"
 						: DateTime.TryParse(csv.GetString("declarationDate"), out DateTime declarationDate)
@@ -179,16 +148,42 @@ namespace AISComp.Tools
 					DeclarationTitle = string.IsNullOrEmpty(csv.GetString("declarationTitle"))
 						? "Unknown"
 						: csv.GetString("declarationTitle").Trim()
-				};
+				});
 
-				disasters.Add(disaster);
+				//disasterList.Add(disaster);
 			}
 
-			return disasters;
+			// HazardMitigationAssistanceMitigatedProperties
+			using var reader2 = File.OpenText(Path.Combine("Data", "HazardMitigationAssistanceMitigatedProperties.csv"));
+			using var csv2 = CsvDataReader.Create(reader2, new CsvDataReaderOptions { HasHeaders = true });
+
+			Console.WriteLine("Starting Processing");
+
+			var time = DateTime.Now;
+
+			while (csv2.Read())
+			{
+				var id = int.TryParse(csv2.GetString("disasterNumber"), out int disasterNumber) ? disasterNumber : 0;
+
+				if (disasterDict.TryGetValue(id, out var disasters))
+				{
+					var damage = new Damage
+					{
+						StructureType = string.IsNullOrEmpty(csv2.GetString("structureType")) ? "Unknown" : csv2.GetString("structureType"),
+						NumberOfProperties = string.IsNullOrEmpty(csv2.GetString("numberOfProperties")) ? "Unknown" : csv2.GetString("numberOfProperties"),
+						DamageCategory = string.IsNullOrEmpty(csv2.GetString("damageCategory")) ? "Unknown" : csv2.GetString("damageCategory")
+					};
+
+					foreach (var disaster in disasters) disaster.Damages.Add(damage);
+				}
+			}
+
+			var disasterList = disasterDict.Values.SelectMany(d => d).ToList();
+
+			Console.WriteLine($"Loaded {disasterList.Count} disasters in {(DateTime.Now - time).TotalMilliseconds}ms");
+
+			return disasterList;
 		}
-
-
-
 
 
 

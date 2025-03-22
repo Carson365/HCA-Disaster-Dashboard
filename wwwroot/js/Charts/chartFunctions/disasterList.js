@@ -93,9 +93,8 @@ function showDisasterModal(d3, fipsStateCode, disaster) {
 
 function getAllCountiesAffected(stateFips, disasterNumber) {
     const designatedAreas = new Set();
-    if (!stateData[stateFips]) return [];
-    Object.values(stateData[stateFips]).forEach(d => {
-        if (d.DisasterNumber == disasterNumber) {
+    stateData.forEach(d => {
+        if (d.FIPSStateCode == stateFips && d.DisasterNumber == disasterNumber) {
             designatedAreas.add(d.DesignatedArea);
         }
     });

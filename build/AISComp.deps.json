@@ -9,62 +9,10 @@
     ".NETCoreApp,Version=v9.0/linux-arm64": {
       "AISComp/1.0.0": {
         "dependencies": {
-          "CsvHelper": "33.0.1",
-          "FileHelpers": "3.5.2",
-          "Microsoft.Data.Analysis": "0.22.2",
           "Sylvan.Data.Csv": "1.4.1"
         },
         "runtime": {
           "AISComp.dll": {}
-        }
-      },
-      "Apache.Arrow/14.0.2": {
-        "runtime": {
-          "lib/net6.0/Apache.Arrow.dll": {
-            "assemblyVersion": "14.0.2.0",
-            "fileVersion": "14.0.2.0"
-          }
-        }
-      },
-      "CsvHelper/33.0.1": {
-        "runtime": {
-          "lib/net8.0/CsvHelper.dll": {
-            "assemblyVersion": "33.0.0.0",
-            "fileVersion": "33.0.1.24"
-          }
-        }
-      },
-      "FileHelpers/3.5.2": {
-        "runtime": {
-          "lib/netstandard2.0/FileHelpers.dll": {
-            "assemblyVersion": "3.5.2.0",
-            "fileVersion": "3.5.2.0"
-          }
-        }
-      },
-      "Microsoft.Data.Analysis/0.22.2": {
-        "dependencies": {
-          "Apache.Arrow": "14.0.2",
-          "Microsoft.ML.DataView": "4.0.2",
-          "System.Numerics.Tensors": "9.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Data.Analysis.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "0.2200.225.12505"
-          }
-        }
-      },
-      "Microsoft.ML.DataView/4.0.2": {
-        "dependencies": {
-          "System.Collections.Immutable": "8.0.0",
-          "System.Memory": "4.6.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.ML.DataView.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "4.0.225.12505"
-          }
         }
       },
       "Sylvan.Data.Csv/1.4.1": {
@@ -72,16 +20,6 @@
           "lib/net6.0/Sylvan.Data.Csv.dll": {
             "assemblyVersion": "1.4.1.0",
             "fileVersion": "1.4.1.0"
-          }
-        }
-      },
-      "System.Collections.Immutable/8.0.0": {},
-      "System.Memory/4.6.0": {},
-      "System.Numerics.Tensors/9.0.0": {
-        "runtime": {
-          "lib/net9.0/System.Numerics.Tensors.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.52809"
           }
         }
       }
@@ -93,68 +31,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Apache.Arrow/14.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-2xvo9q2ag/Ze7TKSMsZfcQFMk3zZKWcduttJXoYnoevZD2bv+lKnOPeleyxONuR1ZwhZ00D86pPM9TWx2GMY2w==",
-      "path": "apache.arrow/14.0.2",
-      "hashPath": "apache.arrow.14.0.2.nupkg.sha512"
-    },
-    "CsvHelper/33.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-fev4lynklAU2A9GVMLtwarkwaanjSYB4wUqO2nOJX5hnzObORzUqVLe+bDYCUyIIRQM4o5Bsq3CcyJR89iMmEQ==",
-      "path": "csvhelper/33.0.1",
-      "hashPath": "csvhelper.33.0.1.nupkg.sha512"
-    },
-    "FileHelpers/3.5.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Z0jwjF4AmDBzRWfHFMdrcuBgmoQ2ChLaTmhRjnmReoUPUkT/+5StzWCB0N0RpslYeXiSyvcntcZNLtY58todFw==",
-      "path": "filehelpers/3.5.2",
-      "hashPath": "filehelpers.3.5.2.nupkg.sha512"
-    },
-    "Microsoft.Data.Analysis/0.22.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-03BYnS/6OH5POkTkxaCoz4bqAH4irFQsXtsMOeaxwOCL7JTzXtneyqENSI+DldLKEDMlt6ZvzdktYUf/W3oN6g==",
-      "path": "microsoft.data.analysis/0.22.2",
-      "hashPath": "microsoft.data.analysis.0.22.2.nupkg.sha512"
-    },
-    "Microsoft.ML.DataView/4.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-k8q9UwoCG5WpwnvPS3s46yNU+wkMgAC5F/8OELpPbozcyJw0DZL8WnpnL/mw7E218Ec4SpYz+nxL9P87eAdzmg==",
-      "path": "microsoft.ml.dataview/4.0.2",
-      "hashPath": "microsoft.ml.dataview.4.0.2.nupkg.sha512"
-    },
     "Sylvan.Data.Csv/1.4.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-CFUkLdnIYejrCrhvnOmrl5K4Vb5Yx+sWawO4WP6JWKa6Rof3GKnx+FFAvKZY4P7kC6J2mBib5VePucIvMX6M+g==",
       "path": "sylvan.data.csv/1.4.1",
       "hashPath": "sylvan.data.csv.1.4.1.nupkg.sha512"
-    },
-    "System.Collections.Immutable/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg==",
-      "path": "system.collections.immutable/8.0.0",
-      "hashPath": "system.collections.immutable.8.0.0.nupkg.sha512"
-    },
-    "System.Memory/4.6.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OEkbBQoklHngJ8UD8ez2AERSk2g+/qpAaSWWCBFbpH727HxDq5ydVkuncBaKcKfwRqXGWx64dS6G1SUScMsitg==",
-      "path": "system.memory/4.6.0",
-      "hashPath": "system.memory.4.6.0.nupkg.sha512"
-    },
-    "System.Numerics.Tensors/9.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hyJB4UlpAi19Xr9AXzu2NuagKC4lPfHObNMEAA0HmqFz2rX7wKgzeYzO/jM/eBHDhnUGFFEjk5cOoJaxqg5J4A==",
-      "path": "system.numerics.tensors/9.0.0",
-      "hashPath": "system.numerics.tensors.9.0.0.nupkg.sha512"
     }
   }
 }

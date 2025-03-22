@@ -42,5 +42,13 @@ namespace AISComp.Tools
 		public required string DeclarationDate { get; set; }
 		public required string IncidentEndDate { get; set; }
 		public required string DeclarationTitle { get; set; }
+		public List<Damage> Damages { get; set; } = [];
+	}
+
+	public class Damage
+	{
+		public required string StructureType { get; set; }
+		public required string NumberOfProperties { get; set; }
+		public string? DamageCategory { get; set; }
 	}
 }
