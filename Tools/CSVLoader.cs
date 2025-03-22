@@ -1,12 +1,11 @@
-﻿using AISComp.Components.Pages;
-using FileHelpers;
+﻿using Sylvan.Data.Csv;
+using System.Data;
 
 namespace AISComp.Tools
 {
 	public class CSVLoader
 	{
 		public bool IsLoading { get; private set; } = true;
-
 		public static event Action? OnLoaded;
 
 		public void SignalLoaded()
@@ -15,118 +14,199 @@ namespace AISComp.Tools
 			IsLoading = false;
 		}
 
-		public static List<Employee> GetLocationOrgTree(string ID)
-		{
-			if (ID != null)
-			{
-				return [.. EmployeeList.Where(e => e.LocationID == ID)];
-			}
-			else return [];
-		}
+		public static IReadOnlyList<Employee> EmployeeList { get; private set; } = InitializeEmployees();
+		public static IReadOnlyList<Location> Locations { get; private set; } = InitializeLocations();
+		public static IReadOnlyList<Department> Departments { get; private set; } = InitializeDepartments();
+		public static IReadOnlyList<Disaster> Disasters { get; private set; } = InitializeDisasters();
 
-		public static List<Employee> EmployeeList { get; private set; } = InitializeEmployees();
+
+		public static List<Employee> GetLocationOrgTree(string ID) =>
+	string.IsNullOrEmpty(ID) ? [] : [.. EmployeeList.Where(e => e.LocationID == ID)];
+
+
 		private static List<Employee> InitializeEmployees()
 		{
-			var engine = new FileHelperEngine<CSVEmployee> { Options = { IgnoreFirstLines = 1 } };
-			CSVEmployee?[] records = engine.ReadFile(Path.Combine("Data", "employees.csv"));
+			using var reader = File.OpenText(Path.Combine("Data", "employees.csv"));
+			using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
+			var employeeDict = new Dictionary<string, Employee>(300000);
 
-			List<Employee> employees = [];
-			foreach (CSVEmployee? record in records)
+			while (csv.Read())
 			{
-				if (record != null)
+				string id = csv.GetString(0);
+				employeeDict[id] = new Employee
 				{
-					Employee employee = new()
-					{
-						ID = record.ID,
-						Name = $"{record.FirstName} {record.LastName}",
-						Position = record.Position,
-						LocationID = record.LocationID,
-						HireDate = string.IsNullOrEmpty(record.HireDate) ? "Null" : record.HireDate, // Accomodate the CEO who has no anniversary
-						Up = null,
-						Downs = []
-					};
-					employees.Add(employee);
-				}
+					ID = id,
+					Name = string.Concat(csv.GetFieldSpan(2), " ", csv.GetFieldSpan(1)),
+					Position = csv.GetString(5),
+					LocationID = csv.GetString(3),
+					HireDate = csv.IsDBNull(7) ? "Null" : csv.GetString(7),
+					ManagerID = csv.IsDBNull(6) ? null : csv.GetString(6),
+				};
 			}
 
-			Dictionary<string, Employee> employeeDict = employees.ToDictionary(e => e.ID);
-
-			foreach (CSVEmployee? record in records)
+			Parallel.ForEach(employeeDict.Values, employee =>
 			{
-				if (record != null && employeeDict.TryGetValue(record.ID, out var employee))
+				if (employee.ManagerID != null && employeeDict.TryGetValue(employee.ManagerID, out var manager))
 				{
-					// Set Up reference if manager ID exists
-					if (!string.IsNullOrEmpty(record.ManagerID) && employeeDict.TryGetValue(record.ManagerID, out var manager))
-					{
-						employee.Up = manager;
-						manager.Downs?.Add(employee);
-					}
+					employee.Up = manager;
+					manager.Downs.Add(employee);
 				}
-			}
-			//SelectedEmployee = employees.First(e => e.ID == "27b43e8f-a8df-4c34-88af-e4ba0aa51fc5");
-			return employees;
+			});
+
+			return [.. employeeDict.Values];
 		}
 
-		public Location? SelectedLocation { get; set; }
-		public static List<Location> Locations { get; private set; } = InitializeLocations();
 		private static List<Location> InitializeLocations()
 		{
-			FileHelperEngine<CSVLocation> engine = new() { Options = { IgnoreFirstLines = 1 } };
-			List<CSVLocation> locs = [.. engine.ReadFile(Path.Combine("Data", "locations.csv"))];
+			using var reader = File.OpenText(Path.Combine("Data", "locations.csv"));
+			using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
+			var locationEmployeeCount = EmployeeList.GroupBy(e => e.LocationID)
+													.ToDictionary(g => g.Key, g => g.Count());
 
-			List<Location> save = [];
+			var locations = new List<Location>();
 
-			foreach (CSVLocation l in locs)
+			while (csv.Read())
 			{
-				if (l != null)
+				var record = new Location
 				{
-					Location location = new()
-					{
-						ID = l.ID,
-						Name = l.Name,
-						City = l.City,
-						State = l.State,
-						Zip = l.Zip,
-						Latitude = l.Latitude,
-						Longitude = l.Longitude,
-						Size = EmployeeList.Count(e => e.LocationID == l.ID)
-					};
-					save.Add(location);
-				}
+					ID = csv.GetString(0),
+					Name = csv.GetString(1),
+					City = csv.GetString(2),
+					State = csv.GetString(3),
+					Zip = csv.GetString(4),
+					Latitude = csv.GetString(5),
+					Longitude = csv.GetString(6),
+					Size = locationEmployeeCount.GetValueOrDefault(csv.GetString(0), 0)
+				};
+
+				locations.Add(record);
 			}
 
-			return save;
+			return locations;
 		}
 
-		public static List<Department> Departments { get; private set; } = InitializeDepartments();
 		private static List<Department> InitializeDepartments()
 		{
-			FileHelperEngine<Department> engine = new() { Options = { IgnoreFirstLines = 1 } };
-			return [.. engine.ReadFile(Path.Combine("Data", "departments.csv"))];
+			using var reader = File.OpenText(Path.Combine("Data", "departments.csv"));
+			using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
+
+			var departments = new List<Department>();
+
+			while (csv.Read())
+			{
+				var record = new Department
+				{
+					ID = csv.GetString(0),
+					Name = csv.GetString(1),
+				};
+
+				departments.Add(record);
+			}
+
+			return departments;
 		}
+
+		//private static List<Disaster> InitializeDisasters()
+		//{
+		//	var time1 = DateTime.Now;
+		//	using var reader = File.OpenText(Path.Combine("Data", "disasters.csv"));
+		//	using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
+		//	var disasters = new List<Disaster>();
+
+		//	while (csv.Read())
+		//	{
+		//		var record = new Disaster
+		//		{
+		//			ID = csv.GetString("id"), // CSV header maps to property names
+		//			State = csv.GetString("state"),
+		//			FIPSStateCode = csv.GetString("fipsStateCode"),
+		//			FIPSCountyCode = csv.GetString("fipsCountyCode"),
+		//			IncidentType = csv.GetString("incidentType"),
+		//			Year = int.Parse(csv.GetString("fyDeclared")), // Assuming "fyDeclared" is the year
+		//			DesignatedArea = csv.GetString("designatedArea"),
+		//			DisasterNumber = int.Parse(csv.GetString("disasterNumber")),
+		//			DeclarationDate = csv.GetString("declarationDate"),
+		//			IncidentEndDate = csv.GetString("incidentEndDate"),
+		//			DeclarationTitle = csv.GetString("declarationTitle")
+		//		};
+
+		//		disasters.Add(record);
+		//	}
+
+		//	var time2 = DateTime.Now;
+
+		//	Console.WriteLine($"Disasters loaded in {(time2 - time1).TotalMilliseconds} ms");
+
+		//	return disasters;
+		//}
+
+
+		private static List<Disaster> InitializeDisasters()
+		{
+			using var reader = File.OpenText(Path.Combine("Data", "disasters.csv"));
+			using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
+			var disasters = new List<Disaster>();
+
+			while (csv.Read())
+			{
+				var disaster = new Disaster
+				{
+					// Directly clean data while creating the Disaster object
+					ID = string.IsNullOrEmpty(csv.GetString("id")) ? "N/A" : csv.GetString("id"),
+					State = csv.GetString("state"),
+					FIPSStateCode = string.IsNullOrEmpty(csv.GetString("fipsStateCode")) ? "Unknown" : csv.GetString("fipsStateCode"),
+					FIPSCountyCode = string.IsNullOrEmpty(csv.GetString("fipsCountyCode"))
+						? "Unknown"
+						: csv.GetString("fipsCountyCode").PadLeft(3, '0'),
+					IncidentType = string.IsNullOrEmpty(csv.GetString("incidentType"))
+						? "Unknown"
+						: csv.GetString("incidentType").Trim(),
+					Year = int.TryParse(csv.GetString("fyDeclared"), out int year) ? year : 0, // Defaults to 0 if parsing fails
+					DesignatedArea = string.IsNullOrEmpty(csv.GetString("designatedArea"))
+						? "Unknown"
+						: csv.GetString("designatedArea").Trim(),
+					DisasterNumber = int.TryParse(csv.GetString("disasterNumber"), out int disasterNumber) ? disasterNumber : 0, // Defaults to 0 if parsing fails
+					DeclarationDate = string.IsNullOrEmpty(csv.GetString("declarationDate"))
+						? "Not Listed"
+						: DateTime.TryParse(csv.GetString("declarationDate"), out DateTime declarationDate)
+							? declarationDate.ToString("yyyy-MM-dd")
+							: "Invalid Date",
+					IncidentEndDate = string.IsNullOrEmpty(csv.GetString("incidentEndDate"))
+						? "Not Listed"
+						: DateTime.TryParse(csv.GetString("incidentEndDate"), out DateTime incidentEndDate)
+							? incidentEndDate.ToString("yyyy-MM-dd")
+							: "Invalid Date",
+					DeclarationTitle = string.IsNullOrEmpty(csv.GetString("declarationTitle"))
+						? "Unknown"
+						: csv.GetString("declarationTitle").Trim()
+				};
+
+				disasters.Add(disaster);
+			}
+
+			return disasters;
+		}
+
+
+
+
+
+
 
 
 		public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId)
 		{
-			// First, climb upward—but only while the manager is in the same location.
+			// Climb upward as long as the manager is in the same location.
 			Employee topEmployee = startingEmployee;
 			while (topEmployee.Up != null && topEmployee.Up.LocationID == locationId)
 			{
 				topEmployee = topEmployee.Up;
 			}
-
-			// Now build and return the filtered tree starting from topEmployee.
 			return TrimTreeToLocation(topEmployee, locationId);
 		}
 
 		private static Employee TrimTreeToLocation(Employee employee, string locationId)
 		{
-			//// If this node does not belong to the location, skip it.
-			//// (In our use case this shouldn’t happen for the root node.)
-			//if (employee.LocationID != locationId)
-			//	return null; // or throw an exception
-
-			// Create a new copy of the current employee.
 			Employee trimmed = new()
 			{
 				ID = employee.ID,
@@ -136,10 +216,8 @@ namespace AISComp.Tools
 				HireDate = employee.HireDate,
 				Up = null,
 				Downs = []
-				// We intentionally leave Up null in the trimmed tree.
 			};
 
-			// Process each subordinate: only add those who are in the same location.
 			if (employee.Downs != null)
 			{
 				foreach (var subordinate in employee.Downs)
@@ -147,32 +225,11 @@ namespace AISComp.Tools
 					if (subordinate.LocationID == locationId)
 					{
 						var trimmedSub = TrimTreeToLocation(subordinate, locationId);
-						if (trimmedSub != null)
-							trimmed.Downs.Add(trimmedSub);
+						trimmed.Downs.Add(trimmedSub);
 					}
-					// Subordinates who don’t match are skipped.
 				}
 			}
-
 			return trimmed;
 		}
-
-
-
-
-
-		////////////////////////////////
-
-
-
-
-		//public static List<Disaster> Disasters { get; private set; } = InitializeDisasters();
-
-		//private static List<Disaster> InitializeDisasters()
-		//{
-		//	FileHelperEngine<Disaster> engine = new() { Options = { IgnoreFirstLines = 1 } };
-		//	return [.. engine.ReadFile(Path.Combine("Data", "disasters.csv"))];
-		//}
-
 	}
 }

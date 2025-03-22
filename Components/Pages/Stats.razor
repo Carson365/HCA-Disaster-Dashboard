@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
 @page "/stats/{Fip}"
+@using System.Text.Json
 
 <head>
 	<meta charset="UTF-8">
@@ -68,33 +69,28 @@
 
 @code {
 
-	[Parameter] public string Fip { get; set; }
+	[Parameter] public required string Fip { get; set; }
+
+	private JsonSerializerOptions options = new JsonSerializerOptions
+		{
+			PropertyNamingPolicy = null,
+		};
 
 	protected override async Task OnAfterRenderAsync(bool first)
 	{
 		if (first)
 		{
-
-			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "./js/stats/data.json");
-			string fileContents;
-
-			if (File.Exists(filePath))
-			{
-				fileContents = await File.ReadAllTextAsync(filePath);
-			}
-			else
-			{
-				fileContents = "[]";
-			}
-
-
-
+			// string filePath = Path.Combine("Data", "data.json");
+			// string fileContents = await File.ReadAllTextAsync(filePath);
 
 
 
 			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Charts/main.js");
 			// await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
-			await jsModule.InvokeVoidAsync("createCharts", Fip, fileContents);
+			// await jsModule.InvokeVoidAsync("createCharts", Fip, fileContents);
+
+			_ = Task.Run(() => jsModule.InvokeVoidAsync("createCharts", Fip, JsonSerializer.Serialize(CSVLoader.Disasters.Where(d => d.FIPSStateCode == $"{Fip[0]}{Fip[1]}"), options)));
+
 		}
 	}
 }

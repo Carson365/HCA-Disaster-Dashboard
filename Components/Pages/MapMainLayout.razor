@@ -16,6 +16,17 @@
     // Declare as nullable so the compiler knows it might be null initially.
     private IJSObjectReference? _jsModule;
 
+    protected override Task OnInitializedAsync()
+    {
+        // var time1 = DateTime.Now;
+		_ = Task.Run(() =>
+		{
+			_ = CSVLoader.Locations;
+		});
+		// Console.WriteLine("Time: " + (DateTime.Now - time1).TotalMilliseconds);
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnAfterRenderAsync(bool first)
     {
         if (first)
@@ -23,7 +34,6 @@
             // Import and store the module only once.
             _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>(
                 "import", "./js/runMapThings.js");
-
             // Optionally, initialize something from the module.
             await _jsModule.InvokeVoidAsync("showFemaPoints");
         }

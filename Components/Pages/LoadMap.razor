@@ -36,8 +36,8 @@
 
 @code {
 	[Parameter] public Location? selectedLocation { get; set; }
-	private string Fip { get; set; }
-	private string CountyName { get; set; }
+	public required string Fip { get; set; }
+	public required string CountyName { get; set; }
 
 	// Options for JSON serialization.
 	private JsonSerializerOptions options = new JsonSerializerOptions
@@ -49,43 +49,43 @@
 	{
 		if (first)
 		{
-			Console.WriteLine("First time rendering");
+			string filePath = Path.Combine("Data", "counties.geojson");
+			string fileContents = await File.ReadAllTextAsync(filePath);
 			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
-			await jsModule.InvokeVoidAsync("runMapThings"); // Initialize the map
+			await jsModule.InvokeVoidAsync("runMapThings", fileContents); // Initialize the map
 			await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
 			// Call runCommon once to add initial hexes
-			await assignPins(jsModule);
-			Console.WriteLine(CSVLoader.Locations.Count);
+			_ = assignPins(jsModule);
 		}
 	}
 
 	private async Task assignPins(IJSObjectReference jsModule)
 	{
-		List<Location> places = CSVLoader.Locations;
-		if (places == null || places.Count == 0) return; ///////////
-		string color = "#03173E";
-		string json = JsonSerializer.Serialize(places, options);
-		await jsModule.InvokeVoidAsync("runCommon", color, json);
-		if (selectedLocation != null)
-		{
-			await jsModule.InvokeVoidAsync("reSelect", JsonSerializer.Serialize(selectedLocation, options));
-		}
+		// var time1 = DateTime.Now;
+		_ = Task.Run(() => jsModule.InvokeVoidAsync("runCommon", "#03173E", JsonSerializer.Serialize(CSVLoader.Locations, options)));
+		// var time2 = DateTime.Now;
+		if (selectedLocation != null) await jsModule.InvokeVoidAsync("reSelect", JsonSerializer.Serialize(selectedLocation, options));
+		// var time3 = DateTime.Now;
+
+		// Console.WriteLine("Time 1: " + (time2 - time1).TotalMilliseconds);
+		// Console.WriteLine("Time 2: " + (time3 - time2).TotalMilliseconds);
 	}
 
 	// When a location is selected from the map (or hex is clicked),
 	[JSInvokable("InvokeIt")]
-	public async Task InvokeIt(Location input, string fip, string County)
-	{
-		if (fip != null) Fip = fip;
-		if (County != null) CountyName = County;
-		selectedLocation = input;
-		StateHasChanged();
-	}
+    public async Task InvokeIt(Location input, string fip, string County)
+    {
+        if (fip != null) Fip = fip;
+        if (County != null) CountyName = County;
+        selectedLocation = input;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
 
 	[JSInvokable("County")]
 	public async Task County(string fip)
 	{
-		// CSVLoaderInstance.Fip = fip;
 		NavigationManager.NavigateTo($"/Stats/{fip}");
+		await Task.CompletedTask;
     }
 }

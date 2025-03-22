@@ -7,24 +7,64 @@
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\stateheatmap.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\piechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\piechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\stackedbarchart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\stackedbarchart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\disasterlist.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\disasterlist.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\charts.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\charts.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\stackedbarchart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\stackedbarchart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\piechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\piechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\disasterlist.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\disasterlist.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\chartfunctions\\stackedareachart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\chartfunctions\\stackedareachart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\apis.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\apis.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\main.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\main.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\stats\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\stats\\script.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\loadmap.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\components\\pages\\stats.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:components\\pages\\stats.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\data\\data.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:data\\data.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\fields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:tools\\fields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,8 +74,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "stackedBarChart.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
+              "ViewState": "AgIAADcAAAAAAAAAAAAQwL8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T05:25:54.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "script.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\script.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\script.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\script.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\script.js",
+              "ViewState": "AgIAAO8BAAAAAAAAAAAAAEICAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T05:21:16.722Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -44,74 +110,178 @@
               "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\stateHeatMap.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stateHeatMap.js",
               "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\stateHeatMap.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFAAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAAE4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-19T19:30:19.899Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "charts.js",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\charts.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\charts.js",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\charts.js",
-              "RelativeToolTip": "wwwroot\\js\\Charts\\charts.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-19T19:23:30.566Z",
+              "WhenOpened": "2025-03-22T05:29:26.455Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Stats.razor",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
-              "RelativeDocumentMoniker": "Components\\Pages\\Stats.razor",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
-              "RelativeToolTip": "Components\\Pages\\Stats.razor",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-19T19:23:10.207Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "pieChart.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\pieChart.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\pieChart.js",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\pieChart.js",
               "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\pieChart.js",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAqwEoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-19T19:22:49.502Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "disasterList.js",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
-              "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
-              "ViewState": "AgIAABkAAAAAAAAAAAAQwAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-07T00:38:36.319Z",
+              "WhenOpened": "2025-03-22T05:16:50.171Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "stackedBarChart.js",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
-              "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\stackedBarChart.js",
-              "ViewState": "AgIAADQAAAAAAAAAAAAAAEIAAABlAAAAAAAAAA==",
+              "Title": "disasterList.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-07T00:33:23.395Z",
+              "WhenOpened": "2025-03-22T05:07:58.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T04:58:36.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Fields.cs",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\Fields.cs",
+              "RelativeDocumentMoniker": "Tools\\Fields.cs",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\Fields.cs",
+              "RelativeToolTip": "Tools\\Fields.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAqwB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T22:52:29.597Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "stackedAreaChart.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stackedAreaChart.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\stackedAreaChart.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\stackedAreaChart.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\chartFunctions\\stackedAreaChart.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T04:29:58.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "main.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\main.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\main.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\main.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\main.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T03:53:34.209Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "charts.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\charts.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\charts.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\charts.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\charts.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAApwA4AAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T04:28:00.759Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Stats.razor",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Stats.razor",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
+              "RelativeToolTip": "Components\\Pages\\Stats.razor",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAqwFsAAAChAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-22T04:14:25.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "LoadMap.razor",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\LoadMap.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\LoadMap.razor",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\LoadMap.razor",
+              "RelativeToolTip": "Components\\Pages\\LoadMap.razor",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-22T04:13:20.717Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "script.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\stats\\script.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\stats\\script.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\stats\\script.js",
+              "RelativeToolTip": "wwwroot\\js\\stats\\script.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKgAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T03:50:10.196Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CSVLoader.cs",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
+              "RelativeDocumentMoniker": "Tools\\CSVLoader.cs",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
+              "RelativeToolTip": "Tools\\CSVLoader.cs",
+              "ViewState": "AgIAALcAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T22:32:12.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "apis.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\apis.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\apis.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\apis.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\apis.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-22T04:29:34.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "data.json",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Data\\data.json",
+              "RelativeDocumentMoniker": "Data\\data.json",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Data\\data.json",
+              "RelativeToolTip": "Data\\data.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-22T03:46:03.615Z",
               "EditorCaption": ""
             }
           ]

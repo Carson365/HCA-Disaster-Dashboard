@@ -100,14 +100,38 @@ export function updateD3Elements(hexes, group, mapInstance, simulation) {
             mapInstance.closePopup();
         })
         .on("pointerdown", function (event, d) {
+            // This functionality inspired by https://stackoverflow.com/a/19942008/18604531
             event.stopPropagation();
             mapInstance.closePopup();
-            hexes.forEach((hex) => {
-                if (hex !== d) hex.deselect();
-            });
-            d.selected ? d.deselect() : d.select();
-            updateD3Elements(hexes, group, mapInstance, simulation);
+
+            let startX = event.clientX;
+            let startY = event.clientY;
+            let moved = false;
+
+            const onPointerMove = (moveEvent) => {
+                if (Math.abs(moveEvent.clientX - startX) > 5 || Math.abs(moveEvent.clientY - startY) > 5) {
+                    moved = true;
+                    document.removeEventListener("pointermove", onPointerMove);
+                }
+            };
+
+            const onPointerUp = (upEvent) => {
+                document.removeEventListener("pointermove", onPointerMove);
+                document.removeEventListener("pointerup", onPointerUp);
+
+                if (!moved) {
+                    hexes.forEach((hex) => {
+                        if (hex !== d) hex.deselect();
+                    });
+                    d.selected ? d.deselect() : d.select();
+                    updateD3Elements(hexes, group, mapInstance, simulation);
+                }
+            };
+
+            document.addEventListener("pointermove", onPointerMove);
+            document.addEventListener("pointerup", onPointerUp);
         })
+
         .on("click", function (event, d) {
             event.stopPropagation();
             mapInstance.closePopup();

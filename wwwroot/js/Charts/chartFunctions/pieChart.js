@@ -1,14 +1,27 @@
-import { disastersByFipsTypes } from "../script.js";
-import { disasterTypesByFipsCounty } from "../script.js"
-import { getCountyNameByFips } from "../script.js"
-import { getStateAbbreviationByFips } from '../script.js';
-
-
+import { stateData, countyData } from "../main.js";
 
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
-    const data = fipsCountyCode ? disasterTypesByFipsCounty(fipsStateCode, fipsCountyCode) : disastersByFipsTypes(fipsStateCode);
+    function filterDisasters(data, stateCode, countyCode = null) {
+        return data
+            .filter(d => d.FIPSStateCode === stateCode && (!countyCode || d.FIPSCountyCode === countyCode))
+            .reduce((acc, item) => {
+                if (!acc.has(item.DisasterNumber)) {
+                    acc.set(item.DisasterNumber, item.IncidentType); // Count only unique DisasterNumbers
+                }
+                return acc;
+            }, new Map());
+    }
 
-    const dataEntries = Object.entries(data).map(([type, count]) => ({ type, count }));
+    const disasterMap = fipsCountyCode
+        ? filterDisasters(countyData, fipsStateCode, fipsCountyCode)
+        : filterDisasters(stateData, fipsStateCode);
+
+    const disasterCounts = Array.from(disasterMap.values()).reduce((acc, type) => {
+        acc[type] = (acc[type] || 0) + 1;
+        return acc;
+    }, {});
+
+    const dataEntries = Object.entries(disasterCounts).map(([type, count]) => ({ type, count }));
     const totalDisasters = dataEntries.reduce((sum, d) => sum + d.count, 0);
     const containerId = fipsCountyCode ? "#countyPieChart" : "#statePieChart";
 

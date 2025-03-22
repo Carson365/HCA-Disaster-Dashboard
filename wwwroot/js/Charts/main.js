@@ -7,15 +7,33 @@
 import { disastersByFips } from './apis.js';
 
 
-window.onload = () => createCharts([]);
+/*window.onload = () => createCharts([]);*/
 
 import { createChartsWithData } from "./charts.js";
 
-let globalData = [];
+export let stateData = [];
+export let countyData = [];
+
+export let stateFip = "";
+export let countyFip = "";
 
 export async function createCharts(fip, data) {
-	Object.assign(disastersByFips, JSON.parse(data));
-	createChartsWithData(fip);
+	//Object.assign(disastersByFips, JSON.parse(data));
+
+	//console.log(disastersByFips);
+
+	//createChartsWithData(fip);
+
+	stateFip = fip[0] + fip[1];
+	countyFip = fip[2] + fip[3] + fip[4];
+
+	Object.assign(stateData, JSON.parse(data));
+
+	countyData = stateData.filter(d => d.FIPSCountyCode === countyFip);
+
+	createChartsWithData();
+
+
 	//try {
 	//  const response = await fetch('./data.json');
 	//  const jsonData = await response.json();  // Wait for the JSON content to be parsed

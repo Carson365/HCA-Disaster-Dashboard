@@ -33,7 +33,8 @@ let simulation = null;
 let svg, group;
 let d3Selections = { iconSelection: null, tetherSelection: null };
 
-export function runMapThings() {
+export function runMapThings(countyData) {
+
     if (mapInstance !== null) {
         mapInstance.remove();
         mapInstance = null;
@@ -69,7 +70,9 @@ export function runMapThings() {
     group = overlay.group;
 
     // Fetch and render county data.
-    countyUtils.fetchCountyData(mapInstance, group, hexes);
+    (async () => {
+        await countyUtils.fetchCountyData(mapInstance, countyData);
+    })();
 
     // Create the D3 force simulation.
     simulation = d3Utils.createSimulation(hexes, () => {

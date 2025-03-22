@@ -4,6 +4,7 @@
 @inject IJSRuntime jsRuntime
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
+@using System.Collections.Concurrent
 @* @inject CSVLoader CsvLoaderInstance *@
 
 
@@ -20,14 +21,15 @@
 
 @code {
 
-	[Parameter] public string LocID { get; set; }
+	[Parameter] public required string LocID { get; set; }
 
-	private List<Employee> SearchResults;
+	private List<Employee>? SearchResults;
 
-	private int visibleCount;
+	// private int visibleCount;
 
 	protected override void OnInitialized()
 	{
+		Console.WriteLine("in tree");
 		CSVLoader.OnLoaded += () => StateHasChanged();
 		SearchResults = CSVLoader.GetLocationOrgTree(LocID);
 	}
@@ -40,7 +42,7 @@
 
 	protected override async Task OnAfterRenderAsync(bool first)
 	{
-		if (first)
+		if (first && SearchResults != null)
 		{
 			// Assume CSVLoader.SelectedEmployee is one of the employees in the location.
 			Employee startingEmployee = SearchResults[0];
@@ -68,7 +70,7 @@
 					LocationID = LocID,
 					HireDate = "",
 					Up = null,
-					Downs = new List<Employee>(allTopUps.Values)
+					Downs = new ConcurrentBag<Employee>(allTopUps.Values)
 				};
 
 			// Console.WriteLine("Total: " + "a");
