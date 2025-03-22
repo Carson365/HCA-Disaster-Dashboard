@@ -4,11 +4,10 @@ import { createStackedBarChart } from './chartFunctions/stackedBarChart.js';
 import { createStateHeatMap } from './chartFunctions/stateHeatMap.js';
 import { createDisasterList } from './chartFunctions/disasterList.js';
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+import { stateFip, countyFip } from "./main.js";
 
-export function createChartsWithData(fip) {
-	let stateFip = fip[0] + fip[1];
-	let countyFip = fip[2] + fip[3] + fip[4];
-	createStackedAreaChart(d3, stateFip, countyFip);
+export function createChartsWithData() {
+	createStackedAreaChart(d3);
 	createPieChart(d3, stateFip, countyFip);
 	createPieChart(d3, stateFip);
 	createStackedBarChart(d3, stateFip, countyFip);

@@ -18,7 +18,7 @@ export async function fetchCountyData(mapInstance, countyData) {
 	//);
 	const data = JSON.parse(countyData)
 
-	console.log(data)
+	//console.log(data)
 
 
 	if (!mapInstance.getPane("countyHoverPane")) {

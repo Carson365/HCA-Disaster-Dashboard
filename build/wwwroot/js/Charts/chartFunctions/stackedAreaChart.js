@@ -1,22 +1,32 @@
-import { disastersByFipsSince1968 } from '../script.js';
-import { disastersByCountyFipsSince1968 } from "../script.js"
+import { stateData, countyData } from "../main.js";
+
+export async function createStackedAreaChart(d3) {
+    function aggregateDisastersByYear(data) {
+        return data.reduce((acc, item) => {
+            const year = new Date(item.DeclarationDate).getFullYear();
+            acc[year] = acc[year] || new Set();
+            acc[year].add(item.DisasterNumber); // Use DisasterNumber instead of ID
+            return acc;
+        }, {});
+    }
 
 
+    const rawStateData = aggregateDisastersByYear(stateData);
+    const aggregatedStateData = Object.fromEntries(
+        Object.entries(rawStateData).map(([year, ids]) => [year, ids.size])
+    );
 
+    const rawCountyData = aggregateDisastersByYear(countyData);
+    const aggregatedCountyData = Object.fromEntries(
+        Object.entries(rawCountyData).map(([year, ids]) => [year, ids.size])
+    );
 
+    const allYears = [...new Set([...Object.keys(aggregatedStateData), ...Object.keys(aggregatedCountyData)].map(Number))].sort((a, b) => a - b);
 
-
-export async function createStackedAreaChart(d3, fipsStateCode, fipsCountyCode) {
-    const [stateData, countyData] = await Promise.all([
-        disastersByFipsSince1968(fipsStateCode),
-        disastersByCountyFipsSince1968(fipsStateCode, fipsCountyCode)
-    ]);
-
-    const allYears = [...new Set([...Object.keys(stateData), ...Object.keys(countyData)].map(Number))].sort((a, b) => a - b);
     const mergedData = allYears.map(year => ({
         year,
-        state: stateData[year] || 0,
-        county: countyData[year] || 0
+        state: aggregatedStateData[year] || 0,
+        county: aggregatedCountyData[year] || 0
     }));
 
     function renderChart() {
@@ -69,7 +79,6 @@ export async function createStackedAreaChart(d3, fipsStateCode, fipsCountyCode) 
             legend.append("text").attr("x", 20).attr("y", i * 20 + 12).text(name).style("font-size", "12px");
         });
 
-        // Tooltip
         const tooltip = d3.select("#stackedAreaChart")
             .append("div")
             .attr("id", "tooltip")
@@ -81,7 +90,6 @@ export async function createStackedAreaChart(d3, fipsStateCode, fipsCountyCode) 
             .style("font-size", "12px")
             .style("display", "none");
 
-        // Hover interaction
         svg.on("mousemove", function (event) {
             const [mouseX] = d3.pointer(event);
             const closestYear = Math.round(x.invert(mouseX));

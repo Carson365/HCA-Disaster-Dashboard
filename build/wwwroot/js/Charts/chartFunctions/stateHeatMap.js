@@ -1,8 +1,45 @@
-import { getAverageDisastersPerYearByCounty } from "../script.js";
+import { stateData, countyData } from "../main.js";
 
 export async function createStateHeatMap(d3, fipsCode) {
     const container = document.getElementById("stateHeatMap");
     if (!container) return;
+
+    function calculateAverageDisastersPerYear(fipsStateCode) {
+        const disasters = stateData.filter(d => d.FIPSStateCode === fipsStateCode);
+
+        if (!disasters.length) {
+            console.log(`No disaster data found for state FIPS code: ${fipsStateCode}`);
+            return {};
+        }
+
+        const countyDisasterCounts = {};
+
+        disasters.forEach(disaster => {
+            const { FIPSCountyCode, Year } = disaster;
+
+            if (!FIPSCountyCode || !Year) return;
+
+            // Create full FIPS code (state + county)
+            const fullFipsCode = fipsStateCode + FIPSCountyCode;
+
+            if (!countyDisasterCounts[fullFipsCode]) {
+                countyDisasterCounts[fullFipsCode] = { totalYears: new Set(), totalDisasters: 0 };
+            }
+
+            countyDisasterCounts[fullFipsCode].totalYears.add(Year);
+            countyDisasterCounts[fullFipsCode].totalDisasters += 1;
+        });
+
+        const countyAverages = {};
+        Object.keys(countyDisasterCounts).forEach(countyFips => {
+            const { totalYears, totalDisasters } = countyDisasterCounts[countyFips];
+            countyAverages[countyFips] = totalYears.size > 0
+                ? parseFloat((totalDisasters / totalYears.size).toFixed(2))
+                : 0;
+        });
+
+        return countyAverages;
+    }
 
     function renderMap() {
         const width = container.clientWidth * 0.95;
@@ -37,9 +74,20 @@ export async function createStateHeatMap(d3, fipsCode) {
                 features: geoData.features.filter(d => d.properties.STATE === fipsCode)
             };
 
-            const countyDisasterAverages = getAverageDisastersPerYearByCounty(fipsCode);
-            const minDisasters = d3.min(Object.values(countyDisasterAverages));
-            const maxDisasters = d3.max(Object.values(countyDisasterAverages));
+            // Get disaster averages using the new function
+            const countyDisasterAverages = calculateAverageDisastersPerYear(fipsCode);
+
+            const validDisasterValues = Object.entries(countyDisasterAverages)
+                .filter(([countyFips]) => !countyFips.endsWith("000")) // Exclude counties with "000"
+                .map(([_, avg]) => avg);
+
+            const minDisasters = d3.min(validDisasterValues);
+            const maxDisasters = d3.max(validDisasterValues);
+
+
+            console.log(countyDisasterAverages)
+
+            console.log(maxDisasters)
 
             const colorScale = d3.scaleSequential(d3.interpolateReds)
                 .domain([Math.log(minDisasters + 1), Math.log(maxDisasters + 1)]);

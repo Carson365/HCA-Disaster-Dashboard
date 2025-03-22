@@ -31,9 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="33.0.1" />
-    <PackageReference Include="FileHelpers" Version="3.5.2" />
-    <PackageReference Include="Microsoft.Data.Analysis" Version="0.22.2" />
     <PackageReference Include="Sylvan.Data.Csv" Version="1.4.1" />
   </ItemGroup>
 

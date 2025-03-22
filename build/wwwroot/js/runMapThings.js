@@ -33,7 +33,7 @@ let simulation = null;
 let svg, group;
 let d3Selections = { iconSelection: null, tetherSelection: null };
 
-export function runMapThings(countyData) {
+export async function runMapThings(countyData) {
 
     if (mapInstance !== null) {
         mapInstance.remove();
