@@ -157,8 +157,6 @@ namespace AISComp.Tools
 			using var reader2 = File.OpenText(Path.Combine("Data", "HazardMitigationAssistanceMitigatedProperties.csv"));
 			using var csv2 = CsvDataReader.Create(reader2, new CsvDataReaderOptions { HasHeaders = true });
 
-			Console.WriteLine("Starting Processing");
-
 			var time = DateTime.Now;
 
 			while (csv2.Read())
@@ -179,8 +177,6 @@ namespace AISComp.Tools
 			}
 
 			var disasterList = disasterDict.Values.SelectMany(d => d).ToList();
-
-			Console.WriteLine($"Loaded {disasterList.Count} disasters in {(DateTime.Now - time).TotalMilliseconds}ms");
 
 			return disasterList;
 		}

@@ -1,4 +1,5 @@
 import { stateData, countyData } from "../main.js";
+import { showTooltip, positionTooltip, hideTooltip } from "../tooltip.js";
 
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
     function filterDisasters(data, stateCode, countyCode = null) {
@@ -45,17 +46,6 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
         const arc = d3.arc().innerRadius(0).outerRadius(radius);
         const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-        const tooltip = d3.select("body").append("div")
-            .attr("id", "tooltip")
-            .style("position", "absolute")
-            .style("background", "#fff")
-            .style("padding", "5px 10px")
-            .style("border", "1px solid #ddd")
-            .style("border-radius", "5px")
-            .style("box-shadow", "0px 0px 5px rgba(0,0,0,0.3)")
-            .style("pointer-events", "none")
-            .style("opacity", 0);
-
         svg.selectAll("path")
             .data(pieData)
             .enter().append("path")
@@ -65,21 +55,14 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
             .style("stroke-width", "2px")
             .on("mouseover", function (event, d) {
                 const percentage = ((d.data.count / totalDisasters) * 100).toFixed(2);
-                tooltip.style("opacity", 1)
-                    .html(`<strong>${d.data.type}</strong><br>${percentage}%`)
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY + 10) + "px");
-
-                d3.select(this).style("opacity", 0.7);
+                showTooltip(`<strong>${d.data.type}</strong><br>${percentage}%`, event);
             })
-            .on("mousemove", function (event) {
-                tooltip.style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY + 10) + "px");
+            .on("mousemove", function (event, d) {
+                positionTooltip(event);
             })
-            .on("mouseout", function () {
-                tooltip.style("opacity", 0);
-                d3.select(this).style("opacity", 1);
-            });
+			.on("mouseout", function () {
+				hideTooltip();
+			});
     }
 
     renderChart();

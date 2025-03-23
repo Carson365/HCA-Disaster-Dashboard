@@ -18,12 +18,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        // var time1 = DateTime.Now;
-		_ = Task.Run(() =>
-		{
-			_ = CSVLoader.Locations;
-		});
-		// Console.WriteLine("Time: " + (DateTime.Now - time1).TotalMilliseconds);
+		_ = Task.Run(() => { _ = CSVLoader.Locations;});
         return base.OnInitializedAsync();
     }
 
@@ -32,9 +27,7 @@
         if (first)
         {
             // Import and store the module only once.
-            _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./js/runMapThings.js");
-            // Optionally, initialize something from the module.
+            _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
             await _jsModule.InvokeVoidAsync("showFemaPoints");
         }
     }
@@ -45,20 +38,10 @@
     {
         show ^= true;
         // If the module hasn't been loaded yet, import it.
-        if (_jsModule is null)
-        {
-            _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./js/runMapThings.js");
-        }
+        if (_jsModule is null) _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
 
         // Call the appropriate JS function.
-        if (show)
-        {
-            await _jsModule.InvokeVoidAsync("showFemaPoints");
-        }
-        else
-        {
-            await _jsModule.InvokeVoidAsync("hideFemaPoints");
-        }
+        if (show) await _jsModule.InvokeVoidAsync("showFemaPoints");
+        else await _jsModule.InvokeVoidAsync("hideFemaPoints");
     }
 }

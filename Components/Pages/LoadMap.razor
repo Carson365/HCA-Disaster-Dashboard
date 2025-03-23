@@ -4,7 +4,6 @@
 @using System.Text.Json
 @inject NavigationManager NavigationManager
 
-
 <link rel="stylesheet" href="/leaflet/leaflet.css" />
 <script src="leaflet/leaflet.js"></script>
 
@@ -60,14 +59,8 @@
 
 	private async Task assignPins(IJSObjectReference jsModule)
 	{
-		// var time1 = DateTime.Now;
 		_ = Task.Run(() => jsModule.InvokeVoidAsync("runCommon", "#03173E", JsonSerializer.Serialize(CSVLoader.Locations, options)));
-		// var time2 = DateTime.Now;
 		if (selectedLocation != null) await jsModule.InvokeVoidAsync("reSelect", JsonSerializer.Serialize(selectedLocation, options));
-		// var time3 = DateTime.Now;
-
-		// Console.WriteLine("Time 1: " + (time2 - time1).TotalMilliseconds);
-		// Console.WriteLine("Time 2: " + (time3 - time2).TotalMilliseconds);
 	}
 
 	// When a location is selected from the map (or hex is clicked),

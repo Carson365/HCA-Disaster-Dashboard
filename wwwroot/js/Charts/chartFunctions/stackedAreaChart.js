@@ -1,5 +1,8 @@
 import { stateData, countyData } from "../main.js";
 
+import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
+
+
 export async function createStackedAreaChart(d3) {
     function aggregateDisastersByYear(data) {
         return data.reduce((acc, item) => {
@@ -79,34 +82,22 @@ export async function createStackedAreaChart(d3) {
             legend.append("text").attr("x", 20).attr("y", i * 20 + 12).text(name).style("font-size", "12px");
         });
 
-        const tooltip = d3.select("#stackedAreaChart")
-            .append("div")
-            .attr("id", "tooltip")
-            .style("position", "absolute")
-            .style("background", "white")
-            .style("border", "1px solid black")
-            .style("padding", "5px")
-            .style("border-radius", "5px")
-            .style("font-size", "12px")
-            .style("display", "none");
-
         svg.on("mousemove", function (event) {
             const [mouseX] = d3.pointer(event);
             const closestYear = Math.round(x.invert(mouseX));
             const yearData = mergedData.find(d => d.year === closestYear);
 
             if (yearData) {
-                tooltip.style("display", "block")
-                    .html(`<strong>Year:</strong> ${closestYear}<br>
-                           <strong>State Disasters:</strong> ${yearData.state}<br>
-                           <strong>County Disasters:</strong> ${yearData.county}`)
-                    .style("left", `${event.pageX + 10}px`)
-                    .style("top", `${event.pageY - 20}px`);
+                showTooltip(
+                    `<strong>Year:</strong> ${closestYear}<br>
+                   <strong>State Disasters:</strong> ${yearData.state}<br>
+                   <strong>County Disasters:</strong> ${yearData.county}`,
+                    event
+                );
             }
-        });
-
-        svg.on("mouseout", function () {
-            tooltip.style("display", "none");
+        })
+        .on("mouseout", function () {
+            hideTooltip();
         });
     }
 
