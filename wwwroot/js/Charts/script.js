@@ -20,7 +20,6 @@ import { disastersByFips } from './apis.js';
 
 ////////////////////
 
-
 // function exportData(data = disastersByFips, filename = 'data.json') {
 //     const dataStr = JSON.stringify(data, null, 2);
 //     const blob = new Blob([dataStr], { type: 'application/json' });
@@ -37,11 +36,6 @@ import { disastersByFips } from './apis.js';
 //     URL.revokeObjectURL(url);
 // }
 
-
-
-
-
-
 let storedInstance = null;
 export function setDotNetHelper(instance) {
     storedInstance = instance;
@@ -57,16 +51,17 @@ export function sendToDotNet(fip, place) {
 
 //////////
 
-// async function fetchAllAPIData() {
-//     await fetchFEMADisasterDeclarationsSummariesSince1968()
-//     console.log(disastersByFips)
-// }
+//async function fetchAllAPIData() {
+ //    await fetchFEMADisasterDeclarationsSummariesSince1968()
+ //    await fetchFEMAHousingAssistanceOwnersSince1968()
+ //    console.log(disastersByFips)
+ //}
 
 // async function displayAllData(fipsCode) {
 //     let fipsStateCode = fipsCode[0] + fipsCode[1]
 //     let fipsCountyCode = fipsCode[2] + fipsCode[3] + fipsCode[4]
 
-//     createDisastersStackedAreaChart(fipsStateCode, fipsCountyCode)
+//    createDisastersStackedAreaChart(fipsStateCode, fipsCountyCode)
 //     createPieChartForStateTypes(fipsStateCode)
 //     createPieChartForCountyTypes(fipsStateCode, fipsCountyCode)
 //     createBarChartForMonthlyAverageByStateAndCounty(fipsStateCode, fipsCountyCode)

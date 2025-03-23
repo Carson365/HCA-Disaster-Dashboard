@@ -61,9 +61,17 @@ export async function fetchFEMADisasterDeclarationsSummariesSince1968() {
 }
 
 async function removeInvalidFipsData() {
-    // Load GeoJSON counties data (you can load this from a URL or from a local file)
+    // Load GeoJSON counties data (using fetch instead of D3)
     const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
-    const geoData = await d3.json(geojsonUrl);
+    const response = await fetch(geojsonUrl);
+    
+    // Check if the response is okay
+    if (!response.ok) {
+        console.error(`Failed to fetch GeoJSON data: ${response.status}`);
+        return;
+    }
+
+    const geoData = await response.json();
 
     // Extract valid county FIPS codes from the GeoJSON
     const validFipsCodes = new Set();

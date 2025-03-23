@@ -31,6 +31,16 @@ export async function createCharts(fip, data) {
 
 	countyData = stateData.filter(d => d.FIPSCountyCode === countyFip);
 
+	// stateData.forEach(obj => {
+	// 	obj.Damages.forEach(damage => {
+	// 		if (damage.DamageCategory !== "N/A") {
+	// 			for (let i = 0; i < damage.NumberOfProperties; i++) {
+	// 				console.log(damage.DamageCategory);
+	// 			}
+	// 		}
+	// 	});
+	// });
+
 	createChartsWithData();
 
 

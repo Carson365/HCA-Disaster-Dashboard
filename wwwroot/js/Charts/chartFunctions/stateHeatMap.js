@@ -84,11 +84,6 @@ export async function createStateHeatMap(d3, fipsCode) {
             const minDisasters = d3.min(validDisasterValues);
             const maxDisasters = d3.max(validDisasterValues);
 
-
-            console.log(countyDisasterAverages)
-
-            console.log(maxDisasters)
-
             const colorScale = d3.scaleSequential(d3.interpolateReds)
                 .domain([Math.log(minDisasters + 1), Math.log(maxDisasters + 1)]);
 
