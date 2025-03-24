@@ -1,4 +1,5 @@
 import { stateData, countyData } from "../main.js";
+import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 export async function createStateHeatMap(d3, fipsCode) {
     const container = document.getElementById("stateHeatMap");
@@ -6,11 +7,6 @@ export async function createStateHeatMap(d3, fipsCode) {
 
     function calculateAverageDisastersPerYear(fipsStateCode) {
         const disasters = stateData.filter(d => d.FIPSStateCode === fipsStateCode);
-
-        if (!disasters.length) {
-            console.log(`No disaster data found for state FIPS code: ${fipsStateCode}`);
-            return {};
-        }
 
         const countyDisasterCounts = {};
 
@@ -46,7 +42,6 @@ export async function createStateHeatMap(d3, fipsCode) {
         const height = container.clientHeight * 0.95;
 
         d3.select("#stateHeatMap svg").remove();
-        d3.select("#tooltip").remove();
 
         const svg = d3.select("#stateHeatMap")
             .append("svg")
@@ -54,17 +49,6 @@ export async function createStateHeatMap(d3, fipsCode) {
             .attr("height", height)
             .attr("viewBox", `0 0 ${width} ${height}`)
             .attr("preserveAspectRatio", "xMinYMin meet");
-
-        const tooltip = d3.select("body").append("div")
-            .attr("id", "tooltip")
-            .style("position", "absolute")
-            .style("background", "white")
-            .style("border", "1px solid black")
-            .style("padding", "5px")
-            .style("font-size", "14px")
-            .style("border-radius", "4px")
-            .style("pointer-events", "none")
-            .style("display", "none");
 
         const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
 
@@ -83,11 +67,6 @@ export async function createStateHeatMap(d3, fipsCode) {
 
             const minDisasters = d3.min(validDisasterValues);
             const maxDisasters = d3.max(validDisasterValues);
-
-
-            console.log(countyDisasterAverages)
-
-            console.log(maxDisasters)
 
             const colorScale = d3.scaleSequential(d3.interpolateReds)
                 .domain([Math.log(minDisasters + 1), Math.log(maxDisasters + 1)]);
@@ -109,17 +88,16 @@ export async function createStateHeatMap(d3, fipsCode) {
                 .on("mouseover", function (event, d) {
                     const countyFips = d.properties.STATE + d.properties.COUNTY;
                     const avgDisasters = countyDisasterAverages[countyFips];
-                    tooltip.style("display", "block")
-                        .html(`<strong>${d.properties.NAME} County</strong><br>Avg Disasters/Year: ${avgDisasters || 'No data'}`)
-                        .style("left", `${event.pageX + 10}px`)
-                        .style("top", `${event.pageY - 10}px`);
+                    showTooltip(
+                        `<strong>${d.properties.NAME} County</strong><br>Avg Disasters/Year: ${avgDisasters || 'No data'}`,
+                        event
+                    );
                 })
                 .on("mousemove", function (event) {
-                    tooltip.style("left", `${event.pageX + 10}px`)
-                        .style("top", `${event.pageY - 10}px`);
+                    positionTooltip(event);
                 })
                 .on("mouseout", function () {
-                    tooltip.style("display", "none");
+                    hideTooltip();
                 });
         });
     }

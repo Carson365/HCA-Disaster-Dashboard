@@ -1,26 +1,41 @@
 import { stateData, countyData } from "../main.js";
 
 export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
-    const container = d3.select("#disasterList");
-    if (container.empty()) return;
+    // Select separate containers for county and state data
+    const countyContainer = d3.select("#countyDisasterList");
+    const stateContainer = d3.select("#stateDisasterList");
+
+    // Ensure both containers exist
+    if (countyContainer.empty() || stateContainer.empty()) return;
 
     const stateDisasters = stateData;
     stateDisasters.sort((a, b) => new Date(b.DeclarationDate) - new Date(a.DeclarationDate));
 
     const displayedDisasterNumbers = new Set();
-    const countyDisasters = stateDisasters.filter(d => String(d.FIPSCountyCode) === String(fipsCountyCode) && !displayedDisasterNumbers.has(d.DisasterNumber));
+    const countyDisasters = stateDisasters.filter(
+        d => String(d.FIPSCountyCode) === String(fipsCountyCode) && !displayedDisasterNumbers.has(d.DisasterNumber)
+    );
     countyDisasters.forEach(d => displayedDisasterNumbers.add(d.DisasterNumber));
 
-    container.html("");
+    // Clear the containers
+    countyContainer.html("");
+    stateContainer.html("");
 
-    function createTableSection(title, data, rowClass) {
-        container.append("tr").html(`<th scope="col" colspan="4" class="text-center">${title}</th>`);
-        container.append("tr").html(`
-      <th scope="col">Disaster Type</th>
-      <th scope="col">Area Affected</th>
-      <th scope="col">Declaration Title</th>
-      <th scope="col">Date</th>
-    `);
+    // Modified createTableSection to accept a container parameter
+    function createTableSection(container, title, data, rowClass) {
+        container.append("tr")
+            .attr("id", "header")
+            .html(`<th scope="col" colspan="4" class="text-center">${title}</th>`);
+
+        container.append("tr")
+            .attr("id", "subheader")
+            .html(`
+        <th scope="col">Disaster Type</th>
+        <th scope="col">Area Affected</th>
+        <th scope="col">Declaration Title</th>
+        <th scope="col">Date</th>
+      `);
+
         container.selectAll(`.${rowClass}`)
             .data(data)
             .enter()
@@ -35,7 +50,8 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .on("click", (event, d) => showDisasterModal(d3, fipsStateCode, d));
     }
 
-    createTableSection("County Data", countyDisasters, "county-row");
+    // Create table sections in their respective containers
+    createTableSection(countyContainer, "County Data", countyDisasters, "county-row");
 
     const disasterCounts = new Map();
     stateDisasters.forEach(d => {
@@ -51,7 +67,7 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
                 : d.DesignatedArea
         }));
 
-    createTableSection("State Data", stateOnlyDisasters, "state-row");
+    createTableSection(stateContainer, "State Data", stateOnlyDisasters, "state-row");
 }
 
 function showDisasterModal(d3, fipsStateCode, disaster) {
@@ -93,9 +109,8 @@ function showDisasterModal(d3, fipsStateCode, disaster) {
 
 function getAllCountiesAffected(stateFips, disasterNumber) {
     const designatedAreas = new Set();
-    if (!stateData[stateFips]) return [];
-    Object.values(stateData[stateFips]).forEach(d => {
-        if (d.DisasterNumber == disasterNumber) {
+    stateData.forEach(d => {
+        if (d.FIPSStateCode == stateFips && d.DisasterNumber == disasterNumber) {
             designatedAreas.add(d.DesignatedArea);
         }
     });

@@ -1,4 +1,5 @@
 import { stateData, countyData } from "../main.js";
+import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 // Function to calculate average disasters per month for the state
 function getAverageDisastersPerMonth(fipsStateCode) {
@@ -129,16 +130,6 @@ export function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
             .domain(['State', 'County'])
             .range(['purple', '#00BFFF']);
 
-        const tooltip = d3.select("body").append("div")
-            .style("position", "absolute")
-            .style("background", "#fff")
-            .style("padding", "5px 10px")
-            .style("border", "1px solid #ddd")
-            .style("border-radius", "5px")
-            .style("box-shadow", "0px 0px 5px rgba(0,0,0,0.3)")
-            .style("pointer-events", "none")
-            .style("display", "none");
-
         svg.selectAll("rect")
             .data(data)
             .enter().append("rect")
@@ -153,17 +144,15 @@ export function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
                 const county = countyData.find(c => c.FIPSCountyCode === fipsCountyCode);
                 const countyName = county ? county.DesignatedArea : "Unknown County";
 
-                tooltip.style("display", "block")
-                    .html(`<strong>${monthNames[parseInt(d.month) - 1]} ${d.type === 'State' ? state : countyName}</strong><br>Avg Disasters/Year: ${d.average.toFixed(2)}`)
-                    .style("left", `${event.pageX + 10}px`)
-                    .style("top", `${event.pageY - 10}px`);
+                const content = `<strong>${monthNames[parseInt(d.month) - 1]} ${d.type === 'State' ? state : countyName}</strong><br>
+                                 Avg Disasters/Year: ${d.average.toFixed(2)}`;
+                showTooltip(content, event);
             })
             .on("mousemove", function (event) {
-                tooltip.style("left", `${event.pageX + 10}px`)
-                    .style("top", `${event.pageY - 10}px`);
+                positionTooltip(event);
             })
             .on("mouseout", function () {
-                tooltip.style("display", "none");
+                hideTooltip();
             });
 
         svg.append("g")

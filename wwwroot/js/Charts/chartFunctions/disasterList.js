@@ -27,14 +27,33 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .attr("id", "header")
             .html(`<th scope="col" colspan="4" class="text-center">${title}</th>`);
 
+      //  container.append("tr")
+      //      .attr("id", "subheader")
+      //      .html(`
+      //  <th scope="col">Disaster Type</th>
+      //  <th scope="col">Area Affected</th>
+      //  <th scope="col">Declaration Title</th>
+      //  <th scope="col">Date</th>
+      //`);
+
+      //  container.selectAll(`.${rowClass}`)
+      //      .data(data)
+      //      .enter()
+      //      .append("tr")
+      //      .attr("class", "clickable-row")
+      //      .html(d => `
+      //  <td>${d.IncidentType}</td>
+      //  <td>${d.DesignatedArea}</td>
+      //  <td>${d.DeclarationTitle}</td>
+      //  <td>${new Date(d.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</td>
+        //`)
         container.append("tr")
             .attr("id", "subheader")
             .html(`
         <th scope="col">Disaster Type</th>
-        <th scope="col">Area Affected</th>
         <th scope="col">Declaration Title</th>
         <th scope="col">Date</th>
-      `);
+    `);
 
         container.selectAll(`.${rowClass}`)
             .data(data)
@@ -43,10 +62,9 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .attr("class", "clickable-row")
             .html(d => `
         <td>${d.IncidentType}</td>
-        <td>${d.DesignatedArea}</td>
-        <td>${d.DeclarationTitle}</td>
-        <td>${new Date(d.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</td>
-      `)
+        <td id="descCenter">${d.DeclarationTitle}</td>
+        <td id="dateNoWrap">${new Date(d.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })}</td>
+    `)
             .on("click", (event, d) => showDisasterModal(d3, fipsStateCode, d));
     }
 

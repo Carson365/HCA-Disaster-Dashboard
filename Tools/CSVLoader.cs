@@ -147,7 +147,7 @@ namespace AISComp.Tools
 							: "Invalid Date",
 					DeclarationTitle = string.IsNullOrEmpty(csv.GetString("declarationTitle"))
 						? "Unknown"
-						: csv.GetString("declarationTitle").Trim()
+						: csv.GetString("declarationTitle").Replace(",", ", ").Replace(",  ", ", ").Trim()
 				});
 
 				//disasterList.Add(disaster);

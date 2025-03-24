@@ -26,7 +26,6 @@
   </ItemGroup>-->
 
   <ItemGroup>
-    <None Include="Tools\CSVLoader2.cs" />
     <None Include="wwwroot\js\runMapThings.js" />
   </ItemGroup>
 
