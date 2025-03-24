@@ -38,7 +38,7 @@ export async function createCharts(fip, data) {
   
   export async function getCountyNameByFips(d3, stateFips, countyFips) {
     const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
-    let name = 'Unkown'
+    let name = 'Unknown'
     const geoData = await d3.json(geojsonUrl);
 
     Object.values(geoData.features).forEach(obj => {

@@ -213,14 +213,19 @@
 	margin-top: 1.5em;
 	margin-right: 1.5em;
 	margin-bottom: 1.5em;
+	width: calc(100% - 1.5em);
 }
 
+	.tableHolder:last-of-type {
+		margin-top: 0em;
+	}
 	.tableHolder:first-of-type {
-		margin-bottom: 0em;
+		min-height: calc(100% - 3em);
 	}
 
-@media(max-width: 800px) {
+@media(max-width: 900px) {
 	.tableHolder {
 		margin-left: 1.5em;
+		width: calc(100% - 3em);
 	}
 }

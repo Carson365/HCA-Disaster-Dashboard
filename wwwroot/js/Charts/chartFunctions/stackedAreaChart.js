@@ -131,10 +131,16 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
             );
 
             if (yearData) {
+                let xPos = x(yearData.year);
+
+                // Ensure the vertical line stays within the chart boundaries
+                const inset = 2; // Move line slightly inside the chart
+                xPos = Math.max(margin.left + inset, Math.min(xPos, width - margin.right - inset));
+
                 // Show and move the hover line
                 d3.select("#hover-line")
-                    .attr("x1", x(yearData.year))
-                    .attr("x2", x(yearData.year))
+                    .attr("x1", xPos)
+                    .attr("x2", xPos)
                     .attr("y1", margin.top)
                     .attr("y2", height - margin.bottom)
                     .style("opacity", 1);
@@ -152,6 +158,7 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
                 hideTooltip();
                 d3.select("#hover-line").style("opacity", 0); // Hide the vertical line
             });
+
 
 
 

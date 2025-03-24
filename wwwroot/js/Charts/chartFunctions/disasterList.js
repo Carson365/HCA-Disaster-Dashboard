@@ -1,6 +1,7 @@
 import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 
 export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
+
     let countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode)
     let stateName = await getStateNameByFips(fipsStateCode)
 
@@ -30,26 +31,6 @@ export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .attr("id", "header")
             .html(`<th scope="col" colspan="4" class="text-center">${title}</th>`);
 
-      //  container.append("tr")
-      //      .attr("id", "subheader")
-      //      .html(`
-      //  <th scope="col">Disaster Type</th>
-      //  <th scope="col">Area Affected</th>
-      //  <th scope="col">Declaration Title</th>
-      //  <th scope="col">Date</th>
-      //`);
-
-      //  container.selectAll(`.${rowClass}`)
-      //      .data(data)
-      //      .enter()
-      //      .append("tr")
-      //      .attr("class", "clickable-row")
-      //      .html(d => `
-      //  <td>${d.IncidentType}</td>
-      //  <td>${d.DesignatedArea}</td>
-      //  <td>${d.DeclarationTitle}</td>
-      //  <td>${new Date(d.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</td>
-        //`)
         container.append("tr")
             .attr("id", "subheader")
             .html(`
@@ -89,6 +70,8 @@ export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
         }));
 
     createTableSection(stateContainer, `${stateName} State Data`, stateOnlyDisasters, "state-row");
+
+    d3.select(".tableHolder").attr("style", "min-height: unset !important;");
 }
 
 function showDisasterModal(d3, fipsStateCode, disaster) {
