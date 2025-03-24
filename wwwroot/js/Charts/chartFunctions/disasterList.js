@@ -1,6 +1,9 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 
-export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
+export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
+    let countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode)
+    let stateName = await getStateNameByFips(fipsStateCode)
+
     // Select separate containers for county and state data
     const countyContainer = d3.select("#countyDisasterList");
     const stateContainer = d3.select("#stateDisasterList");
@@ -51,7 +54,7 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .attr("id", "subheader")
             .html(`
         <th scope="col">Disaster Type</th>
-        <th scope="col">Declaration Title</th>
+        <th scope="col">      Declaration Title</th>
         <th scope="col">Date</th>
     `);
 
@@ -69,7 +72,7 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
     }
 
     // Create table sections in their respective containers
-    createTableSection(countyContainer, "County Data", countyDisasters, "county-row");
+    createTableSection(countyContainer, `${countyName} County Data`, countyDisasters, "county-row");
 
     const disasterCounts = new Map();
     stateDisasters.forEach(d => {
@@ -85,7 +88,7 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
                 : d.DesignatedArea
         }));
 
-    createTableSection(stateContainer, "State Data", stateOnlyDisasters, "state-row");
+    createTableSection(stateContainer, `${stateName} State Data`, stateOnlyDisasters, "state-row");
 }
 
 function showDisasterModal(d3, fipsStateCode, disaster) {

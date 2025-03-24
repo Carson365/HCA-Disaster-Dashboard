@@ -1,7 +1,15 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 import { showTooltip, positionTooltip, hideTooltip } from "../tooltip.js";
 
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
+
+    let countyName = "";
+    if(fipsCountyCode){
+        countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode)
+    }
+
+    let stateName = await getStateNameByFips(fipsStateCode)
+
     function filterDisasters(data, stateCode, countyCode = null) {
         return data
             .filter(d => d.FIPSStateCode === stateCode && (!countyCode || d.FIPSCountyCode === countyCode))
@@ -36,9 +44,22 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
 
         const svg = container.append("svg")
             .attr("width", width)
-            .attr("height", height)
+            .attr("height", height + 50) // Extra space for title
             .append("g")
-            .attr("transform", `translate(${width / 2}, ${height / 2})`);
+            .attr("transform", `translate(${width / 2}, ${height / 2 + 40})`);
+
+        // Add dynamic title
+        const chartTitle = fipsCountyCode
+            ? `Disaster Types in ${countyName} County`
+            : `Disaster Types in ${stateName}`;
+
+        svg.append("text")
+            .attr("x", 0)
+            .attr("y", -height / 2 - 0)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text(chartTitle);
 
         const pie = d3.pie().value(d => d.count);
         const pieData = pie(dataEntries);
@@ -60,9 +81,9 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
             .on("mousemove", function (event, d) {
                 positionTooltip(event);
             })
-			.on("mouseout", function () {
-				hideTooltip();
-			});
+            .on("mouseout", function () {
+                hideTooltip();
+            });
     }
 
     renderChart();

@@ -1,18 +1,19 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
+export async function createStackedAreaChart(d3, countyFip, stateFip) {
+    let countyName = await getCountyNameByFips(d3, stateFip, countyFip)
+    let stateName = await getStateNameByFips(stateFip)
 
-export async function createStackedAreaChart(d3) {
     function aggregateDisastersByYear(data) {
         return data.reduce((acc, item) => {
             const year = new Date(item.DeclarationDate).getFullYear();
             acc[year] = acc[year] || new Set();
-            acc[year].add(item.DisasterNumber); // Use DisasterNumber instead of ID
+            acc[year].add(item.DisasterNumber);
             return acc;
         }, {});
     }
-
 
     const rawStateData = aggregateDisastersByYear(stateData);
     const aggregatedStateData = Object.fromEntries(
@@ -38,13 +39,22 @@ export async function createStackedAreaChart(d3) {
         const container = document.getElementById("stackedAreaChart");
         const width = container.clientWidth * 0.9;
         const height = container.clientHeight * 0.9;
-        const margin = { top: 25, right: 0, bottom: 25, left: 20 };
+        const margin = { top: 50, right: 0, bottom: 25, left: 20 }; // Increased for title
 
         const svg = d3.select("#stackedAreaChart")
             .append("svg")
             .attr("width", width)
             .attr("height", height)
             .attr("viewBox", `0 0 ${width} ${height}`);
+
+        // Add title with the correct format and style
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", margin.top / 2)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text(`Natural Disasters in ${countyName}, ${stateName} Since 1968`);
 
         const x = d3.scaleLinear()
             .domain(d3.extent(mergedData, d => d.year))

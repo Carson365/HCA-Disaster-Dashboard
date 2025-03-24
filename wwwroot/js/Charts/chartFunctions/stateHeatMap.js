@@ -1,9 +1,12 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getStateNameByFips } from "../main.js";
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 export async function createStateHeatMap(d3, fipsCode) {
     const container = document.getElementById("stateHeatMap");
     if (!container) return;
+
+    // Get the state name for the title
+    const stateName = await getStateNameByFips(fipsCode);
 
     function calculateAverageDisastersPerYear(fipsStateCode) {
         const disasters = stateData.filter(d => d.FIPSStateCode === fipsStateCode);
@@ -46,9 +49,18 @@ export async function createStateHeatMap(d3, fipsCode) {
         const svg = d3.select("#stateHeatMap")
             .append("svg")
             .attr("width", width)
-            .attr("height", height)
-            .attr("viewBox", `0 0 ${width} ${height}`)
-            .attr("preserveAspectRatio", "xMinYMin meet");
+            .attr("height", height + 40) // Extra space for title
+            .append("g")
+            .attr("transform", `translate(0, 50)`); // Push map down for title
+
+        // Add dynamic title for state heat map
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", -20)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text(`Annual Average of Natural Disasters Across Counties in  ${stateName}`);
 
         const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
 
@@ -71,7 +83,7 @@ export async function createStateHeatMap(d3, fipsCode) {
             const colorScale = d3.scaleSequential(d3.interpolateReds)
                 .domain([Math.log(minDisasters + 1), Math.log(maxDisasters + 1)]);
 
-            const projection = d3.geoMercator().fitSize([width, height], stateCounties);
+            const projection = d3.geoMercator().fitSize([width, height - 40], stateCounties);
             const path = d3.geoPath().projection(projection);
 
             svg.selectAll("path")
