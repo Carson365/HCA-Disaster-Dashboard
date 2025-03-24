@@ -1,8 +1,7 @@
-﻿import { stateData, getCountyNameByFips, getStateNameByFips } from "../main.js";
+﻿import { stateData, getCountyNameByFips } from "../main.js";
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 export async function createDamageStackedBarChart(d3, fipsStateCode) {
-    let stateName = await getStateNameByFips(fipsStateCode);
 
     // Aggregate data for all counties in the state by FIPS code
     const countyDamageMap = new Map();
@@ -161,9 +160,8 @@ export async function createDamageStackedBarChart(d3, fipsStateCode) {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Damage Categories by County in ${stateName}`);
+            .text(`Property Damage Severity and Quantity by County`);
     }
-
 
     renderChart();
     window.addEventListener("resize", renderChart);

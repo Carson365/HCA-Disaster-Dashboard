@@ -130,7 +130,7 @@
 	scroll-snap-align: start;
 }
 
-@media(max-width: 900px) {
+@media(max-width: 1000px) {
 	.x1, .x2 {
 		position: relative;
 		min-width: 100%;
@@ -173,7 +173,7 @@
 	overflow-y: hidden;
 }
 
-@media(min-width: 901px) {
+@media(min-width: 1001px) {
 	.squish .Zcard-content {
 		margin-left: 1.5em;
 	}
@@ -223,7 +223,7 @@
 		min-height: calc(100% - 3em);
 	}
 
-@media(max-width: 900px) {
+@media(max-width: 1000px) {
 	.tableHolder {
 		margin-left: 1.5em;
 		width: calc(100% - 3em);
