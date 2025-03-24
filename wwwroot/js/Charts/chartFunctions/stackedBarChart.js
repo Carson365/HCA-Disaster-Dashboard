@@ -173,7 +173,7 @@ export async function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Monthly Average of Natural Disasters in ${stateName}`);
+            .text(`Monthly Average of Natural Disasters`);
 
     }
 

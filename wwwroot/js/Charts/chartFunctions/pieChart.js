@@ -50,8 +50,8 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
 
         // Add dynamic title
         const chartTitle = fipsCountyCode
-            ? `Disaster Types in ${countyName} County`
-            : `Disaster Types in ${stateName}`;
+            ? `County Disaster Types`
+            : `State Disaster Types`;
 
         svg.append("text")
             .attr("x", 0)

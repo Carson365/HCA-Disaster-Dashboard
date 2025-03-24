@@ -58,8 +58,8 @@ export async function createDamagePieChart(d3, fipsStateCode, fipsCountyCode = n
 
         // Add dynamic title
         const chartTitle = fipsCountyCode
-            ? `Damage Categories in ${countyName} County`
-            : `Damage Categories in ${stateName}`;
+            ? `County Damage Categories`
+            : `State Damage Categories`;
 
         svg.append("text")
             .attr("x", 0)

@@ -54,7 +54,7 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Natural Disasters in ${countyName}, ${stateName} Since 1968`);
+            .text(`Natural Disasters Since 1968`);
 
         const x = d3.scaleLinear()
             .domain(d3.extent(mergedData, d => d.year))

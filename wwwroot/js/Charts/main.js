@@ -4,6 +4,7 @@
 //This function is called with the data as a parameter.
 
 import { createChartsWithData } from "./charts.js";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 export let stateData = [];
 export let countyData = [];
@@ -31,10 +32,11 @@ export async function createCharts(fip, data) {
 	// });
 
 	createChartsWithData();
+
+    document.getElementById("statsTitle").innerHTML = `${await getCountyNameByFips(d3, stateFip, countyFip)} County, ${getStateNameByFips(stateFip)}`
   }
   
   export async function getCountyNameByFips(d3, stateFips, countyFips) {
-	console.log("County :" + stateFips + " " + countyFips)
     const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
     let name = 'Unkown'
     const geoData = await d3.json(geojsonUrl);
@@ -48,7 +50,6 @@ export async function createCharts(fip, data) {
 }
 
 export function getStateNameByFips(fipsCode) {
-	console.log("State Name: " + fipsCode)
     const abbreviation = fipsToName[fipsCode];
     if (abbreviation) {
         return abbreviation;
