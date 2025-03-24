@@ -4,19 +4,24 @@
 <PageTitle>HCA Healthcare</PageTitle>
 
 <div class="page">
-	<div class="body">
-		<div class="top-row px-4">
-			<div class="top-row2 ps-3 navbar">
-				<a class="navbar-brand" href=""><b>HCA Healthcare</b></a>
-			</div>
-		</div>
-		<div class="bottom-line"></div>
-		<main>
-			@ChildContent
-		</main>
+	<div class="top-row">
+		<a class="branding" href=""><b>HCA Healthcare</b></a>
 	</div>
+	<main>
+		@ChildContent
+		@if (searchEnabled)
+		{
+			<div class="left-sidebar sidebar"></div>
+		}
+		@if (selectedEmployee != null)
+		{
+			<div class="right-sidebar sidebar"></div>
+		}
+	</main>
 </div>
 
 @code {
 	[Parameter] public RenderFragment? ChildContent { get; set; }
+	bool searchEnabled=true;
+	bool? selectedEmployee = true;
 }

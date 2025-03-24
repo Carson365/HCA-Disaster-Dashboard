@@ -29,7 +29,7 @@
 
 	protected override void OnInitialized()
 	{
-		Console.WriteLine("in tree");
+		// Console.WriteLine("in tree");
 		CSVLoader.OnLoaded += () => StateHasChanged();
 		SearchResults = CSVLoader.GetLocationOrgTree(LocID);
 	}

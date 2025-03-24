@@ -58,18 +58,18 @@
 	}
 
 .x1 {
-	min-width: 35%;
+	min-width: 40%;
 	height: 100%;
 	scroll-snap-align: end;
 }
 
 .x2 {
-	min-width: 65%;
+	min-width: 60%;
 	height: 100%;
 	scroll-snap-align: start;
 }
 
-@media(max-width: 800px) {
+@media(max-width: 900px) {
 	.x1, .x2 {
 		position: relative;
 		min-width: 100%;
@@ -112,7 +112,7 @@
 	overflow-y: hidden;
 }
 
-@media(min-width: 801px) {
+@media(min-width: 901px) {
 	.squish .Zcard-content {
 		margin-left: 1.5em;
 	}

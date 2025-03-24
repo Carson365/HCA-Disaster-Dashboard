@@ -92,23 +92,69 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
             legend.append("text").attr("x", 20).attr("y", i * 20 + 12).text(name).style("font-size", "12px");
         });
 
+        //svg.on("mousemove", function (event) {
+        //    const [mouseX] = d3.pointer(event);
+        //    let estimatedYear = Math.round(x.invert(mouseX));
+
+        //    // Find the closest available year in mergedData
+        //    let yearData = mergedData.reduce((prev, curr) =>
+        //        Math.abs(curr.year - estimatedYear) < Math.abs(prev.year - estimatedYear) ? curr : prev
+        //    );
+
+        //    if (yearData) {
+        //        showTooltip(
+        //            `<strong>Year:</strong> ${yearData.year}<br>
+        //     <strong>State Disasters:</strong> ${yearData.state}<br>
+        //     <strong>County Disasters:</strong> ${yearData.county}`,
+        //            event
+        //        );
+        //    }
+        //}).on("mouseout", function () {
+        //    hideTooltip();
+        //});
+
+        // Append a vertical dashed line that will follow the hovered year
+        svg.append("line")
+            .attr("id", "hover-line")
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-dasharray", "5,5") // Dashed line
+            .style("opacity", 0); // Initially hidden
+
         svg.on("mousemove", function (event) {
             const [mouseX] = d3.pointer(event);
-            const closestYear = Math.round(x.invert(mouseX));
-            const yearData = mergedData.find(d => d.year === closestYear);
+            let estimatedYear = Math.round(x.invert(mouseX));
+
+            // Find the closest available year in mergedData
+            let yearData = mergedData.reduce((prev, curr) =>
+                Math.abs(curr.year - estimatedYear) < Math.abs(prev.year - estimatedYear) ? curr : prev
+            );
 
             if (yearData) {
+                // Show and move the hover line
+                d3.select("#hover-line")
+                    .attr("x1", x(yearData.year))
+                    .attr("x2", x(yearData.year))
+                    .attr("y1", margin.top)
+                    .attr("y2", height - margin.bottom)
+                    .style("opacity", 1);
+
+                // Update the tooltip
                 showTooltip(
-                    `<strong>Year:</strong> ${closestYear}<br>
-                   <strong>State Disasters:</strong> ${yearData.state}<br>
-                   <strong>County Disasters:</strong> ${yearData.county}`,
+                    `<strong>Year:</strong> ${yearData.year}<br>
+             <strong>State Disasters:</strong> ${yearData.state}<br>
+             <strong>County Disasters:</strong> ${yearData.county}`,
                     event
                 );
             }
         })
-        .on("mouseout", function () {
-            hideTooltip();
-        });
+            .on("mouseout", function () {
+                hideTooltip();
+                d3.select("#hover-line").style("opacity", 0); // Hide the vertical line
+            });
+
+
+
     }
 
     renderChart();
