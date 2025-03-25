@@ -1,4 +1,4 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getStateNameByFips } from "../main.js";
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 // Function to calculate average disasters per month for the state
@@ -82,7 +82,8 @@ function getAverageCountyDisastersPerMonth(fipsStateCode, fipsCountyCode) {
 }
 
 // Create the stacked bar chart
-export function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
+export async function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
+
     const stateMonthlyAverages = getAverageDisastersPerMonth(fipsStateCode);
     const countyMonthlyAverages = fipsCountyCode ? getAverageCountyDisastersPerMonth(fipsStateCode, fipsCountyCode) : null;
 
@@ -100,7 +101,8 @@ export function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
 
     data.sort((a, b) => parseInt(a.month) - parseInt(b.month));
 
-    function renderChart() {
+    async function renderChart() {
+        let stateName = await getStateNameByFips(fipsStateCode)
         const container = d3.select("#stackedBarChart");
         if (container.empty()) return;
 
@@ -171,7 +173,7 @@ export function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Avg Natural Disasters By Month in ${stateData.find(s => s.FIPSStateCode === fipsStateCode)?.State || "Unknown State"}`);
+            .text(`Monthly Average of Natural Disasters`);
 
     }
 

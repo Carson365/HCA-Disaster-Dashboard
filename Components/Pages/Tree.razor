@@ -1,17 +1,19 @@
 ﻿@page "/tree/{LocID}"
 @using AISComp.Tools
-@* @using AISComp.Components.Shared*@
 @inject IJSRuntime jsRuntime
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
 @using System.Collections.Concurrent
-@* @inject CSVLoader CsvLoaderInstance *@
 
 
 <PageTitle>Tree</PageTitle>
 
 
 <OrgMainLayout>
+	<div class="top-row">
+		<a class="branding oi oi-home" href=""></a>
+		<a class="branding"><b>@($"{CSVLoader.Locations.First(x => x.ID==LocID).Name}")</b></a>
+	</div>
 	<body>
 		<div class="container">
 		</div>

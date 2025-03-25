@@ -150,7 +150,6 @@ namespace AISComp.Tools
 						: csv.GetString("declarationTitle").Replace(",", ", ").Replace(",  ", ", ").Trim()
 				});
 
-				//disasterList.Add(disaster);
 			}
 
 			// HazardMitigationAssistanceMitigatedProperties

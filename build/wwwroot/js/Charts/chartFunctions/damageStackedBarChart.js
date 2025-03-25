@@ -34,7 +34,7 @@ export async function createDamageStackedBarChart(d3, fipsStateCode) {
     // Build a mapping from FIPS to county name
     const countyNameMap = {};
     await Promise.all(processedData.map(async entry => {
-        countyNameMap[entry.county] = await getCountyNameByFips(entry.county);
+        countyNameMap[entry.county] = await getCountyNameByFips(d3, fipsStateCode, entry.county);
     }));
 
     const categories = new Set();

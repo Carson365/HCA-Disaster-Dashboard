@@ -47,14 +47,12 @@ input[type="text"] {
 		}
 
 .container {
-	height:100%;
-	width:100%;
+	height: calc(100vh - 3.5em);
+	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	mix-blend-mode: overlay;
-	margin-top: -5px; /* Counteract the margin of the top box */
-
 }
 
 .box {
@@ -76,4 +74,48 @@ body{
 
 .custom {
 	color: var(--text);
+}
+
+
+
+main {
+	overflow: auto;
+	min-width: 100vw;
+	min-height: calc(100vh - 3.5em);
+	height: calc(100vh - 3.5em);
+}
+
+.branding {
+	text-decoration: none;
+	padding-left: 1em;
+	padding-right: 1em;
+	font-size: 1.5em;
+}
+
+
+
+.top-row {
+	height: 3.5em;
+	min-height: 3.5em;
+	display: flex;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100vw;
+	mix-blend-mode: lighten;
+	justify-content: space-between;
+	position: relative;
+}
+
+.branding:first-of-type {
+	margin-right: auto; /* Pushes the first branding to the left */
+}
+
+.branding:last-of-type {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	text-align: center; /* Center the text */
+	padding-left: 3em;
+	z-index: -1;
 }

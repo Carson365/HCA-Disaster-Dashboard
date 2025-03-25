@@ -1,14 +1,7 @@
-import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
+import { stateData, countyData } from "../main.js";
 import { showTooltip, positionTooltip, hideTooltip } from "../tooltip.js";
 
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
-
-    let countyName = "";
-    if(fipsCountyCode){
-        countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode)
-    }
-
-    let stateName = await getStateNameByFips(fipsStateCode)
 
     function filterDisasters(data, stateCode, countyCode = null) {
         return data
@@ -77,12 +70,14 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
             .on("mouseover", function (event, d) {
                 const percentage = ((d.data.count / totalDisasters) * 100).toFixed(2);
                 showTooltip(`<strong>${d.data.type}</strong><br>${percentage}%`, event);
+                d3.select(this).style("opacity", 0.7);
             })
             .on("mousemove", function (event, d) {
                 positionTooltip(event);
             })
             .on("mouseout", function () {
                 hideTooltip();
+                d3.select(this).style("opacity", 1);
             });
     }
 

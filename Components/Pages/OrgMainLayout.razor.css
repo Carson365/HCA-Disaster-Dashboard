@@ -7,7 +7,7 @@
     min-height: 100vh;
 }
 
-.top-row {
+/*.top-row {
     height: 3.5em;
     min-height: 3.5em;
     display: flex;
@@ -29,7 +29,7 @@ main {
     padding-left: 1em;
     padding-right: 1em;
     font-size: 1.5em;
-}
+}*/
 
 
 
@@ -49,8 +49,7 @@ main {
 
 .sidebar {
     overflow: auto;
-    min-width: 385px;
-    max-width: 385px;
+    width: min(385px, 100%);
     min-height: calc(100vh - 3.5em);
     height: calc(100vh - 3.5em);
     background-color: red;

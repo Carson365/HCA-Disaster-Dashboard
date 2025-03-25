@@ -191,3 +191,13 @@ tbody tr:last-child td:last-child {
 tbody tr:last-child td {
     border-bottom: none;
 }
+
+#dateNoWrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: right;
+}
+
+#descCenter{
+    text-align: center;
+}

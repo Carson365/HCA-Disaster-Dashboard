@@ -1,11 +1,8 @@
-import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
+import { stateData, countyData } from "../main.js";
 
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 export async function createStackedAreaChart(d3, countyFip, stateFip) {
-    let countyName = await getCountyNameByFips(d3, stateFip, countyFip)
-    let stateName = await getStateNameByFips(stateFip)
-
     function aggregateDisastersByYear(data) {
         return data.reduce((acc, item) => {
             const year = new Date(item.DeclarationDate).getFullYear();

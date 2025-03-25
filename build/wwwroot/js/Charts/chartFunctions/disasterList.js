@@ -1,6 +1,10 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 
-export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
+export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
+
+    let countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode)
+    let stateName = await getStateNameByFips(fipsStateCode)
+
     // Select separate containers for county and state data
     const countyContainer = d3.select("#countyDisasterList");
     const stateContainer = d3.select("#stateDisasterList");
@@ -31,10 +35,9 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .attr("id", "subheader")
             .html(`
         <th scope="col">Disaster Type</th>
-        <th scope="col">Area Affected</th>
-        <th scope="col">Declaration Title</th>
+        <th scope="col">      Declaration Title</th>
         <th scope="col">Date</th>
-      `);
+    `);
 
         container.selectAll(`.${rowClass}`)
             .data(data)
@@ -43,15 +46,14 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
             .attr("class", "clickable-row")
             .html(d => `
         <td>${d.IncidentType}</td>
-        <td>${d.DesignatedArea}</td>
-        <td>${d.DeclarationTitle}</td>
-        <td>${new Date(d.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</td>
-      `)
+        <td id="descCenter">${d.DeclarationTitle}</td>
+        <td id="dateNoWrap">${new Date(d.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })}</td>
+    `)
             .on("click", (event, d) => showDisasterModal(d3, fipsStateCode, d));
     }
 
     // Create table sections in their respective containers
-    createTableSection(countyContainer, "County Data", countyDisasters, "county-row");
+    createTableSection(countyContainer, `${countyName} County Data`, countyDisasters, "county-row");
 
     const disasterCounts = new Map();
     stateDisasters.forEach(d => {
@@ -67,7 +69,9 @@ export function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
                 : d.DesignatedArea
         }));
 
-    createTableSection(stateContainer, "State Data", stateOnlyDisasters, "state-row");
+    createTableSection(stateContainer, `${stateName} State Data`, stateOnlyDisasters, "state-row");
+
+    d3.select(".tableHolder").attr("style", "min-height: unset !important;");
 }
 
 function showDisasterModal(d3, fipsStateCode, disaster) {
@@ -77,6 +81,7 @@ function showDisasterModal(d3, fipsStateCode, disaster) {
     if (modalContainer.empty()) {
         const allCountiesAffected = getAllCountiesAffected(fipsStateCode, disaster.DisasterNumber);
         const disasterBeginAndEnd = `${new Date(disaster.DeclarationDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} - ${new Date(disaster.IncidentEndDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`;
+        const disasterDamageData = getPropertiesAffected(disaster)
 
         modalContainer = d3.select("body").append("div")
             .attr("class", "modal fade")
@@ -93,7 +98,9 @@ function showDisasterModal(d3, fipsStateCode, disaster) {
             </div>
             <div class="modal-body">
               <p><strong>Disaster Type:</strong> ${disaster.IncidentType}</p>
-              <p><strong>Areas Affected in ${disaster.State}:</strong> ${allCountiesAffected.join(", ")}</p>
+              <p><strong>Areas Affected in ${disaster.State}:</strong><br> ${allCountiesAffected.join(", ")}</p>
+              <p><strong>${disasterDamageData == "" ? "" : "Availible Property Damage Statistics:"}</strong></p>
+              <p>${disasterDamageData}</p>
               <p>${disasterBeginAndEnd}</p>
             </div>
             <div class="modal-footer">
@@ -115,4 +122,24 @@ function getAllCountiesAffected(stateFips, disasterNumber) {
         }
     });
     return Array.from(designatedAreas);
+}
+
+function getPropertiesAffected(disaster) {
+    let damageCategoryCounts = {};
+
+    disaster.Damages.forEach(obj => {
+        if (obj.DamageCategory !== "N/A") {
+            if (!damageCategoryCounts[obj.DamageCategory]) {
+                damageCategoryCounts[obj.DamageCategory] = 0;
+            }
+            damageCategoryCounts[obj.DamageCategory] += Number(obj.NumberOfProperties);
+        }
+    });
+
+    let result = "";
+    for (let category in damageCategoryCounts) {
+        result += `Damage Category: ${category}, Total Properties Affected: ${damageCategoryCounts[category]} <br>`;
+    }
+
+    return result;
 }
