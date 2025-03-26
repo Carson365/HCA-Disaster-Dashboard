@@ -96,6 +96,12 @@ export async function createStateHeatMap(d3, fipsCode) {
                 .attr("stroke", "#000")
                 .attr("stroke-width", 1)
                 .on("mouseover", function (event, d) {
+                    // Highlight the county on hover
+                    d3.select(this)
+                        .attr("stroke", "#ff0") // Change stroke to yellow
+                        .attr("stroke-width", 2) // Make the stroke wider
+                        .raise(); // Move this element to the top layer
+
                     const countyFips = d.properties.STATE + d.properties.COUNTY;
                     const avgDisasters = countyDisasterAverages[countyFips];
                     showTooltip(
@@ -108,6 +114,10 @@ export async function createStateHeatMap(d3, fipsCode) {
                     positionTooltip(event);
                 })
                 .on("mouseout", function () {
+                    // Reset highlight on mouseout
+                    d3.select(this)
+                        .attr("stroke", "#000") // Reset stroke to black
+                        .attr("stroke-width", 1); // Reset stroke width to default
                     hideTooltip();
                     d3.select(this).style("opacity", 1);
                 });

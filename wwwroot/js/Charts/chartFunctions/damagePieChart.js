@@ -76,23 +76,63 @@ export async function createDamagePieChart(d3, fipsStateCode, fipsCountyCode = n
             .attr("stroke", "white")
             .style("stroke-width", "2px")
             .on("mouseover", function (event, d) {
+                // Show tooltip with damage category, percentage and number of properties
                 const percentage = ((d.data.count / totalProperties) * 100).toFixed(2);
-                showTooltip(`<strong>${d.data.category}</strong><br>${percentage}% of total properties`, event);
-                d3.select(this).style("opacity", 0.7);
+                showTooltip(
+                    `<strong>Damage Category:</strong> ${d.data.category}<br><strong>Percentage:</strong> ${percentage}%<br><strong>Properties Affected:</strong> ${d.data.count}`,
+                    event
+                );
+                d3.select(this).style("opacity", 0.7); // Highlight on hover
             })
             .on("mousemove", function (event) {
                 positionTooltip(event);
             })
             .on("mouseout", function () {
-                hideTooltip();
-                d3.select(this).style("opacity", 1);
-            })
-            .on("click", function (event, d) {
-                showTooltip(
-                    `<strong>Damage Category:</strong> ${d.data.category}<br><strong>Total Properties Affected:</strong> ${d.data.count}`,
-                    event
-                );
+                hideTooltip(); // Hide tooltip on mouseout
+                d3.select(this).style("opacity", 1); // Reset opacity
             });
+
+        // Add labels for sections that have more than 10% of the total
+        svg.selectAll("text.label")
+            .data(pieData)
+            .enter().append("text")
+            .attr("class", "label")
+            .attr("transform", function(d) {
+                const centroid = arc.centroid(d);
+                return `translate(${centroid[0]}, ${centroid[1]})`;
+            })
+            .attr("text-anchor", "middle")
+            .attr("dy", ".35em")
+            .style("font-size", "14px") // Font size increased for better readability
+            .style("font-weight", "bold") // Making the font weight bold
+            .style("fill", "white") // Set the text color to white
+            .style("stroke", "none") // No stroke around text
+            .style("stroke-width", "0px")
+            .html(function(d) {
+                // Only show text if the slice represents more than 10% of the total
+                return ((d.data.count / totalProperties) * 100) >= 10 ? wrapText(d.data.category, 10) : ""; // Only show if greater than 10%
+            });
+
+        // Function to wrap text by words and add <br> if necessary
+        function wrapText(text, maxLength) {
+            const words = text.split(" ");
+            let currentLine = "";
+            let result = [];
+
+            words.forEach(word => {
+                // Check if adding the word exceeds maxLength
+                if ((currentLine + word).length > maxLength) {
+                    result.push(currentLine); // Push current line to result
+                    currentLine = word; // Start a new line with the word
+                } else {
+                    currentLine = currentLine ? currentLine + " " + word : word; // Append word to the current line
+                }
+            });
+            if (currentLine) result.push(currentLine); // Add any remaining line
+
+            // Join the lines with <br> to create line breaks in HTML
+            return result.join("<br>");
+        }
     }
 
     renderChart();
