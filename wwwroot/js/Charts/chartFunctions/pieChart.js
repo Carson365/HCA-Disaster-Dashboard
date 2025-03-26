@@ -1,14 +1,7 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 import { showTooltip, positionTooltip, hideTooltip } from "../tooltip.js";
 
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
-
-    let countyName = "";
-    if(fipsCountyCode){
-        countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode);
-    }
-
-    let stateName = await getStateNameByFips(fipsStateCode);
 
     function filterDisasters(data, stateCode, countyCode = null) {
         return data
@@ -78,12 +71,41 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
             .on("mouseover", function (event, d) {
                 const percentage = ((d.data.count / totalDisasters) * 100).toFixed(2);
                 showTooltip(`<strong>${d.data.type}</strong><br>${percentage}%`, event);
+                
+                // Highlight hovered section
+                d3.select(this)
+                    .style("opacity", 0.7) // Reduce opacity for highlighting
+                    .style("stroke-width", "3px"); // Increase border width
             })
             .on("mousemove", function (event, d) {
                 positionTooltip(event);
             })
             .on("mouseout", function () {
                 hideTooltip();
+                // Reset the highlighting
+                d3.select(this)
+                    .style("opacity", 1)
+                    .style("stroke-width", "2px");
+            });
+
+        // Add labels for sections that have more than 10% of the total
+        svg.selectAll("text.label")
+            .data(pieData)
+            .enter().append("text")
+            .attr("class", "label")
+            .attr("transform", function(d) {
+                const centroid = arc.centroid(d);
+                return `translate(${centroid[0]}, ${centroid[1]})`;
+            })
+            .attr("text-anchor", "middle")
+            .attr("dy", ".35em")
+            .style("font-size", "14px") // Font size increased for better readability
+            .style("font-weight", "bold") // Making the font weight bold
+            .style("fill", "white") // Set the text color to white
+            .style("stroke", "none") // No stroke around text
+            .style("stroke-width", "0px") // Remove stroke width
+            .text(function(d) {
+                return ((d.data.count / totalDisasters) * 100) >= 15 ? d.data.type : "";
             });
     }
 
