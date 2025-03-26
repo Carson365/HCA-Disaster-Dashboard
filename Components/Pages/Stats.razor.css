@@ -231,7 +231,7 @@
 	}
 }
 
-<<<<<<< Updated upstream
+
 
 
 /*
@@ -287,8 +287,11 @@ main {
 	padding-left: 3em;
 	z-index: -1;
 }
-=======
+
 .clickable-row:hover {
     cursor: pointer;
 }
->>>>>>> Stashed changes
+
+.clickable-row:hover {
+    cursor: pointer;
+}
