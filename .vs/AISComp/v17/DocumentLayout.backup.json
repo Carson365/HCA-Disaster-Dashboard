@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\carso\\Desktop\\AIS Git\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\d3utils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\d3utils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\hex.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\hex.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\wwwroot\\js\\charts\\tooltip.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
+      "RelativeMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|solutionrelative:wwwroot\\js\\charts\\tooltip.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1B6BB5C-1C03-4250-A95A-E15CD886820B}|AISComp.csproj|c:\\users\\carso\\desktop\\ais git\\tools\\csvloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,50 +38,41 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "d3Utils.js",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\d3Utils.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\d3Utils.js",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\d3Utils.js",
-              "RelativeToolTip": "wwwroot\\js\\d3Utils.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAABEAAAAAAAAAA==",
+              "Title": "tooltip.js",
+              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\tooltip.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\tooltip.js",
+              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\tooltip.js",
+              "RelativeToolTip": "wwwroot\\js\\Charts\\tooltip.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-25T22:29:50.367Z",
+              "WhenOpened": "2025-03-25T22:34:31.491Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Hex.js",
-              "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Hex.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\Hex.js",
-              "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Hex.js",
-              "RelativeToolTip": "wwwroot\\js\\Hex.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-25T22:29:35.262Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "CSVLoader.cs",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
               "RelativeDocumentMoniker": "Tools\\CSVLoader.cs",
               "ToolTip": "C:\\Users\\carso\\Desktop\\AIS Git\\Tools\\CSVLoader.cs",
               "RelativeToolTip": "Tools\\CSVLoader.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAIwGwAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAIwGwAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-25T22:11:04.585Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "Stats.razor",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\Components\\Pages\\Stats.razor",
               "RelativeDocumentMoniker": "Components\\Pages\\Stats.razor",
@@ -98,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "main.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\main.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\main.js",
@@ -111,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "charts.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\charts.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\charts.js",
@@ -124,7 +111,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "disasterList.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\disasterList.js",
@@ -137,7 +124,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "damageStackedBarChart.js",
               "DocumentMoniker": "C:\\Users\\carso\\Desktop\\AIS Git\\wwwroot\\js\\Charts\\chartFunctions\\damageStackedBarChart.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\Charts\\chartFunctions\\damageStackedBarChart.js",

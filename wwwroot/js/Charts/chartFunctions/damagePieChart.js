@@ -108,6 +108,7 @@ export async function createDamagePieChart(d3, fipsStateCode, fipsCountyCode = n
             .style("fill", "white") // Set the text color to white
             .style("stroke", "none") // No stroke around text
             .style("stroke-width", "0px")
+            .style("pointer-events", "none") // Allow mouse events to pass through
             .html(function(d) {
                 // Only show text if the slice represents more than 10% of the total
                 return ((d.data.count / totalProperties) * 100) >= 10 ? wrapText(d.data.category, 10) : ""; // Only show if greater than 10%

@@ -104,6 +104,7 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
             .style("fill", "white") // Set the text color to white
             .style("stroke", "none") // No stroke around text
             .style("stroke-width", "0px") // Remove stroke width
+            .style("pointer-events", "none") // Allow mouse events to pass through
             .text(function(d) {
                 return ((d.data.count / totalDisasters) * 100) >= 15 ? d.data.type : "";
             });
