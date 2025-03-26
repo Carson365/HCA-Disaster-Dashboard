@@ -1,4 +1,4 @@
-import { stateData, countyData, getStateNameByFips } from "../main.js";
+import { stateData, countyData } from "../main.js";
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 // Function to calculate average disasters per month for the state
@@ -102,7 +102,6 @@ export async function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
     data.sort((a, b) => parseInt(a.month) - parseInt(b.month));
 
     async function renderChart() {
-        let stateName = await getStateNameByFips(fipsStateCode)
         const container = d3.select("#stackedBarChart");
         if (container.empty()) return;
 
@@ -149,12 +148,14 @@ export async function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
                 const content = `<strong>${monthNames[parseInt(d.month) - 1]} ${d.type === 'State' ? state : countyName}</strong><br>
                                  Avg Disasters/Year: ${d.average.toFixed(2)}`;
                 showTooltip(content, event);
+                d3.select(this).style("opacity", 0.7);
             })
             .on("mousemove", function (event) {
                 positionTooltip(event);
             })
             .on("mouseout", function () {
                 hideTooltip();
+                d3.select(this).style("opacity", 1);
             });
 
         svg.append("g")

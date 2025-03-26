@@ -10,7 +10,7 @@ export function runTree(employeeJson) {
 
     // Create a hierarchy; assume that d.Downs holds child nodes.
     const root = d3.hierarchy(rootData, d => d.Downs);
-    const totalNodes = root.descendants().length;
+    //const totalNodes = root.descendants().length;
 
     // Define dimensions and parameters.
     const width = document.querySelector('.container').offsetWidth;

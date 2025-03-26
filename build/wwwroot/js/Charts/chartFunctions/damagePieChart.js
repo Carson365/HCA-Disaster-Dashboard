@@ -1,13 +1,7 @@
-import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
+import { stateData, countyData } from "../main.js";
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js"; // Import the global tooltip functions
 
 export async function createDamagePieChart(d3, fipsStateCode, fipsCountyCode = null) {
-    // Fetch names for title
-    let countyName = "";
-    if (fipsCountyCode) {
-        countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode);
-    }
-    let stateName = await getStateNameByFips(fipsStateCode);
 
     function filterDisasters(data, stateCode, countyCode = null) {
         return data

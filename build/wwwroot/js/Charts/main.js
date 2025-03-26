@@ -4,7 +4,6 @@
 //This function is called with the data as a parameter.
 
 import { createChartsWithData } from "./charts.js";
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 export let stateData = [];
 export let countyData = [];
@@ -12,7 +11,12 @@ export let countyData = [];
 export let stateFip = "";
 export let countyFip = "";
 
-export async function createCharts(fip, data) {
+export let countyFipNameData = {};
+
+export async function createCharts(fip, data, counties) {
+
+	Object.assign(stateData, JSON.parse(data));
+	Object.assign(countyFipNameData, JSON.parse(counties));
 
 	stateFip = fip[0] + fip[1];
 	countyFip = fip[2] + fip[3] + fip[4];
@@ -21,41 +25,19 @@ export async function createCharts(fip, data) {
 
 	countyData = stateData.filter(d => d.FIPSCountyCode === countyFip);
 
-	// stateData.forEach(obj => {
-	// 	obj.Damages.forEach(damage => {
-	// 		if (damage.DamageCategory !== "N/A") {
-	// 			for (let i = 0; i < damage.NumberOfProperties; i++) {
-	// 				console.log(damage.DamageCategory);
-	// 			}
-	// 		}
-	// 	});
-	// });
-
 	createChartsWithData();
 
-    document.getElementById("statsTitle").innerHTML = `${await getCountyNameByFips(d3, stateFip, countyFip)} County, ${getStateNameByFips(stateFip)}`
-  }
-  
-  export async function getCountyNameByFips(d3, stateFips, countyFips) {
-    const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
-    let name = 'Unknown'
-    const geoData = await d3.json(geojsonUrl);
-
-    Object.values(geoData.features).forEach(obj => {
-        if (obj.properties.STATE === stateFips && obj.properties.COUNTY === countyFips && obj.properties.NAME != undefined) {
-            name = obj.properties.NAME
-        }
-    });
-    return name
 }
 
+export async function getCountyNameByFips(countyFips) {
+	return countyFipNameData[countyFips];
+}
 export function getStateNameByFips(fipsCode) {
     const abbreviation = fipsToName[fipsCode];
     if (abbreviation) {
         return abbreviation;
     }
 }
-
 const fipsToName = {
     "01": "Alabama", "02": "Alaska", "04": "Arizona", "05": "Arkansas", "06": "California",
     "08": "Colorado", "09": "Connecticut", "10": "Delaware", "11": "District of Columbia",

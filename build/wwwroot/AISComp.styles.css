@@ -55,6 +55,7 @@
 .page[b-7jqcgbi8k5] {
 	position: relative;
 	display: flex;
+	background-image: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%);
 }
 
 .sidebar[b-7jqcgbi8k5] {
@@ -78,6 +79,55 @@
 	background-color: rgba(200,220,230, 80%);
 	z-index: 50;
 }
+
+
+
+/*.top-row1 {
+	height: 3.5em;
+	min-height: 3.5em;
+	display: flex;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100vw;
+	mix-blend-mode: lighten;
+}*/
+
+/*#map {
+	overflow: auto;
+	min-width: 100vw;
+	min-height: calc(100vh - 5em);
+	height: calc(100vh - 5em);
+}*/
+
+/*.branding1 {
+	text-decoration: none;
+	padding-left: 1em;
+	padding-right: 1em;
+	font-size: 1.5em;
+}
+
+.top-row1 {
+	height: 3.5em;
+	min-height: 3.5em;
+	display: flex;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100vw;
+	mix-blend-mode: lighten;
+	justify-content: space-between;*/
+	/*	padding: 0 1em;
+*/ /*position: relative;
+}
+
+.branding1{
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	text-align: center;*/ /* Center the text */
+	/*padding-left: 3em;
+	z-index: -1;
+}*/
 /* _content/AISComp/Components/Pages/OrgMainLayout.razor.rz.scp.css */
 .page[b-zv7j0jmkb8] {
     display: flex;
@@ -88,7 +138,7 @@
     min-height: 100vh;
 }
 
-.top-row[b-zv7j0jmkb8] {
+/*.top-row {
     height: 3.5em;
     min-height: 3.5em;
     display: flex;
@@ -98,19 +148,19 @@
     mix-blend-mode: lighten;
 }
 
-main[b-zv7j0jmkb8] {
+main {
     overflow: auto;
     min-width: 100vw;
     min-height: calc(100vh - 3.5em);
     height: calc(100vh - 3.5em);
 }
 
-.branding[b-zv7j0jmkb8]{
+.branding{
     text-decoration: none;
     padding-left: 1em;
     padding-right: 1em;
     font-size: 1.5em;
-}
+}*/
 
 
 
@@ -130,8 +180,7 @@ main[b-zv7j0jmkb8] {
 
 .sidebar[b-zv7j0jmkb8] {
     overflow: auto;
-    min-width: 385px;
-    max-width: 385px;
+    width: min(385px, 100%);
     min-height: calc(100vh - 3.5em);
     height: calc(100vh - 3.5em);
     background-color: red;
@@ -149,8 +198,8 @@ body[b-xdm2ure6px] {
 	height: 100%;
 	background-image: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%);
 }
-/*
-.navbar {
+
+/*.navbar {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -158,9 +207,9 @@ body[b-xdm2ure6px] {
 	height: 50px;
 	background-color: #333;
 	color: white;
-}
-*/
-.navbar[b-xdm2ure6px] {
+}*/
+
+/*.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -168,22 +217,22 @@ body[b-xdm2ure6px] {
     position: relative;
 }
 
-#back-button button[b-xdm2ure6px] {
+#back-button button {
     background-color: transparent;
     border: none;
-	color: white;
-    /*padding: 8px 15px;*/
-    border-radius: 4px;
+	color: white;*/
+/*padding: 8px 15px;*/
+/*border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
     text-decoration: none;
 }
 
-#back-button button:hover[b-xdm2ure6px] {
+#back-button button:hover {
     background-color: transparent;
 }
 
-.navbar-title[b-xdm2ure6px] {
+.navbar-title {
     position: absolute;
 	color: white;
     left: 50%;
@@ -192,34 +241,34 @@ body[b-xdm2ure6px] {
 	font-size: 20px;
 }
 
-.navbar-toggler[b-xdm2ure6px] {
+.navbar-toggler {
     background-color: transparent;
     border: none;
 }
 
-.navbar-collapse[b-xdm2ure6px] {
+.navbar-collapse {
     display: flex;
 }
 
-.navbar-nav[b-xdm2ure6px] {
+.navbar-nav {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
 }
 
-.nav-item[b-xdm2ure6px] {
+.nav-item {
     margin-left: 20px;
 }
 
-.nav-link[b-xdm2ure6px] {
+.nav-link {
     text-decoration: none;
     font-size: 16px;
 }
 
-.nav-item.active .nav-link[b-xdm2ure6px] {
+.nav-item.active .nav-link {
     font-weight: bold;
-}
+}*/
 
 .Zcontent[b-xdm2ure6px] {
 	display: flex;
@@ -358,6 +407,7 @@ body[b-xdm2ure6px] {
 	.tableHolder:last-of-type[b-xdm2ure6px] {
 		margin-top: 0em;
 	}
+
 	.tableHolder:first-of-type[b-xdm2ure6px] {
 		min-height: calc(100% - 3em);
 	}
@@ -367,6 +417,62 @@ body[b-xdm2ure6px] {
 		margin-left: 1.5em;
 		width: calc(100% - 3em);
 	}
+}
+
+
+
+/*
+.top-row {
+	height: 3.5em;
+	min-height: 3.5em;
+	display: flex;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100vw;
+	mix-blend-mode: lighten;
+	justify-content: space-between;
+}
+*/
+main[b-xdm2ure6px] {
+	overflow: auto;
+	min-width: 100vw;
+	min-height: calc(100vh - 3.5em);
+	height: calc(100vh - 3.5em);
+}
+
+.branding[b-xdm2ure6px] {
+	text-decoration: none;
+	padding-left: 1em;
+	padding-right: 1em;
+	font-size: 1.5em;
+}
+
+
+
+.top-row[b-xdm2ure6px] {
+	height: 3.5em;
+	min-height: 3.5em;
+	display: flex;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100vw;
+	mix-blend-mode: lighten;
+	justify-content: space-between;
+	position: relative;
+}
+
+.branding:first-of-type[b-xdm2ure6px] {
+	margin-right: auto; /* Pushes the first branding to the left */
+}
+
+.branding:last-of-type[b-xdm2ure6px] {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	text-align: center; /* Center the text */
+	padding-left: 3em;
+	z-index: -1;
 }
 /* _content/AISComp/Components/Pages/Tree.razor.rz.scp.css */
 form[b-az60ut22r0] {
@@ -418,14 +524,12 @@ input[type="text"][b-az60ut22r0] {
 		}
 
 .container[b-az60ut22r0] {
-	height:100%;
-	width:100%;
+	height: calc(100vh - 3.5em);
+	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	mix-blend-mode: overlay;
-	margin-top: -5px; /* Counteract the margin of the top box */
-
 }
 
 .box[b-az60ut22r0] {
@@ -447,4 +551,48 @@ body[b-az60ut22r0]{
 
 .custom[b-az60ut22r0] {
 	color: var(--text);
+}
+
+
+
+main[b-az60ut22r0] {
+	overflow: auto;
+	min-width: 100vw;
+	min-height: calc(100vh - 3.5em);
+	height: calc(100vh - 3.5em);
+}
+
+.branding[b-az60ut22r0] {
+	text-decoration: none;
+	padding-left: 1em;
+	padding-right: 1em;
+	font-size: 1.5em;
+}
+
+
+
+.top-row[b-az60ut22r0] {
+	height: 3.5em;
+	min-height: 3.5em;
+	display: flex;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: 100vw;
+	mix-blend-mode: lighten;
+	justify-content: space-between;
+	position: relative;
+}
+
+.branding:first-of-type[b-az60ut22r0] {
+	margin-right: auto; /* Pushes the first branding to the left */
+}
+
+.branding:last-of-type[b-az60ut22r0] {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	text-align: center; /* Center the text */
+	padding-left: 3em;
+	z-index: -1;
 }

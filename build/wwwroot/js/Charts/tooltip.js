@@ -19,6 +19,7 @@ export function createGlobalTooltip() {
             .style("pointer-events", "none")
             .style("opacity", 0);
     }
+    hideTooltip();
 }
 
 export function showTooltip(content, event) {

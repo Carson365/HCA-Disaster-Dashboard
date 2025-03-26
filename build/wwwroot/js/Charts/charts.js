@@ -9,8 +9,6 @@ import { createDamageStackedBarChart } from "./chartFunctions/damageStackedBarCh
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { stateFip, countyFip } from "./main.js";
 
-
-
 import { createGlobalTooltip } from "./tooltip.js";
 
 

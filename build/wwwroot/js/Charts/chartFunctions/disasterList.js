@@ -1,8 +1,8 @@
-import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
+import { stateData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 
 export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
 
-    let countyName = await getCountyNameByFips(d3, fipsStateCode, fipsCountyCode)
+    let countyName = await getCountyNameByFips(fipsCountyCode)
     let stateName = await getStateNameByFips(fipsStateCode)
 
     // Select separate containers for county and state data
@@ -53,7 +53,7 @@ export async function createDisasterList(d3, fipsStateCode, fipsCountyCode) {
     }
 
     // Create table sections in their respective containers
-    createTableSection(countyContainer, `${countyName} County Data`, countyDisasters, "county-row");
+    createTableSection(countyContainer, `${countyName} Data`, countyDisasters, "county-row");
 
     const disasterCounts = new Map();
     stateDisasters.forEach(d => {
