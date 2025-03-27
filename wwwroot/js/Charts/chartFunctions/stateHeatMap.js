@@ -57,7 +57,7 @@ export async function createStateHeatMap(d3, fipsCode) {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Annual Average of Natural Disasters Across Counties`);
+            .text(`Annual Average Natural Disasters By County`);
 
         const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
 

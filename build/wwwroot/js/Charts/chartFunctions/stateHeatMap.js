@@ -57,7 +57,7 @@ export async function createStateHeatMap(d3, fipsCode) {
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Annual Average of Natural Disasters Across Counties`);
+            .text(`Annual Average Natural Disasters By County`);
 
         const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
 
@@ -96,18 +96,28 @@ export async function createStateHeatMap(d3, fipsCode) {
                 .attr("stroke", "#000")
                 .attr("stroke-width", 1)
                 .on("mouseover", function (event, d) {
+                    // Highlight the county on hover
+                    d3.select(this)
+                        .attr("stroke", "#ff0") // Change stroke to yellow
+                        .attr("stroke-width", 2) // Make the stroke wider
+                        .raise(); // Move this element to the top layer
+
                     const countyFips = d.properties.STATE + d.properties.COUNTY;
                     const avgDisasters = countyDisasterAverages[countyFips];
                     showTooltip(
                         `<strong>${d.properties.NAME} County</strong><br>Avg Disasters/Year: ${avgDisasters || 'No data'}`,
                         event
                     );
-                    d3.select(this).style("opacity", 0.7);
+                    //d3.select(this).style("opacity", 0.7);
                 })
                 .on("mousemove", function (event) {
                     positionTooltip(event);
                 })
                 .on("mouseout", function () {
+                    // Reset highlight on mouseout
+                    d3.select(this)
+                        .attr("stroke", "#000") // Reset stroke to black
+                        .attr("stroke-width", 1); // Reset stroke width to default
                     hideTooltip();
                     d3.select(this).style("opacity", 1);
                 });

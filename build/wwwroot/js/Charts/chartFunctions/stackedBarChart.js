@@ -170,7 +170,7 @@ export async function createStackedBarChart(d3, fipsStateCode, fipsCountyCode) {
 
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", -10)
+            .attr("y", 0)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")

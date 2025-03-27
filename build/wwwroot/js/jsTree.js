@@ -1,23 +1,25 @@
 ﻿import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { showTooltip, hideTooltip, positionTooltip, createGlobalTooltip } from "./Charts/tooltip.js"; // Import the universal tooltip functions
 
-
 export function runTree(employeeJson) {
-
     createGlobalTooltip();
 
     let rootData = JSON.parse(employeeJson);
 
     // Create a hierarchy; assume that d.Downs holds child nodes.
     const root = d3.hierarchy(rootData, d => d.Downs);
-    //const totalNodes = root.descendants().length;
 
-    // Define dimensions and parameters.
-    const width = document.querySelector('.container').offsetWidth;
-    const height = document.querySelector('.container').offsetHeight;
-    const spacing = 50; // Radial spacing between levels
+    // Define container and tree dimensions
+    const container = document.querySelector('.treeContainer');
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
+    const treeSize = Math.min(containerWidth, containerHeight); // Keep it square
 
-    // Place the root at the center.
+    const width = treeSize;
+    const height = treeSize;
+    const spacing = 25; // Radial spacing between levels
+
+    // Place the root at the center
     root.x = width / 2;
     root.y = height / 2;
 
@@ -27,15 +29,38 @@ export function runTree(employeeJson) {
     const nodes = root.descendants();
     const links = root.links();
 
-    // Set up the SVG canvas.
-    d3.select(".container").select("svg").remove(); // Clear previous tree
-    const svg = d3.select(".container")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    const depthColors = ["#777", "#FFF", "#07F", "#0F0", "#FF0", "#FFA500", "#F00", "#FFC0CB", "#800080"];
 
-    // Add links (lines between nodes).
-    const link = svg.append("g")
+    // Clear previous tree before rendering a new one
+    d3.select(".treeContainer").select("svg").remove();
+
+    // Define the zoom behavior with constrained pan
+    const zoom = d3.zoom()
+        .scaleExtent([0.75, 2]) // Set min and max zoom levels
+        .on("zoom", event => {
+            g.attr("transform", event.transform);
+        });
+
+    // Create the SVG canvas
+    const svg = d3.select(".treeContainer")
+        .append("svg")
+        .attr("width", containerWidth)
+        .attr("height", containerHeight)
+        .call(zoom);  // Attach zoom behavior
+
+    // Create a group that will hold all visual elements
+    const g = svg.append("g");
+
+    // Define the initial transformation to center the tree
+    const initialTransform = d3.zoomIdentity
+        .translate((containerWidth - width) / 2, (containerHeight - height) / 2)
+        .scale(1);
+
+    // Apply the initial transform using the zoom behavior
+    svg.call(zoom.transform, initialTransform);
+
+    // Add links (lines between nodes)
+    const link = g.append("g")
         .attr("stroke", "#FFF")
         .style("pointer-events", "auto")
         .selectAll("line")
@@ -44,10 +69,8 @@ export function runTree(employeeJson) {
         .append("line")
         .attr("stroke-width", 0.3);
 
-    const depthColors = ["#777", "#FFF", "#07F", "#0F0", "#FF0", "#FFA500", "#F00", "#FFC0CB", "#800080"];
-
-    // Add nodes as circles and attach tooltip event handlers.
-    const node = svg.append("g")
+    // Add nodes as circles
+    const node = g.append("g")
         .selectAll("circle")
         .data(nodes)
         .enter()
@@ -66,18 +89,15 @@ export function runTree(employeeJson) {
                 `<b>${d.data.Name}</b><br>(${d.data.ID})${moreDetails}`,
                 event
             );
-
-            d3.select(this).style("opacity", 0.7);
         })
         .on("mousemove", function (event) {
             positionTooltip(event);
         })
         .on("mouseleave", function () {
             hideTooltip();
-            d3.select(this).style("opacity", 1);
         });
 
-    // (Optional) Set up a force simulation.
+    // Ensure tree nodes are correctly placed
     d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.data.ID).distance(25).strength(0.8))
         .force("charge", d3.forceManyBody().strength(-8))
@@ -91,7 +111,7 @@ export function runTree(employeeJson) {
         .force("border", borderForce(width - 50, height - 50, 100))
         .on("tick", ticked);
 
-    // Fix the root at the center.
+    // Fix the root at the center
     nodes[0].fx = width / 2;
     nodes[0].fy = height / 2;
 

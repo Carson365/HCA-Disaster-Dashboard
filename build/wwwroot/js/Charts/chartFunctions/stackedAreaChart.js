@@ -36,7 +36,7 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
         const container = document.getElementById("stackedAreaChart");
         const width = container.clientWidth * 0.9;
         const height = container.clientHeight * 0.9;
-        const margin = { top: 50, right: 0, bottom: 25, left: 20 }; // Increased for title
+        const margin = { top: 40, right: 0, bottom: 25, left: 20 }; // Increased for title
 
         const svg = d3.select("#stackedAreaChart")
             .append("svg")
@@ -47,7 +47,7 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
         // Add title with the correct format and style
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", margin.top / 2)
+            .attr("y", 15)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
@@ -88,27 +88,6 @@ export async function createStackedAreaChart(d3, countyFip, stateFip) {
             legend.append("rect").attr("x", 0).attr("y", i * 20).attr("width", 15).attr("height", 15).attr("fill", i === 0 ? "#2E8B57" : "#98C9E8");
             legend.append("text").attr("x", 20).attr("y", i * 20 + 12).text(name).style("font-size", "12px");
         });
-
-        //svg.on("mousemove", function (event) {
-        //    const [mouseX] = d3.pointer(event);
-        //    let estimatedYear = Math.round(x.invert(mouseX));
-
-        //    // Find the closest available year in mergedData
-        //    let yearData = mergedData.reduce((prev, curr) =>
-        //        Math.abs(curr.year - estimatedYear) < Math.abs(prev.year - estimatedYear) ? curr : prev
-        //    );
-
-        //    if (yearData) {
-        //        showTooltip(
-        //            `<strong>Year:</strong> ${yearData.year}<br>
-        //     <strong>State Disasters:</strong> ${yearData.state}<br>
-        //     <strong>County Disasters:</strong> ${yearData.county}`,
-        //            event
-        //        );
-        //    }
-        //}).on("mouseout", function () {
-        //    hideTooltip();
-        //});
 
         // Append a vertical dashed line that will follow the hovered year
         svg.append("line")

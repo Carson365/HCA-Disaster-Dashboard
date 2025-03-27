@@ -155,12 +155,12 @@ export async function createDamageStackedBarChart(d3, fipsStateCode) {
 
         // Title
         svg.append("text")
-            .attr("x", width / 2)
-            .attr("y", -20)
+            .attr("x", (width - margin.left) / 2) // Adjusted to account for the added margin
+            .attr("y", -35)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
             .style("font-weight", "bold")
-            .text(`Property Damage Severity and Quantity by County`);
+            .text(`Damage Severity and Quantity by County`);
     }
 
     renderChart();

@@ -1,4 +1,4 @@
-import { stateData, countyData } from "../main.js";
+import { stateData, countyData, getCountyNameByFips, getStateNameByFips } from "../main.js";
 import { showTooltip, positionTooltip, hideTooltip } from "../tooltip.js";
 
 export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
@@ -60,6 +60,7 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
         const arc = d3.arc().innerRadius(0).outerRadius(radius);
         const color = d3.scaleOrdinal(d3.schemeCategory10);
 
+        // Create pie chart slices
         svg.selectAll("path")
             .data(pieData)
             .enter().append("path")
@@ -70,14 +71,42 @@ export async function createPieChart(d3, fipsStateCode, fipsCountyCode = null) {
             .on("mouseover", function (event, d) {
                 const percentage = ((d.data.count / totalDisasters) * 100).toFixed(2);
                 showTooltip(`<strong>${d.data.type}</strong><br>${percentage}%`, event);
-                d3.select(this).style("opacity", 0.7);
+                
+                // Highlight hovered section
+                d3.select(this)
+                    .style("opacity", 0.7) // Reduce opacity for highlighting
+                    .style("stroke-width", "3px"); // Increase border width
             })
             .on("mousemove", function (event, d) {
                 positionTooltip(event);
             })
             .on("mouseout", function () {
                 hideTooltip();
-                d3.select(this).style("opacity", 1);
+                // Reset the highlighting
+                d3.select(this)
+                    .style("opacity", 1)
+                    .style("stroke-width", "2px");
+            });
+
+        // Add labels for sections that have more than 10% of the total
+        svg.selectAll("text.label")
+            .data(pieData)
+            .enter().append("text")
+            .attr("class", "label")
+            .attr("transform", function(d) {
+                const centroid = arc.centroid(d);
+                return `translate(${centroid[0]}, ${centroid[1]})`;
+            })
+            .attr("text-anchor", "middle")
+            .attr("dy", ".35em")
+            .style("font-size", "14px") // Font size increased for better readability
+            .style("font-weight", "bold") // Making the font weight bold
+            .style("fill", "white") // Set the text color to white
+            .style("stroke", "none") // No stroke around text
+            .style("stroke-width", "0px") // Remove stroke width
+            .style("pointer-events", "none") // Allow mouse events to pass through
+            .text(function(d) {
+                return ((d.data.count / totalDisasters) * 100) >= 15 ? d.data.type : "";
             });
     }
 

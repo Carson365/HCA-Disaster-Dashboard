@@ -421,6 +421,7 @@ body[b-xdm2ure6px] {
 
 
 
+
 /*
 .top-row {
 	height: 3.5em;
@@ -445,6 +446,7 @@ main[b-xdm2ure6px] {
 	padding-left: 1em;
 	padding-right: 1em;
 	font-size: 1.5em;
+	line-height: 1em;
 }
 
 
@@ -473,6 +475,14 @@ main[b-xdm2ure6px] {
 	text-align: center; /* Center the text */
 	padding-left: 3em;
 	z-index: -1;
+}
+
+.clickable-row:hover[b-xdm2ure6px] {
+    cursor: pointer;
+}
+
+.clickable-row:hover[b-xdm2ure6px] {
+    cursor: pointer;
 }
 /* _content/AISComp/Components/Pages/Tree.razor.rz.scp.css */
 form[b-az60ut22r0] {
@@ -523,13 +533,15 @@ input[type="text"][b-az60ut22r0] {
 			color: #FFF;
 		}
 
-.container[b-az60ut22r0] {
+.treeContainer[b-az60ut22r0] {
 	height: calc(100vh - 3.5em);
-	width: 100%;
+	width: 100vw;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	mix-blend-mode: overlay;
+	margin: 0px;
+	padding: 0px;
 }
 
 .box[b-az60ut22r0] {
@@ -567,6 +579,7 @@ main[b-az60ut22r0] {
 	padding-left: 1em;
 	padding-right: 1em;
 	font-size: 1.5em;
+	line-height: 1em;
 }
 
 

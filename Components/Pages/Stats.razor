@@ -92,6 +92,7 @@
 		LoadCountyData();
 		StateName = GetStateNameByFips(stateFips);
 		CountyName = GetCountyNameByFips(stateFips, countyFips);
+		await Task.CompletedTask;
 	}
 
 	private void LoadCountyData()
@@ -113,7 +114,7 @@
 
 	private string GetCountyNameByFips(string stateFips, string countyFips)
 	{
-		return countyData.TryGetValue((stateFips, countyFips), out string name) ? name : "Unknown";
+		return countyData.TryGetValue((stateFips, countyFips), out string? name) ? name : "Unknown";
 	}
 
 	private string GetStateNameByFips(string fipsCode)
@@ -133,6 +134,6 @@
 			{ "53", "Washington" }, { "54", "West Virginia" }, { "55", "Wisconsin" }, { "56", "Wyoming" },
 			{ "72", "Puerto Rico" }
 		};
-		return fipsToName.TryGetValue(fipsCode, out string name) ? name : "Unknown";
+		return fipsToName.TryGetValue(fipsCode, out string? name) ? name : "Unknown";
 	}
 }

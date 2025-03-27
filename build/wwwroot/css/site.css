@@ -201,3 +201,7 @@ tbody tr:last-child td {
 #descCenter{
     text-align: center;
 }
+
+.clickable-row {
+    cursor: pointer;
+}
