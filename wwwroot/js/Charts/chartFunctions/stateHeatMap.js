@@ -108,7 +108,7 @@ export async function createStateHeatMap(d3, fipsCode) {
                         `<strong>${d.properties.NAME} County</strong><br>Avg Disasters/Year: ${avgDisasters || 'No data'}`,
                         event
                     );
-                    d3.select(this).style("opacity", 0.7);
+                    //d3.select(this).style("opacity", 0.7);
                 })
                 .on("mousemove", function (event) {
                     positionTooltip(event);

@@ -103,9 +103,6 @@ function showDisasterModal(d3, fipsStateCode, disaster) {
               <p>${disasterDamageData}</p>
               <p>${disasterBeginAndEnd}</p>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
           </div>
         </div>
       `);
