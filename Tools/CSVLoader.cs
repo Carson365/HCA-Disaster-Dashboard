@@ -1,4 +1,5 @@
 ﻿using Sylvan.Data.Csv;
+using System.Collections.Concurrent;
 using System.Data;
 
 namespace AISComp.Tools
@@ -184,7 +185,7 @@ namespace AISComp.Tools
 
 
 
-		public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId)
+		public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId, Dictionary<string, Employee> cache)
 		{
 			// Climb upward as long as the manager is in the same location.
 			Employee topEmployee = startingEmployee;
@@ -192,12 +193,19 @@ namespace AISComp.Tools
 			{
 				topEmployee = topEmployee.Up;
 			}
-			return TrimTreeToLocation(topEmployee, locationId);
+			return TrimTreeToLocation(topEmployee, locationId, cache);
 		}
 
-		private static Employee TrimTreeToLocation(Employee employee, string locationId)
+		private static Employee TrimTreeToLocation(Employee employee, string locationId, Dictionary<string, Employee> cache)
 		{
-			Employee trimmed = new()
+			// Return the cached result if it exists.
+			if (cache.TryGetValue(employee.ID, out var cached))
+			{
+				return cached;
+			}
+
+			// Create a trimmed copy of the current employee.
+			Employee trimmed = new Employee
 			{
 				ID = employee.ID,
 				Name = employee.Name,
@@ -205,21 +213,26 @@ namespace AISComp.Tools
 				LocationID = employee.LocationID,
 				HireDate = employee.HireDate,
 				Up = null,
-				Downs = []
+				Downs = new ConcurrentBag<Employee>()
 			};
 
+			// Cache this trimmed employee before processing children to handle cycles.
+			cache[employee.ID] = trimmed;
+
+			// Process subordinates recursively.
 			if (employee.Downs != null)
 			{
 				foreach (var subordinate in employee.Downs)
 				{
 					if (subordinate.LocationID == locationId)
 					{
-						var trimmedSub = TrimTreeToLocation(subordinate, locationId);
+						var trimmedSub = TrimTreeToLocation(subordinate, locationId, cache);
 						trimmed.Downs.Add(trimmedSub);
 					}
 				}
 			}
 			return trimmed;
 		}
+
 	}
 }

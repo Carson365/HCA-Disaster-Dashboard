@@ -15,7 +15,7 @@
 		<a class="branding"><b>@($"{CSVLoader.Locations.First(x => x.ID==LocID).Name}")</b></a>
 	</div>
 	<body>
-		<div class="container">
+		<div class="treeContainer">
 		</div>
 	</body>
 </OrgMainLayout>
@@ -42,52 +42,40 @@
 			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
 		};
 
-	protected override async Task OnAfterRenderAsync(bool first)
-	{
-		if (first && SearchResults != null)
-		{
-			// Assume CSVLoader.SelectedEmployee is one of the employees in the location.
-			Employee startingEmployee = SearchResults[0];
-			// string locationId = CsvLoaderInstance.SelectedLocation.ID;
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (first && SearchResults != null)
+        {
+            // Create a cache dictionary.
+            Dictionary<string, Employee> trimmedCache = new();
 
-			// Get the trimmed tree (only employees at the selected location).
-			Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID);
-			// var emps = JsonSerializer.Serialize(trimmedSelectedEmployee, options);
+            // Process the selected employee for the starting tree.
+            Employee startingEmployee = SearchResults[0];
+            Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID, trimmedCache);
 
-			Dictionary<string,Employee> allTopUps = new();
+            Dictionary<string, Employee> allTopUps = new();
 
-			foreach (Employee emp in SearchResults)
-			{
-				var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID);
-				allTopUps.TryAdd(e.ID, e);
-			}
+            foreach (Employee emp in SearchResults)
+            {
+                var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID, trimmedCache);
+                allTopUps.TryAdd(e.ID, e);
+            }
 
-			// Console.WriteLine("All top ups: " + allTopUps.Count());
+            Employee dummyEmployee = new Employee
+                {
+                    ID = "Connected employees have no supervisor",
+                    Name = "Organization Root",
+                    Position = "",
+                    LocationID = LocID,
+                    HireDate = "",
+                    Up = null,
+                    Downs = new ConcurrentBag<Employee>(allTopUps.Values)
+                };
 
-			Employee dummyEmployee = new Employee()
-				{
-					ID = "Connected employees have no supervisor",
-					Name = "Organization Root",
-					Position = "",
-					LocationID = LocID,
-					HireDate = "",
-					Up = null,
-					Downs = new ConcurrentBag<Employee>(allTopUps.Values)
-				};
+            var emps = JsonSerializer.Serialize(dummyEmployee, options);
 
-			// Console.WriteLine("Total: " + "a");
-
-			var emps = JsonSerializer.Serialize(dummyEmployee, options);
-
-
-
-			// var sel = CSVLoader.SearchResults[0];
-			// while (sel.Up != null) sel = sel.Up;
-			// var emps = JsonSerializer.Serialize(sel, options);
-
-
-			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
-			await jsModule.InvokeVoidAsync("runTree", emps); // Ensure the map is initialized
-		}
-	}
+            IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            await jsModule.InvokeVoidAsync("runTree", emps); // Ensure the map is initialized
+        }
+    }
 }

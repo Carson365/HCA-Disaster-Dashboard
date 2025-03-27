@@ -13,7 +13,7 @@
 		{
 			<div class="left-sidebar sidebar"></div>
 		}
-		@if (selectedEmployee != null)
+		@if (selectedEmployee != false)
 		{
 			<div class="right-sidebar sidebar"></div>
 		}
@@ -22,6 +22,6 @@
 
 @code {
 	[Parameter] public RenderFragment? ChildContent { get; set; }
-	bool searchEnabled=true;
-	bool? selectedEmployee = true;
+	bool searchEnabled=false;
+	bool? selectedEmployee = false;
 }

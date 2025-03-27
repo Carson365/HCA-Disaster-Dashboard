@@ -46,13 +46,15 @@ input[type="text"] {
 			color: #FFF;
 		}
 
-.container {
+.treeContainer {
 	height: calc(100vh - 3.5em);
-	width: 100%;
+	width: 100vw;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	mix-blend-mode: overlay;
+	margin: 0px;
+	padding: 0px;
 }
 
 .box {
