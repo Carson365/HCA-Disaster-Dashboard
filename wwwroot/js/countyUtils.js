@@ -1,5 +1,4 @@
-﻿import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-import { dotNetCountyClick } from "./runMapThings.js"
+﻿import { dotNetCountyClick } from "./runMapThings.js"
 
 export function getDefaultCountyStyle(feature) {
 	return {

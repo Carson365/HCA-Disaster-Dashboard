@@ -185,9 +185,122 @@ namespace AISComp.Tools
 
 
 
+		//public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId, Dictionary<string, Employee> cache)
+		//{
+		//	// Climb upward as long as the manager is in the same location.
+		//	Employee topEmployee = startingEmployee;
+		//	while (topEmployee.Up != null && topEmployee.Up.LocationID == locationId)
+		//	{
+		//		topEmployee = topEmployee.Up;
+		//	}
+		//	return TrimTreeToLocation(topEmployee, locationId, cache);
+		//}
+
+		//private static Employee TrimTreeToLocation(Employee employee, string locationId, Dictionary<string, Employee> cache)
+		//{
+		//	// Return the cached result if it exists.
+		//	if (cache.TryGetValue(employee.ID, out var cached))
+		//	{
+		//		return cached;
+		//	}
+
+		//	// Create a trimmed copy of the current employee.
+		//	Employee trimmed = new()
+		//	{
+		//		ID = employee.ID,
+		//		Name = employee.Name,
+		//		Position = employee.Position,
+		//		LocationID = employee.LocationID,
+		//		HireDate = employee.HireDate,
+		//		Up = null,
+		//		Downs = []
+		//	};
+
+		//	// Cache this trimmed employee before processing children to handle cycles.
+		//	cache[employee.ID] = trimmed;
+
+		//	// Process subordinates recursively.
+		//	if (employee.Downs != null)
+		//	{
+		//		foreach (var subordinate in employee.Downs)
+		//		{
+		//			if (subordinate.LocationID == locationId)
+		//			{
+		//				var trimmedSub = TrimTreeToLocation(subordinate, locationId, cache);
+		//				trimmed.Downs.Add(trimmedSub);
+		//			}
+		//		}
+		//	}
+		//	return trimmed;
+		//}
+
+
+
+
+		//public static List<Employee> GetTrimmedEmployeeList(string locationId)
+		//{
+		//	// Get the starting tree (list of employees in the location).
+		//	List<Employee> orgTree = GetLocationOrgTree(locationId);
+		//	if (orgTree == null || orgTree.Count == 0)
+		//		return [];
+
+		//	Dictionary<string, Employee> trimmedCache = [];
+		//	List<Employee> flattenedList = [];
+
+		//	// Process each top-level employee from the tree.
+		//	foreach (var employee in orgTree)
+		//	{
+		//		// Get the trimmed version of the employee tree.
+		//		Employee trimmed = GetTrimmedSelectedEmployee(employee, locationId, trimmedCache);
+		//		FlattenTree(trimmed, flattenedList);
+		//	}
+		//	return flattenedList;
+		//}
+
+		//// Helper method to flatten a trimmed tree into a list.
+		//private static void FlattenTree(Employee employee, List<Employee> list)
+		//{
+		//	list.Add(employee);
+		//	if (employee.Downs != null)
+		//	{
+		//		foreach (var subordinate in employee.Downs)
+		//		{
+		//			FlattenTree(subordinate, list);
+		//		}
+		//	}
+		//}
+
+
+		// Instead of processing every employee, get only the top-level employees in the given location.
+		public static List<Employee> GetTrimmedEmployeeList(string locationId)
+		{
+			if (string.IsNullOrEmpty(locationId))
+				return [];
+
+			// Get all employees for the location.
+			var orgEmployees = EmployeeList.Where(e => e.LocationID == locationId).ToList();
+
+			// Filter to only those who have no manager in the same location.
+			var topEmployees = orgEmployees
+				.Where(e => e.Up == null || e.Up.LocationID != locationId)
+				.ToList();
+
+			Dictionary<string, Employee> trimmedCache = [];
+			List<Employee> flattenedList = [];
+
+			foreach (var top in topEmployees)
+			{
+				// Trim the entire tree starting at the top-level employee.
+				var trimmed = TrimTreeToLocation(top, locationId, trimmedCache);
+				FlattenTree(trimmed, flattenedList);
+			}
+
+			return flattenedList;
+		}
+
+		// This helper is kept for cases where you start from a known employee and need the trimmed tree.
 		public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId, Dictionary<string, Employee> cache)
 		{
-			// Climb upward as long as the manager is in the same location.
 			Employee topEmployee = startingEmployee;
 			while (topEmployee.Up != null && topEmployee.Up.LocationID == locationId)
 			{
@@ -196,6 +309,7 @@ namespace AISComp.Tools
 			return TrimTreeToLocation(topEmployee, locationId, cache);
 		}
 
+		// Recursively clone the tree for employees at the given location.
 		private static Employee TrimTreeToLocation(Employee employee, string locationId, Dictionary<string, Employee> cache)
 		{
 			// Return the cached result if it exists.
@@ -205,34 +319,45 @@ namespace AISComp.Tools
 			}
 
 			// Create a trimmed copy of the current employee.
-			Employee trimmed = new Employee
+			Employee trimmed = new()
 			{
 				ID = employee.ID,
 				Name = employee.Name,
 				Position = employee.Position,
 				LocationID = employee.LocationID,
 				HireDate = employee.HireDate,
+				// The upward link is not needed in the trimmed tree.
 				Up = null,
-				Downs = new ConcurrentBag<Employee>()
+				// Assume Downs is always initialized (or could be set to new List<Employee>() here).
+				Downs = []
 			};
 
-			// Cache this trimmed employee before processing children to handle cycles.
+			// Cache this trimmed employee before processing children.
 			cache[employee.ID] = trimmed;
 
 			// Process subordinates recursively.
-			if (employee.Downs != null)
+			foreach (var subordinate in employee.Downs)
 			{
-				foreach (var subordinate in employee.Downs)
+				if (subordinate.LocationID == locationId)
 				{
-					if (subordinate.LocationID == locationId)
-					{
-						var trimmedSub = TrimTreeToLocation(subordinate, locationId, cache);
-						trimmed.Downs.Add(trimmedSub);
-					}
+					var trimmedSub = TrimTreeToLocation(subordinate, locationId, cache);
+					trimmed.Downs.Add(trimmedSub);
 				}
 			}
 			return trimmed;
 		}
+
+		// Helper method to flatten a trimmed tree into a list.
+		private static void FlattenTree(Employee employee, List<Employee> list)
+		{
+			list.Add(employee);
+			foreach (var subordinate in employee.Downs)
+			{
+				FlattenTree(subordinate, list);
+			}
+		}
+
+
 
 	}
 }

@@ -1,4 +1,4 @@
-import { stateData } from "../main.js";
+import { stateData, countyShapes } from "../main.js";
 import { showTooltip, hideTooltip, positionTooltip } from "../tooltip.js";
 
 export async function createStateHeatMap(d3, fipsCode) {
@@ -12,16 +12,13 @@ export async function createStateHeatMap(d3, fipsCode) {
 
         disasters.forEach(disaster => {
             const { FIPSCountyCode, Year } = disaster;
-
             if (!FIPSCountyCode || !Year) return;
 
             // Create full FIPS code (state + county)
             const fullFipsCode = fipsStateCode + FIPSCountyCode;
-
             if (!countyDisasterCounts[fullFipsCode]) {
                 countyDisasterCounts[fullFipsCode] = { totalYears: new Set(), totalDisasters: 0 };
             }
-
             countyDisasterCounts[fullFipsCode].totalYears.add(Year);
             countyDisasterCounts[fullFipsCode].totalDisasters += 1;
         });
@@ -59,69 +56,67 @@ export async function createStateHeatMap(d3, fipsCode) {
             .style("font-weight", "bold")
             .text(`Annual Average Natural Disasters By County`);
 
-        const geojsonUrl = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json";
+        // Use the local countyShapes data instead of fetching it
+        const geoData = countyShapes;
+        const stateCounties = {
+            type: "FeatureCollection",
+            features: geoData.features.filter(d => d.properties.STATE === fipsCode)
+        };
 
-        d3.json(geojsonUrl).then(geoData => {
-            const stateCounties = {
-                type: "FeatureCollection",
-                features: geoData.features.filter(d => d.properties.STATE === fipsCode)
-            };
+        // Get disaster averages using the new function
+        const countyDisasterAverages = calculateAverageDisastersPerYear(fipsCode);
+        const validDisasterValues = Object.entries(countyDisasterAverages)
+            .filter(([countyFips]) => !countyFips.endsWith("000")) // Exclude counties with "000"
+            .map(([_, avg]) => avg);
 
-            // Get disaster averages using the new function
-            const countyDisasterAverages = calculateAverageDisastersPerYear(fipsCode);
+        const minDisasters = d3.min(validDisasterValues);
+        const maxDisasters = d3.max(validDisasterValues);
 
-            const validDisasterValues = Object.entries(countyDisasterAverages)
-                .filter(([countyFips]) => !countyFips.endsWith("000")) // Exclude counties with "000"
-                .map(([_, avg]) => avg);
+        const colorScale = d3.scaleSequential(d3.interpolateReds)
+            .domain([Math.log(minDisasters + 1), Math.log(maxDisasters + 1)]);
 
-            const minDisasters = d3.min(validDisasterValues);
-            const maxDisasters = d3.max(validDisasterValues);
+        const projection = d3.geoMercator()
+            .rotate([160, 0])
+            .fitSize([width, height - 40], stateCounties);
 
-            const colorScale = d3.scaleSequential(d3.interpolateReds)
-                .domain([Math.log(minDisasters + 1), Math.log(maxDisasters + 1)]);
+        const path = d3.geoPath().projection(projection);
 
-            const projection = d3.geoMercator().rotate([160, 0]).fitSize([width, height - 40], stateCounties);
+        svg.selectAll("path")
+            .data(stateCounties.features)
+            .enter().append("path")
+            .attr("d", path)
+            .attr("fill", d => {
+                const countyFips = d.properties.STATE + d.properties.COUNTY;
+                const avgDisasters = countyDisasterAverages[countyFips];
+                return avgDisasters ? colorScale(Math.log(avgDisasters + 1)) : "#cccccc";
+            })
+            .attr("stroke", "#000")
+            .attr("stroke-width", 1)
+            .on("mouseover", function (event, d) {
+                // Highlight the county on hover
+                d3.select(this)
+                    .attr("stroke", "#ff0") // Change stroke to yellow
+                    .attr("stroke-width", 2) // Make the stroke wider
+                    .raise(); // Move this element to the top layer
 
-            const path = d3.geoPath().projection(projection);
-
-            svg.selectAll("path")
-                .data(stateCounties.features)
-                .enter().append("path")
-                .attr("d", path)
-                .attr("fill", d => {
-                    const countyFips = d.properties.STATE + d.properties.COUNTY;
-                    const avgDisasters = countyDisasterAverages[countyFips];
-                    return avgDisasters ? colorScale(Math.log(avgDisasters + 1)) : "#cccccc";
-                })
-                .attr("stroke", "#000")
-                .attr("stroke-width", 1)
-                .on("mouseover", function (event, d) {
-                    // Highlight the county on hover
-                    d3.select(this)
-                        .attr("stroke", "#ff0") // Change stroke to yellow
-                        .attr("stroke-width", 2) // Make the stroke wider
-                        .raise(); // Move this element to the top layer
-
-                    const countyFips = d.properties.STATE + d.properties.COUNTY;
-                    const avgDisasters = countyDisasterAverages[countyFips];
-                    showTooltip(
-                        `<strong>${d.properties.NAME} County</strong><br>Avg Disasters/Year: ${avgDisasters || 'No data'}`,
-                        event
-                    );
-                    //d3.select(this).style("opacity", 0.7);
-                })
-                .on("mousemove", function (event) {
-                    positionTooltip(event);
-                })
-                .on("mouseout", function () {
-                    // Reset highlight on mouseout
-                    d3.select(this)
-                        .attr("stroke", "#000") // Reset stroke to black
-                        .attr("stroke-width", 1); // Reset stroke width to default
-                    hideTooltip();
-                    d3.select(this).style("opacity", 1);
-                });
-        });
+                const countyFips = d.properties.STATE + d.properties.COUNTY;
+                const avgDisasters = countyDisasterAverages[countyFips];
+                showTooltip(
+                    `<strong>${d.properties.NAME} County</strong><br>Avg Disasters/Year: ${avgDisasters || 'No data'}`,
+                    event
+                );
+            })
+            .on("mousemove", function (event) {
+                positionTooltip(event);
+            })
+            .on("mouseout", function () {
+                // Reset highlight on mouseout
+                d3.select(this)
+                    .attr("stroke", "#000") // Reset stroke to black
+                    .attr("stroke-width", 1); // Reset stroke width to default
+                hideTooltip();
+                d3.select(this).style("opacity", 1);
+            });
     }
 
     renderMap();

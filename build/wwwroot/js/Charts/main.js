@@ -8,15 +8,18 @@ import { createChartsWithData } from "./charts.js";
 export let stateData = [];
 export let countyData = [];
 
+export let countyShapes = {};
+
 export let stateFip = "";
 export let countyFip = "";
 
 export let countyFipNameData = {};
 
-export async function createCharts(fip, data, counties) {
+export async function createCharts(fip, data, counties, countyShapeData) {
 
 	Object.assign(stateData, JSON.parse(data));
-	Object.assign(countyFipNameData, JSON.parse(counties));
+    Object.assign(countyFipNameData, JSON.parse(counties));
+	Object.assign(countyShapes, JSON.parse(countyShapeData));
 
 	stateFip = fip[0] + fip[1];
 	countyFip = fip[2] + fip[3] + fip[4];

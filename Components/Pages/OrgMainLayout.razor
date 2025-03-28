@@ -4,24 +4,195 @@
 <PageTitle>HCA Healthcare</PageTitle>
 
 <div class="page">
-	@* <div class="top-row">
-		<a class="branding" href=""><b>HCA Healthcare</b></a>
-	</div> *@
-	<main>
-		@ChildContent
-		@if (searchEnabled)
-		{
-			<div class="left-sidebar sidebar"></div>
-		}
-		@if (selectedEmployee != false)
-		{
-			<div class="right-sidebar sidebar"></div>
-		}
-	</main>
+    <main>
+        @ChildContent
+        @if (searchEnabled)
+        {
+            <div class="left-sidebar sidebar">
+                "needs an "X" button"
+                <form>
+                    <input type="text" placeholder="Search..." @bind="SearchQuery" @bind:event="oninput" />
+                </form>
+
+                <div class="radio-group">
+                    <span>Search by:</span>
+                    @foreach (var item in new string[] { "Name", "ID", "Role" })
+                    {
+                        <label style="margin-left: 0.75em;">
+                            <input type="radio" name="searchType" id="@item" value="@item"
+                            @onchange="RadioSelection"
+                            checked=@(searchType.Equals(item, StringComparison.OrdinalIgnoreCase)) />
+                            <label for="@item">@item</label>
+                        </label>
+                    }
+                </div>
+
+
+                <!-- Permanent dropdown for location selection -->
+                <select @bind="SelectedLocationId">
+                    <option value="">All locations</option>
+                    @foreach (var group in GroupedLocations)
+                    {
+                        <optgroup label="@group.State">
+                            @foreach (var loc in group.Locations)
+                            {
+                                <option value="@loc.ID">@loc.Name</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+
+
+                @if (searchResults != null && visibleCount != 0)
+                {
+                    @foreach (Employee item in searchResults.Take(visibleCount))
+                    {
+                        <div class="box" @onclick="() => SelectEmployee(item.ID)">
+                            <EmployeeCard Employee="@item" showLoc="@(SelectedLocationId == "")"></EmployeeCard>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        @if(selectedEmployee != null)
+        {
+            <div class="right-sidebar sidebar">
+				<EmployeeCard Employee="@selectedEmployee" showLoc="true"></EmployeeCard>
+                <p> </p>
+                <p>"Go to them (highlight, and go to their tree if not the current one)"</p>
+                <p>"Move them (copy)"</p>
+                <p>"Move someone to them (paste)"</p>
+            </div>
+        }
+    </main>
 </div>
 
 @code {
-	[Parameter] public RenderFragment? ChildContent { get; set; }
-	bool searchEnabled=false;
-	bool? selectedEmployee = false;
+
+    private Employee? selectedEmployee;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            await jsModule.InvokeVoidAsync("setDNCallback", DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public async Task SelectEmployee(string empID)
+    {
+		if (empID == null)
+		{
+			selectedEmployee = null;
+		}
+		else
+		{
+			selectedEmployee = CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == empID);
+		}
+        StateHasChanged(); // Update UI
+    }
+
+
+
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public required string CurrentLocID { get; set; }
+
+    bool searchEnabled = true;
+    // Employee? selectedEmployee;
+    string searchType = "Name";
+    private int visibleCount;
+    private List<Employee> searchResults = new();
+
+    // Helper class for grouping locations by state.
+    public class LocationGroup
+    {
+        public string State { get; set; } = string.Empty;
+        public List<Location> Locations { get; set; } = new();
+    }
+
+    // Build the grouped and sorted list of locations.
+    List<LocationGroup> GroupedLocations => CSVLoader.Locations
+        .GroupBy(loc => loc.State)
+        .OrderBy(g => g.Key)
+        .Select(g => new LocationGroup
+            {
+                State = g.Key,
+                Locations = g.OrderBy(loc => loc.Name).ToList()
+            }).ToList();
+
+    // Custom property for the selected location.
+    private string _selectedLocationId = string.Empty;
+    public string SelectedLocationId
+    {
+        get => _selectedLocationId;
+        set
+        {
+            if (_selectedLocationId != value)
+            {
+                _selectedLocationId = value;
+                SearchEmployee();
+            }
+        }
+    }
+
+    // Custom property for the search query to update on every keystroke.
+    private string _searchQuery = string.Empty;
+    public string SearchQuery
+    {
+        get => _searchQuery;
+        set
+        {
+            if (_searchQuery != value)
+            {
+                _searchQuery = value;
+                SearchEmployee();
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // Set the default selected location to the current one.
+        SelectedLocationId = CurrentLocID;
+        SearchEmployee();
+    }
+
+    private void RadioSelection(ChangeEventArgs e)
+    {
+        searchType = e.Value?.ToString() ?? "Name";
+        SearchEmployee();
+    }
+
+    private void SearchEmployee()
+    {
+        visibleCount = 100;
+
+        // If "All locations" is selected (empty value), search the full tree.
+        if (string.IsNullOrEmpty(SelectedLocationId))
+        {
+            searchResults = CSVLoader.EmployeeList
+                .Where(employee =>
+                    (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                    (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                    (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+        else
+        {
+            // Otherwise, search the trimmed tree for the selected location.
+            var trimmedList = CSVLoader.GetTrimmedEmployeeList(SelectedLocationId);
+            searchResults = trimmedList
+                .Where(employee =>
+                    (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                    (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                    (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+
+        if (string.IsNullOrEmpty(SearchQuery))
+            visibleCount = 0;
+    }
 }

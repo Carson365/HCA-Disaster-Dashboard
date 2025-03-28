@@ -9,7 +9,7 @@
 <PageTitle>Tree</PageTitle>
 
 
-<OrgMainLayout>
+<OrgMainLayout CurrentLocID="@LocID">
 	<div class="top-row">
 		<a class="branding oi oi-home" href=""></a>
 		<a class="branding"><b>@($"{CSVLoader.Locations.First(x => x.ID==LocID).Name}")</b></a>
@@ -22,39 +22,31 @@
 
 
 @code {
+    [Parameter] public required string LocID { get; set; }
 
-	[Parameter] public required string LocID { get; set; }
+    private List<Employee>? SearchResults;
 
-	private List<Employee>? SearchResults;
+    protected override void OnInitialized()
+    {
+        CSVLoader.OnLoaded += () => StateHasChanged();
+        SearchResults = CSVLoader.GetLocationOrgTree(LocID);
+    }
 
-	// private int visibleCount;
-
-	protected override void OnInitialized()
-	{
-		// Console.WriteLine("in tree");
-		CSVLoader.OnLoaded += () => StateHasChanged();
-		SearchResults = CSVLoader.GetLocationOrgTree(LocID);
-	}
-
-	private JsonSerializerOptions options = new JsonSerializerOptions
-		{
-			PropertyNamingPolicy = null,
-			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
-		};
+    private JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = null,
+            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+        };
 
     protected override async Task OnAfterRenderAsync(bool first)
     {
         if (first && SearchResults != null)
         {
-            // Create a cache dictionary.
             Dictionary<string, Employee> trimmedCache = new();
-
-            // Process the selected employee for the starting tree.
             Employee startingEmployee = SearchResults[0];
             Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID, trimmedCache);
 
             Dictionary<string, Employee> allTopUps = new();
-
             foreach (Employee emp in SearchResults)
             {
                 var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID, trimmedCache);
@@ -73,9 +65,9 @@
                 };
 
             var emps = JsonSerializer.Serialize(dummyEmployee, options);
-
             IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
-            await jsModule.InvokeVoidAsync("runTree", emps); // Ensure the map is initialized
+            await jsModule.InvokeVoidAsync("runTree", emps);
         }
     }
 }
+

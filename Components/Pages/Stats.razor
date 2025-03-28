@@ -72,10 +72,14 @@
 	{
 		if (first)
 		{
+			string filePath = Path.Combine("Data", "geojson-counties-fips.json");
+			string fileContents = await File.ReadAllTextAsync(filePath);
+
 			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Charts/main.js");
 			_ = Task.Run(() => jsModule.InvokeVoidAsync("createCharts", Fip,
 			JsonSerializer.Serialize(CSVLoader.Disasters.Where(d => d.FIPSStateCode == $"{Fip[0]}{Fip[1]}"), options),
-			JsonSerializer.Serialize(countyNamesByFip, options)));
+			JsonSerializer.Serialize(countyNamesByFip, options),
+			fileContents));
 		}
 	}
 

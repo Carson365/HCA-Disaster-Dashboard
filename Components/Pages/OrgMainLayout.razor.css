@@ -49,8 +49,59 @@ main {
 
 .sidebar {
     overflow: auto;
-    width: min(385px, 100%);
+    width: min(355px, 100%);
     min-height: calc(100vh - 3.5em);
     height: calc(100vh - 3.5em);
-    background-color: red;
+    /*background-color: red;*/
+    /*background-color: rgba(200,220,230, 80%);*/
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 50;
+}
+
+
+.box {  
+   padding-left: 0.5em;
+   padding-right: 0.5em;
+   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.box:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.box:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* Change the background color on hover */
+    transform: scaleY(1.05); /* Scale the element slightly */
+    transition: transform 0.1s ease; /* Smooth transition effect */
+    cursor: pointer;
+}
+
+
+
+
+
+.left-sidebar form input[type="text"],
+.left-sidebar select {
+    width: calc(100% - 1em); /* Full width minus 0.5em on each side */
+    display: block;
+    margin: 0.5em auto; /* Add vertical spacing */
+    padding: 0.5em;
+    font-size: 1em;
+    height: 2.5em; /* Ensure consistent height */
+}
+
+.left-sidebar select {
+    height: 2.5em; /* Match search bar height */
+}
+
+/* Space out the three main elements */
+.left-sidebar form,
+.left-sidebar select,
+.radio-group {
+    margin-bottom: 1em;
+}
+
+/* Center the radio button line */
+.radio-group {
+    text-align: center;
 }

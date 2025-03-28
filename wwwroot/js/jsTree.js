@@ -1,6 +1,17 @@
 ﻿import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { showTooltip, hideTooltip, positionTooltip, createGlobalTooltip } from "./Charts/tooltip.js"; // Import the universal tooltip functions
 
+let storedInstance = null;
+export function setDNCallback(dotNetHelper) {
+    storedInstance = dotNetHelper;
+}
+
+function sendToDotNet(empID) {
+    if (storedInstance) {
+        storedInstance.invokeMethodAsync('SelectEmployee', empID);
+    }
+}
+
 export function runTree(employeeJson) {
     createGlobalTooltip();
 
@@ -30,6 +41,7 @@ export function runTree(employeeJson) {
     const links = root.links();
 
     const depthColors = ["#777", "#FFF", "#07F", "#0F0", "#FF0", "#FFA500", "#F00", "#FFC0CB", "#800080"];
+    //const depthColors = ["#777", "#FFF", "#F00", "#FFA500", "#FF0", "#0F0", "#07F", "#800080", "#FFC0CB"]
 
     // Clear previous tree before rendering a new one
     d3.select(".treeContainer").select("svg").remove();
@@ -46,7 +58,10 @@ export function runTree(employeeJson) {
         .append("svg")
         .attr("width", containerWidth)
         .attr("height", containerHeight)
-        .call(zoom);  // Attach zoom behavior
+        .call(zoom)  // Attach zoom behavior
+        .on("click", function () {
+            sendToDotNet(""); // Send blank ID if clicked anywhere else
+        });
 
     // Create a group that will hold all visual elements
     const g = svg.append("g");
@@ -95,21 +110,26 @@ export function runTree(employeeJson) {
         })
         .on("mouseleave", function () {
             hideTooltip();
+        })
+        .on("click", function (event, d) {
+            event.stopPropagation(); // Prevent triggering the SVG click event
+            sendToDotNet(d.data.ID); // Send only the employee ID
         });
 
-    // Ensure tree nodes are correctly placed
-    d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.data.ID).distance(25).strength(0.8))
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.data.ID).distance(40).strength(0.4))
         .force("charge", d3.forceManyBody().strength(-8))
+        .force("collide", d3.forceCollide().radius(3.01).strength(0.45))
+        .force("toParent", forceToParent(0.1))
+        .force("border", borderForce(width - 50, height - 50, 50))
+        .force("radialBand", radialBandForce(35, 20, 80))
         .force("radial", d3.forceRadial(
-            d => (d.depth ** 0.5 - (0.05 * d3.max(nodes, d => d.depth))) * 100,
+            d => (d.depth ** 0.4 - (0.2 * d3.max(nodes, d => d.depth))) * 50,
             width / 2,
             height / 2
-        ).strength(0.2))
-        .force("collide", d3.forceCollide().radius(3).strength(0.1))
-        .force("toParent", forceToParent(0.25))
-        .force("border", borderForce(width - 50, height - 50, 100))
+        ).strength(0.1))
         .on("tick", ticked);
+
 
     // Fix the root at the center
     nodes[0].fx = width / 2;
@@ -123,6 +143,12 @@ export function runTree(employeeJson) {
 
         node.attr("cx", d => d.x)
             .attr("cy", d => d.y);
+
+        // Stop simulation when velocity is low
+        let avgVelocity = d3.mean(nodes, d => Math.sqrt(d.vx * d.vx + d.vy * d.vy));
+        if (avgVelocity < 0.08) { // Adjust threshold as needed
+            simulation.stop();
+        }
     }
 
     function assignArcs(node, arcStart, arcEnd, spacing) {
@@ -179,4 +205,43 @@ export function runTree(employeeJson) {
             });
         };
     }
+
+    function radialBandForce(var1, var2, strength = 0.1) {
+        let nodes;
+        function force(alpha) {
+            for (let i = 0, n = nodes.length; i < n; ++i) {
+                const node = nodes[i];
+                if (node.depth === 0) continue; // Keep root fixed
+
+                const depthMultiplier = 1 + 0.5 / node.depth; // Adjust space based on depth
+                const targetRadius = node.depth * var1 * depthMultiplier;
+                const minRadius = targetRadius - var2 / 2;
+                const maxRadius = targetRadius + var2 / 2;
+
+                const dx = node.x - width / 2;
+                const dy = node.y - height / 2;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                let forceFactor = 0;
+                if (dist < minRadius) {
+                    forceFactor = (minRadius - dist) / minRadius;
+                } else if (dist > maxRadius) {
+                    forceFactor = (maxRadius - dist) / maxRadius;
+                }
+
+                const normX = dx / (dist || 1);
+                const normY = dy / (dist || 1);
+
+                node.vx += normX * forceFactor * strength * alpha;
+                node.vy += normY * forceFactor * strength * alpha;
+            }
+        }
+        force.initialize = function (_nodes) {
+            nodes = _nodes;
+        };
+        return force;
+    }
+
+
+
 }
