@@ -2,7 +2,7 @@
 @inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
 @inject NavigationManager NavManager
-
+@inject HttpClient Http
 
 <PageTitle>HCA Healthcare</PageTitle>
 
@@ -24,8 +24,8 @@
                     {
                         <label style="margin-left: 0.75em;">
                             <input type="radio" name="searchType" id="@item" value="@item"
-                            @onchange="RadioSelection"
-                            checked=@(searchType.Equals(item, StringComparison.OrdinalIgnoreCase)) />
+                                   @onchange="RadioSelection"
+                                   checked="@(searchType.Equals(item, StringComparison.OrdinalIgnoreCase))" />
                             <label for="@item">@item</label>
                         </label>
                     }
@@ -48,7 +48,9 @@
                 {
                     @foreach (Employee item in searchResults.Take(visibleCount))
                     {
-                        <div class="box" @onclick="() => SelectEmployee(item.ID)" @onmouseover="() => HoverEmployee(item.ID)" @onmouseout="() => HoverEmployee(String.Empty)">
+                        <div class="box" @onclick="() => SelectEmployee(item.ID)"
+                             @onmouseover="() => HoverEmployee(item.ID)"
+                             @onmouseout="() => HoverEmployee(String.Empty)">
                             <EmployeeCard Employee="@item" showLoc="@(SelectedLocationId == "")"></EmployeeCard>
                         </div>
                     }
@@ -56,17 +58,17 @@
             </div>
         }
 
-        @if (CSVLoader.SelectedEmployee != null)
+        @if (!string.IsNullOrEmpty(selectedEmployeeId))
         {
             <div class="right-sidebar sidebar">
-                <div >
-                <EmployeeCard Employee="@CSVLoader.SelectedEmployee" showLoc="true"></EmployeeCard>
+                <div>
+                    <EmployeeCard Employee="@CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == selectedEmployeeId)"
+                                  showLoc="true"></EmployeeCard>
                 </div>
-                <!-- Button to go to the selected employee -->
-                <div >
+                <div>
                     <button class="goto-button" @onclick="GoToSelectedEmployee">Go To Employee</button>
                 </div>
-                <div >
+                <div>
                     <button class="cut-button" @onclick="CutEmployee">Cut Employee</button>
                     <button class="paste-button" @onclick="PasteEmployee">Paste Employee</button>
                 </div>
@@ -77,25 +79,11 @@
 
 @code {
     [Parameter] public string LocID { get; set; } = string.Empty;
-    // private Employee? selectedEmployee;
     IJSObjectReference? jsModule;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender || jsModule == null)
-        {
-            jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
-            await jsModule.InvokeVoidAsync("setDNCallback", DotNetObjectReference.Create(this));
-        }
-    }
-
-    [JSInvokable]
-    public async Task SelectEmployee(string empID)
-    {
-        CSVLoader.SelectedEmployee = empID == null ? null : CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == empID);
-        if (CSVLoader.SelectedEmployee != null) await HoverEmployee(CSVLoader.SelectedEmployee.ID);
-        StateHasChanged();
-    }
+    // Local copies of session employee IDs.
+    private string selectedEmployeeId = string.Empty;
+    private string cutEmployeeId = string.Empty;
 
     bool searchEnabled = true;
     string searchType = "Name";
@@ -145,10 +133,97 @@
         }
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        // Set HttpClient BaseAddress if it's not already set.
+        if (Http.BaseAddress is null)
+        {
+            Http.BaseAddress = new Uri(NavManager.BaseUri);
+        }
+
         SelectedLocationId = LocID;
+        await LoadSessionState();
         SearchEmployee();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender || jsModule == null)
+        {
+            jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            await jsModule.InvokeVoidAsync("setDNCallback", DotNetObjectReference.Create(this));
+        }
+    }
+
+    private async Task LoadSessionState()
+    {
+        // Load user-specific state from our API endpoints.
+        selectedEmployeeId = await Http.GetStringAsync("api/EmployeeSession/selected");
+        cutEmployeeId = await Http.GetStringAsync("api/EmployeeSession/cut");
+    }
+
+    [JSInvokable]
+    public async Task SelectEmployee(string empID)
+    {
+        selectedEmployeeId = empID;
+        await Http.PostAsJsonAsync("api/EmployeeSession/selected", empID);
+        await HoverEmployee(empID);
+        StateHasChanged();
+    }
+
+    private async Task GoToSelectedEmployee()
+    {
+        if (!string.IsNullOrEmpty(selectedEmployeeId))
+        {
+            var employee = CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == selectedEmployeeId);
+            if (employee != null && LocID != employee.LocationID)
+            {
+                NavManager.NavigateTo($"/tree/{employee.LocationID}", forceLoad: false);
+            }
+            await Task.Delay(100);
+            await HoverEmployee(selectedEmployeeId);
+        }
+    }
+
+    private async Task HoverEmployee(string ID)
+    {
+        if (jsModule != null)
+        {
+            await jsModule.InvokeVoidAsync("highlightEmployee", ID);
+        }
+    }
+
+    private async Task CutEmployee()
+    {
+        if (!string.IsNullOrEmpty(selectedEmployeeId))
+        {
+            cutEmployeeId = selectedEmployeeId;
+            await Http.PostAsJsonAsync("api/EmployeeSession/cut", cutEmployeeId);
+            if (jsModule != null)
+            {
+                await jsModule.InvokeVoidAsync("grayOutEmployee", selectedEmployeeId);
+            }
+        }
+    }
+
+    private async Task PasteEmployee()
+    {
+        if (!string.IsNullOrEmpty(cutEmployeeId) &&
+            !string.IsNullOrEmpty(selectedEmployeeId) &&
+            cutEmployeeId != selectedEmployeeId)
+        {
+            CSVLoader.EmployeeRemap.Add((CSVLoader.EmployeeList.First(e => e.ID == cutEmployeeId),
+                                          CSVLoader.EmployeeList.First(e => e.ID == selectedEmployeeId)));
+            CSVLoader.ApplyEmployeeRemap(CSVLoader.EmployeeList, CSVLoader.EmployeeRemap);
+
+            // Clear cut employee state.
+            cutEmployeeId = string.Empty;
+            await Http.PostAsJsonAsync("api/EmployeeSession/cut", string.Empty);
+
+            NavManager.NavigateTo($"/tree/{selectedEmployeeId}", forceLoad: false);
+            await Task.Delay(100);
+            await HoverEmployee(selectedEmployeeId);
+        }
     }
 
     private void RadioSelection(ChangeEventArgs e)
@@ -174,63 +249,5 @@
 
         if (string.IsNullOrEmpty(SearchQuery))
             visibleCount = 0;
-    }
-
-
-
-    private async Task GoToSelectedEmployee()
-    {
-        if (CSVLoader.SelectedEmployee != null)
-        {
-            // Assume Employee has a LocationID property.
-            if (LocID != CSVLoader.SelectedEmployee.LocationID)
-            {
-                // Update the URL and component state without a full-page refresh.
-                // Navigating to the same component with a new parameter will re-render the Tree.
-                NavManager.NavigateTo($"/tree/{CSVLoader.SelectedEmployee.LocationID}", forceLoad: false);
-            }
-            // If already on the correct tree, call JS to highlight the employee.
-            await Task.Delay(100); // Small delay to ensure re-rendering
-            await HoverEmployee(CSVLoader.SelectedEmployee.ID);
-        }
-    }
-
-    private async Task HoverEmployee(string ID)
-    {
-        if (jsModule != null)
-        {
-            await jsModule.InvokeVoidAsync("highlightEmployee", ID);
-        }
-    }
-
-
-
-
-    // private Employee? cutEmployee = null;
-
-    private async Task CutEmployee()
-    {
-        if (CSVLoader.SelectedEmployee != null)
-        {
-            CSVLoader.CutEmployee = CSVLoader.SelectedEmployee;
-            if (jsModule != null)
-            {
-                await jsModule.InvokeVoidAsync("grayOutEmployee", CSVLoader.SelectedEmployee.ID);
-            }
-        }
-    }
-
-
-    private async Task PasteEmployee()
-    {
-        if (CSVLoader.CutEmployee != null && CSVLoader.SelectedEmployee != null && CSVLoader.CutEmployee != CSVLoader.SelectedEmployee)
-        {
-            CSVLoader.EmployeeRemap.Add((CSVLoader.CutEmployee, CSVLoader.SelectedEmployee));
-            CSVLoader.ApplyEmployeeRemap(CSVLoader.EmployeeList, CSVLoader.EmployeeRemap);
-            CSVLoader.CutEmployee = null; // Reset after pasting
-            NavManager.NavigateTo($"/tree/{CSVLoader.SelectedEmployee.LocationID}", forceLoad: false);
-            await Task.Delay(100);
-            await HoverEmployee(CSVLoader.SelectedEmployee.ID);
-        }
     }
 }

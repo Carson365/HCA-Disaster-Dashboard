@@ -207,8 +207,8 @@ tbody tr:last-child td {
 }
 
 
-circle.highlight {
-    stroke-width: 2;
-    stroke: black;
-    r: 7;
-}
+circle.highlight {  
+   stroke-width: 2;  
+   stroke: black;  
+   r: 7;  
+}  
