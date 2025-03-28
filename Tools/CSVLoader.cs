@@ -23,7 +23,7 @@ namespace AISComp.Tools
 		public static IReadOnlyList<Disaster> Disasters { get; private set; } = InitializeDisasters();
 
 		// Employee remaps loaded from CSV.
-		public static List<(Employee, Employee)> EmployeeRemap { get; private set; } = new();
+		public static List<(Employee, Employee)> EmployeeRemap { get; private set; } = [];
 
 		// Build the employee list, then load and apply any remaps.
 		private static List<Employee> InitializeEmployees()
@@ -43,7 +43,7 @@ namespace AISComp.Tools
 					LocationID = csv.GetString(3),
 					HireDate = csv.IsDBNull(7) ? "Null" : csv.GetString(7),
 					ManagerID = csv.IsDBNull(6) ? null : csv.GetString(6),
-					Downs = new ConcurrentBag<Employee>()
+					Downs = []
 				};
 			}
 
@@ -129,7 +129,7 @@ namespace AISComp.Tools
 				var dn = int.TryParse(csv.GetString("disasterNumber"), out int disasterNumber) ? disasterNumber : 0;
 
 				if (!disasterDict.ContainsKey(dn))
-					disasterDict[dn] = new List<Disaster>();
+					disasterDict[dn] = [];
 
 				disasterDict[dn].Add(new Disaster
 				{
@@ -192,13 +192,13 @@ namespace AISComp.Tools
 
 		// Retrieves the organization tree for a location.
 		public static List<Employee> GetLocationOrgTree(string ID) =>
-			string.IsNullOrEmpty(ID) ? new List<Employee>() : EmployeeList.Where(e => e.LocationID == ID).ToList();
+			string.IsNullOrEmpty(ID) ? [] : [.. EmployeeList.Where(e => e.LocationID == ID)];
 
 		// Returns a trimmed list of employees for a location.
 		public static List<Employee> GetTrimmedEmployeeList(string locationId)
 		{
 			if (string.IsNullOrEmpty(locationId))
-				return new List<Employee>();
+				return [];
 
 			// Get all employees for the location.
 			var orgEmployees = EmployeeList.Where(e => e.LocationID == locationId).ToList();
@@ -208,8 +208,8 @@ namespace AISComp.Tools
 				.Where(e => e.Up == null || e.Up.LocationID != locationId)
 				.ToList();
 
-			Dictionary<string, Employee> trimmedCache = new();
-			List<Employee> flattenedList = new();
+			Dictionary<string, Employee> trimmedCache = [];
+			List<Employee> flattenedList = [];
 
 			foreach (var top in topEmployees)
 			{
@@ -248,7 +248,7 @@ namespace AISComp.Tools
 				LocationID = employee.LocationID,
 				HireDate = employee.HireDate,
 				Up = null,
-				Downs = new ConcurrentBag<Employee>()
+				Downs = []
 			};
 
 			cache[employee.ID] = trimmed;
@@ -327,7 +327,7 @@ namespace AISComp.Tools
 				{
 					var oldManager = oldEmployee.Up;
 					var filteredDowns = oldManager.Downs.Where(e => e.ID != oldEmployee.ID);
-					oldManager.Downs = new ConcurrentBag<Employee>(filteredDowns);
+					oldManager.Downs = [.. filteredDowns];
 				}
 
 				// Update the old employee’s Up reference.

@@ -94,7 +94,14 @@
             };
 
         var emps = JsonSerializer.Serialize(dummyEmployee, options);
-        await jsModule.InvokeVoidAsync("runTree", emps); //////////// An exception of type 'Microsoft.JSInterop.JSException' occurred in System.Private.CoreLib.dll but was not handled in user code Cannot read properties of null(reading 'offsetWidth')
+        await jsModule.InvokeVoidAsync("runTree", emps);
+        if (CSVLoader.CutEmployee != null)
+        {
+            if (jsModule != null)
+            {
+                await jsModule.InvokeVoidAsync("grayOutEmployee", CSVLoader.CutEmployee.ID);
+            }
+        }
     }
 
     // public void Dispose()
