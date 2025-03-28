@@ -121,7 +121,7 @@ export function runTree(employeeJson) {
         .force("charge", d3.forceManyBody().strength(-8))
         .force("collide", d3.forceCollide().radius(3.01).strength(0.45))
         .force("toParent", forceToParent(0.1))
-        .force("border", borderForce(width - 50, height - 50, 50))
+        .force("border", borderForce(width - 50, height - 50, 80))
         .force("radialBand", radialBandForce(35, 20, 80))
         .force("radial", d3.forceRadial(
             d => (d.depth ** 0.4 - (0.2 * d3.max(nodes, d => d.depth))) * 50,

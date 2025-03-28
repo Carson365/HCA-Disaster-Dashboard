@@ -171,11 +171,14 @@ main {
     bottom: 0;
 }
 
-.right-sidebar[b-zv7j0jmkb8]{
-    position: absolute;
-    right: 0;
-    top: 3.5em; /* below the top-row */
-    bottom: 0;
+.right-sidebar[b-zv7j0jmkb8] {  
+   position: absolute;  
+   right: 0;  
+   top: 3.5em; /* below the top-row */  
+   bottom: 0;  
+   display: flex;  
+   flex-direction: column;  
+   align-items: center; /* Center all children horizontally */  
 }
 
 .sidebar[b-zv7j0jmkb8] {
@@ -202,8 +205,6 @@ main {
 
 .box:hover[b-zv7j0jmkb8] {
     background-color: rgba(255, 255, 255, 0.5); /* Change the background color on hover */
-    transform: scaleY(1.05); /* Scale the element slightly */
-    transition: transform 0.1s ease; /* Smooth transition effect */
     cursor: pointer;
 }
 
@@ -235,6 +236,34 @@ main {
 /* Center the radio button line */
 .radio-group[b-zv7j0jmkb8] {
     text-align: center;
+}
+
+
+
+@media (min-width: 1101px) {
+    .left-sidebar[b-zv7j0jmkb8] {
+        display: block;
+    }
+}
+
+@media (max-width: 1100px) {
+    .left-sidebar[b-zv7j0jmkb8] {
+        display: none;
+    }
+}
+
+
+@media (max-width: 1100px) {
+    .right-sidebar[b-zv7j0jmkb8] {
+        top: 80%;
+        height: calc(40% - 30px);
+        width: 100%;
+        min-width: 235px;
+    }
+}
+
+.right-sidebar *[b-zv7j0jmkb8] {
+    margin-bottom: 0.5em;
 }
 /* _content/AISComp/Components/Pages/Stats.razor.rz.scp.css */
 body[b-xdm2ure6px] {
