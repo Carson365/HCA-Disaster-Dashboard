@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="Data\counties.geojson" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Compile Remove="Components\Pages\Location.cs" />
   </ItemGroup>-->
@@ -26,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FileHelpers" Version="3.5.2" />
+    <PackageReference Include="Sylvan.Data.Csv" Version="1.4.1" />
   </ItemGroup>
 
   <ItemGroup>

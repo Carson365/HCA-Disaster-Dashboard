@@ -1,89 +1,111 @@
-﻿@page "/tree/{LocID}"
-@using AISComp.Tools
-@* @using AISComp.Components.Shared*@
-@inject IJSRuntime jsRuntime
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
-@* @inject CSVLoader CsvLoaderInstance *@
+﻿@inject IJSRuntime jsRuntime
+@inject NavigationManager NavManager
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using System.Collections.Concurrent
 
-
-<PageTitle>Tree</PageTitle>
-
-
-<OrgMainLayout>
-	<body>
-		<div class="container">
-		</div>
-	</body>
-</OrgMainLayout>
-
+<div class="top-row">
+    <a class="branding oi oi-home" href=""></a>
+    <a class="branding"><b>@(CSVLoader.Locations.FirstOrDefault(x => x.ID == LocID)?.Name ?? "Unknown")</b></a>
+</div>
+<div class="treeContainer"></div>
 
 @code {
+    [Parameter] public required string LocID { get; set; }
 
-	[Parameter] public string LocID { get; set; }
+    private List<Employee>? SearchResults;
+    private JsonSerializerOptions options = new()
+        {
+            PropertyNamingPolicy = null,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
+        };
 
-	private List<Employee> SearchResults;
+    private IJSObjectReference? jsModule;
+    private bool isFirstRender = true;
 
-	private int visibleCount;
+    protected override async Task OnInitializedAsync()
+    {
+        CSVLoader.OnLoaded += () => StateHasChanged();
+        await LoadTreeData();
+        NavManager.LocationChanged += OnLocationChanged;
+    }
 
-	protected override void OnInitialized()
-	{
-		CSVLoader.OnLoaded += () => StateHasChanged();
-		SearchResults = CSVLoader.GetLocationOrgTree(LocID);
-	}
-
-	private JsonSerializerOptions options = new JsonSerializerOptions
-		{
-			PropertyNamingPolicy = null,
-			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
-		};
-
-	protected override async Task OnAfterRenderAsync(bool first)
-	{
-		if (first)
-		{
-			// Assume CSVLoader.SelectedEmployee is one of the employees in the location.
-			Employee startingEmployee = SearchResults[0];
-			// string locationId = CsvLoaderInstance.SelectedLocation.ID;
-
-			// Get the trimmed tree (only employees at the selected location).
-			Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID);
-			// var emps = JsonSerializer.Serialize(trimmedSelectedEmployee, options);
-
-			Dictionary<string,Employee> allTopUps = new();
-
-			foreach (Employee emp in SearchResults)
-			{
-				var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID);
-				allTopUps.TryAdd(e.ID, e);
-			}
-
-			// Console.WriteLine("All top ups: " + allTopUps.Count());
-
-			Employee dummyEmployee = new Employee()
-				{
-					ID = "Connected employees have no supervisor",
-					Name = "Organization Root",
-					Position = "",
-					LocationID = LocID,
-					HireDate = "",
-					Up = null,
-					Downs = new List<Employee>(allTopUps.Values)
-				};
-
-			// Console.WriteLine("Total: " + "a");
-
-			var emps = JsonSerializer.Serialize(dummyEmployee, options);
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await LoadTreeData(); // Ensure new data loads before re-rendering
+    }
 
 
+    private async Task LoadTreeData()
+    {
+        SearchResults = null; // Clear previous tree immediately
+        StateHasChanged(); // Force UI update
 
-			// var sel = CSVLoader.SearchResults[0];
-			// while (sel.Up != null) sel = sel.Up;
-			// var emps = JsonSerializer.Serialize(sel, options);
+        await Task.Delay(10); // Allow UI to reflect the change before loading new data
+
+        SearchResults = CSVLoader.GetLocationOrgTree(LocID);
+
+        if (SearchResults != null && SearchResults.Any() && !isFirstRender)
+        {
+            await RefreshTree();
+        }
+    }
 
 
-			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
-			await jsModule.InvokeVoidAsync("runTree", emps); // Ensure the map is initialized
-		}
-	}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isFirstRender = false;
+            jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            await RefreshTree();
+        }
+    }
+
+    private async Task RefreshTree()
+    {
+        if (SearchResults == null || !SearchResults.Any() || jsModule == null) return;
+
+        if (!NavManager.Uri.Contains("tree")) 
+        {
+            return;
+        }
+
+        Dictionary<string, Employee> trimmedCache = new();
+        Employee startingEmployee = SearchResults[0];
+        Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID, trimmedCache);
+
+        Dictionary<string, Employee> allTopUps = new();
+        foreach (Employee emp in SearchResults)
+        {
+            var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID, trimmedCache);
+            allTopUps.TryAdd(e.ID, e);
+        }
+
+        Employee dummyEmployee = new Employee
+            {
+                ID = "Connected employees have no supervisor",
+                Name = "Organization Root",
+                Position = "",
+                LocationID = LocID,
+                HireDate = "",
+                Up = null,
+                Downs = new ConcurrentBag<Employee>(allTopUps.Values)
+            };
+
+        var emps = JsonSerializer.Serialize(dummyEmployee, options);
+        await jsModule.InvokeVoidAsync("runTree", emps);
+        if (CSVLoader.CutEmployee != null)
+        {
+            if (jsModule != null)
+            {
+                await jsModule.InvokeVoidAsync("grayOutEmployee", CSVLoader.CutEmployee.ID);
+            }
+        }
+    }
+
+    // public void Dispose()
+    // {
+    //     NavManager.LocationChanged -= OnLocationChanged;
+    // }
 }

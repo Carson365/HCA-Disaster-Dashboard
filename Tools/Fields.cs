@@ -1,53 +1,18 @@
-﻿using FileHelpers;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Concurrent;
 
 namespace AISComp.Tools
 {
 	public class Employee
 	{
-		public required string ID { get; set; }
-		public required string Name { get; set; }
-		public required string Position { get; set; }
-		public required string LocationID { get; set; }
-		public required string HireDate { get; set; }
-		public required Employee? Up { get; set; }
-		public List<Employee>? Downs { get; set; }
+		public string ID { get; set; } = "";
+		public string Name { get; set; } = "";
+		public string Position { get; set; } = "";
+		public string LocationID { get; set; } = "";
+		public string HireDate { get; set; } = "";
+		public Employee? Up { get; set; }
+		public ConcurrentBag<Employee> Downs { get; set; } = [];
+		public string? ManagerID { get; set; }
 	}
-
-	[DelimitedRecord(",")]
-	public class CSVEmployee
-	{
-		public required string ID { get; set; }
-		public required string LastName { get; set; }
-		public required string FirstName { get; set; }
-		public required string LocationID { get; set; }
-		public required string DepartmentID { get; set; }
-		[FieldQuoted('"', QuoteMode.OptionalForBoth)]
-		public required string Position { get; set; }
-		public required string ManagerID { get; set; }
-		public required string HireDate { get; set; }
-	}
-
-	[DelimitedRecord(",")]
-	public class Department
-	{
-		public required string ID { get; set; }
-		[FieldQuoted('"', QuoteMode.OptionalForBoth)]
-		public required string DepartmentName { get; set; }
-	}
-
-	[DelimitedRecord(",")]
-	public class CSVLocation
-	{
-		public required string ID { get; set; }
-		public required string Name { get; set; }
-		public required string City { get; set; }
-		public required string State { get; set; }
-		public required string Zip { get; set; }
-		public required string Latitude { get; set; }
-		public required string Longitude { get; set; }
-	}
-
 	public class Location
 	{
 		public required string ID { get; set; }
@@ -58,5 +23,32 @@ namespace AISComp.Tools
 		public required string Latitude { get; set; }
 		public required string Longitude { get; set; }
 		public required int Size { get; set; }
+	}
+	public class Department
+	{
+		public required string ID { get; set; }
+		public required string Name { get; set; }
+	}
+	public class Disaster
+	{
+		public required string ID { get; set; }
+		public required string State { get; set; }
+		public required string FIPSStateCode { get; set; }
+		public required string FIPSCountyCode { get; set; }
+		public required string IncidentType { get; set; }
+		public required int Year { get; set; }
+		public required string DesignatedArea { get; set; }
+		public required int DisasterNumber { get; set; }
+		public required string DeclarationDate { get; set; }
+		public required string IncidentEndDate { get; set; }
+		public required string DeclarationTitle { get; set; }
+		public List<Damage> Damages { get; set; } = [];
+	}
+
+	public class Damage
+	{
+		public required string StructureType { get; set; }
+		public required string NumberOfProperties { get; set; }
+		public string? DamageCategory { get; set; }
 	}
 }

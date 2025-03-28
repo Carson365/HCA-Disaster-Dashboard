@@ -1,46 +1,143 @@
 ﻿@inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
 @page "/stats/{Fip}"
+@using System.Text.Json
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Data Visualization</title>
-	<link rel="stylesheet" href="./css/stats.css" />
 </head>
 
-<div id="main"></div>
-<script src="https://d3js.org/d3.v7.min.js"></script>
+<body>
+	<div id="main">
+
+		<div class="top-row">
+			<a class="branding oi oi-home" href=""></a>
+			<a class="branding"><b>@($"{CountyName}, {StateName} Disaster Statistics")</b></a>
+		</div>
+
+
+		<div class="Zcontent">
+
+			<div class="Zcolumn x2">
+				<div class="Zcard">
+					<div class="Zcard-content" id="stackedAreaChart"></div>
+				</div>
+				<div class="Zcard squish">
+					<div class="Zcard-content" id="statePieChart"></div>
+					<div class="Zcard-content" id="countyPieChart"></div>
+				</div>
+				<div class="Zcard squish">
+					<div class="Zcard-content" id="stateDamagePieChart"></div>
+					<div class="Zcard-content" id="countyDamagePieChart"></div>
+				</div>
+				<div class="Zcard tall">
+					<div class="Zcard-content" id="stateDamageBarChart"></div>
+				</div>
+				<div class="Zcard">
+					<div class="Zcard-content" id="stackedBarChart"></div>
+				</div>
+				<div class="Zcard tall">
+					<div class="Zcard-content" id="stateHeatMap"></div>
+				</div>
+			</div>
+			<div class="Zcolumn x1">
+				<div class="tableHolder">
+					<table class="table table-striped">
+						<tbody id="countyDisasterList"></tbody>
+					</table>
+				</div>
+				<div class="tableHolder">
+					<table class="table table-striped">
+						<tbody id="stateDisasterList"></tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
 
 @code {
 
-	[Parameter] public string Fip { get; set; }
+	[Parameter] public required string Fip { get; set; }
+
+	private JsonSerializerOptions options = new JsonSerializerOptions
+		{
+			PropertyNamingPolicy = null,
+		};
 
 	protected override async Task OnAfterRenderAsync(bool first)
 	{
 		if (first)
 		{
+			string filePath = Path.Combine("Data", "geojson-counties-fips.json");
+			string fileContents = await File.ReadAllTextAsync(filePath);
 
-			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "./js/stats/data.json");
-			string fileContents;
-
-			if (File.Exists(filePath))
-			{
-				fileContents = await File.ReadAllTextAsync(filePath);
-			}
-			else
-			{
-				fileContents = "[]";
-			}
-
-
-
-
-
-
-			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/stats/script.js");
-			// await jsModule.InvokeVoidAsync("setDotNetHelper", DotNetObjectReference.Create(this));
-			await jsModule.InvokeVoidAsync("handleOnLoad", Fip, fileContents);
+			IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Charts/main.js");
+			_ = Task.Run(() => jsModule.InvokeVoidAsync("createCharts", Fip,
+			JsonSerializer.Serialize(CSVLoader.Disasters.Where(d => d.FIPSStateCode == $"{Fip[0]}{Fip[1]}"), options),
+			JsonSerializer.Serialize(countyNamesByFip, options),
+			fileContents));
 		}
+	}
+
+	private string CountyName { get; set; } = "Unknown";
+	private string StateName { get; set; } = "Unknown";
+	private Dictionary<(string, string), string> countyData = new();
+	private Dictionary<string, string> countyNamesByFip = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		string stateFips = Fip.Substring(0, 2);
+		string countyFips = Fip.Substring(2, 3);
+
+		LoadCountyData();
+		StateName = GetStateNameByFips(stateFips);
+		CountyName = GetCountyNameByFips(stateFips, countyFips);
+		await Task.CompletedTask;
+	}
+
+	private void LoadCountyData()
+	{
+		var lines = File.ReadAllLines(Path.Combine("Data", "national_county2020.csv")).Skip(1);
+		foreach (var line in lines)
+		{
+			var parts = line.Split(',');
+			if (parts.Length > 4)
+			{
+				var stateFips = parts[1].Trim('"');
+				var countyFips = parts[2].Trim('"');
+				var countyName = parts[4].Trim('"');
+				countyData[(stateFips, countyFips)] = countyName;
+				if (stateFips == $"{Fip[0]}{Fip[1]}") countyNamesByFip[countyFips] = countyName;
+			}
+		}
+	}
+
+	private string GetCountyNameByFips(string stateFips, string countyFips)
+	{
+		return countyData.TryGetValue((stateFips, countyFips), out string? name) ? name : "Unknown";
+	}
+
+	private string GetStateNameByFips(string fipsCode)
+	{
+		var fipsToName = new Dictionary<string, string>
+		{
+			{ "01", "Alabama" }, { "02", "Alaska" }, { "04", "Arizona" }, { "05", "Arkansas" }, { "06", "California" },
+			{ "08", "Colorado" }, { "09", "Connecticut" }, { "10", "Delaware" }, { "11", "District of Columbia" },
+			{ "12", "Florida" }, { "13", "Georgia" }, { "15", "Hawaii" }, { "16", "Idaho" }, { "17", "Illinois" },
+			{ "18", "Indiana" }, { "19", "Iowa" }, { "20", "Kansas" }, { "21", "Kentucky" }, { "22", "Louisiana" },
+			{ "23", "Maine" }, { "24", "Maryland" }, { "25", "Massachusetts" }, { "26", "Michigan" }, { "27", "Minnesota" },
+			{ "28", "Mississippi" }, { "29", "Missouri" }, { "30", "Montana" }, { "31", "Nebraska" }, { "32", "Nevada" },
+			{ "33", "New Hampshire" }, { "34", "New Jersey" }, { "35", "New Mexico" }, { "36", "New York" },
+			{ "37", "North Carolina" }, { "38", "North Dakota" }, { "39", "Ohio" }, { "40", "Oklahoma" }, { "41", "Oregon" },
+			{ "42", "Pennsylvania" }, { "44", "Rhode Island" }, { "45", "South Carolina" }, { "46", "South Dakota" },
+			{ "47", "Tennessee" }, { "48", "Texas" }, { "49", "Utah" }, { "50", "Vermont" }, { "51", "Virginia" },
+			{ "53", "Washington" }, { "54", "West Virginia" }, { "55", "Wisconsin" }, { "56", "Wyoming" },
+			{ "72", "Puerto Rico" }
+		};
+		return fipsToName.TryGetValue(fipsCode, out string? name) ? name : "Unknown";
 	}
 }

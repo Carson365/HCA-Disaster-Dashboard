@@ -3,6 +3,9 @@
 
 <div class="page" style="height:100vh; width:100vw;">
     <main style="height:100%; width:100%;">
+@*         <div class="top-row1">
+            <a class="branding1"><b>HCA Healthcare Disaster Dashboard</b></a>
+        </div> *@
         <LoadMap />
         <div id="key">
             <div>&emsp;</div>
@@ -16,15 +19,18 @@
     // Declare as nullable so the compiler knows it might be null initially.
     private IJSObjectReference? _jsModule;
 
+    protected override Task OnInitializedAsync()
+    {
+		_ = Task.Run(() => { _ = CSVLoader.Locations;});
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnAfterRenderAsync(bool first)
     {
         if (first)
         {
             // Import and store the module only once.
-            _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./js/runMapThings.js");
-
-            // Optionally, initialize something from the module.
+            _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
             await _jsModule.InvokeVoidAsync("showFemaPoints");
         }
     }
@@ -35,20 +41,10 @@
     {
         show ^= true;
         // If the module hasn't been loaded yet, import it.
-        if (_jsModule is null)
-        {
-            _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./js/runMapThings.js");
-        }
+        if (_jsModule is null) _jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/runMapThings.js");
 
         // Call the appropriate JS function.
-        if (show)
-        {
-            await _jsModule.InvokeVoidAsync("showFemaPoints");
-        }
-        else
-        {
-            await _jsModule.InvokeVoidAsync("hideFemaPoints");
-        }
+        if (show) await _jsModule.InvokeVoidAsync("showFemaPoints");
+        else await _jsModule.InvokeVoidAsync("hideFemaPoints");
     }
 }

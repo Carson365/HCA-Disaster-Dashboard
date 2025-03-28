@@ -1,60 +1,236 @@
-﻿@inherits LayoutComponentBase
+﻿@page "/tree/{LocID}"
+@inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
+@inject NavigationManager NavManager
+
 
 <PageTitle>HCA Healthcare</PageTitle>
 
 <div class="page">
-@* 	<OrgNavMenu /> *@
-	<div class="body">
-		<div class="top-row px-4">
-			@* <a href="https://docs.microsoft.com/aspnet/" target="_blank" class="underline">About</a> *@
-            <div class="top-row2 ps-3 navbar">
-                <a class="navbar-brand" href=""><b>HCA Healthcare</b></a>
+    <main>
+        <!-- Render the Tree component -->
+        <Tree LocID="@LocID" />
+
+        @if (searchEnabled)
+        {
+            <div class="left-sidebar sidebar">
+                <form>
+                    <input type="text" placeholder="Search..." @bind="SearchQuery" @bind:event="oninput" />
+                </form>
+
+                <div class="radio-group">
+                    <span>Search by:</span>
+                    @foreach (var item in new string[] { "Name", "ID", "Role" })
+                    {
+                        <label style="margin-left: 0.75em;">
+                            <input type="radio" name="searchType" id="@item" value="@item"
+                            @onchange="RadioSelection"
+                            checked=@(searchType.Equals(item, StringComparison.OrdinalIgnoreCase)) />
+                            <label for="@item">@item</label>
+                        </label>
+                    }
+                </div>
+
+                <select @bind="SelectedLocationId">
+                    <option value="">All locations</option>
+                    @foreach (var group in GroupedLocations)
+                    {
+                        <optgroup label="@group.State">
+                            @foreach (var loc in group.Locations)
+                            {
+                                <option value="@loc.ID">@loc.Name</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+
+                @if (searchResults != null && visibleCount != 0)
+                {
+                    @foreach (Employee item in searchResults.Take(visibleCount))
+                    {
+                        <div class="box" @onclick="() => SelectEmployee(item.ID)" @onmouseover="() => HoverEmployee(item.ID)" @onmouseout="() => HoverEmployee(String.Empty)">
+                            <EmployeeCard Employee="@item" showLoc="@(SelectedLocationId == "")"></EmployeeCard>
+                        </div>
+                    }
+                }
             </div>
-		</div>
-		<div class="bottom-line"></div>
-		<main>
-            @ChildContent
-		</main>
-	</div>
+        }
+
+        @if (CSVLoader.SelectedEmployee != null)
+        {
+            <div class="right-sidebar sidebar">
+                <div >
+                <EmployeeCard Employee="@CSVLoader.SelectedEmployee" showLoc="true"></EmployeeCard>
+                </div>
+                <!-- Button to go to the selected employee -->
+                <div >
+                    <button class="goto-button" @onclick="GoToSelectedEmployee">Go To Employee</button>
+                </div>
+                <div >
+                    <button class="cut-button" @onclick="CutEmployee">Cut Employee</button>
+                    <button class="paste-button" @onclick="PasteEmployee">Paste Employee</button>
+                </div>
+            </div>
+        }
+    </main>
 </div>
 
-@* <script>
-    function testing() {
-      const topFade = document.querySelector(".topFade");
-      const bottomFade = document.querySelector(".bottomFade");
-      const scrollY = document.querySelector("main").scrollTop;
-      topFade.style.height = Math.min(5, scrollY * 0.05) + "em";
+@code {
+    [Parameter] public string LocID { get; set; } = string.Empty;
+    // private Employee? selectedEmployee;
+    IJSObjectReference? jsModule;
 
-      const rect = document.querySelector(".container").getBoundingClientRect();
-      bottomFade.style.height = Math.min(5, Math.max(0, (rect.bottom - window.innerHeight) * 0.05)) + "em";
-      console.log(Math.min(5, (rect.bottom - window.innerHeight) * 0.05));
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender || jsModule == null)
+        {
+            jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            await jsModule.InvokeVoidAsync("setDNCallback", DotNetObjectReference.Create(this));
+        }
     }
 
-    // Attach scroll listeners
-    document.addEventListener("scroll", testing, true);
-    document.addEventListener("scrollend", testing, true);
+    [JSInvokable]
+    public async Task SelectEmployee(string empID)
+    {
+        CSVLoader.SelectedEmployee = empID == null ? null : CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == empID);
+        if (CSVLoader.SelectedEmployee != null) await HoverEmployee(CSVLoader.SelectedEmployee.ID);
+        StateHasChanged();
+    }
 
-    // Attach resize listener for window resizing
-    window.addEventListener("resize", testing);
+    bool searchEnabled = true;
+    string searchType = "Name";
+    private int visibleCount;
+    private List<Employee> searchResults = new();
 
-    // Ensure state update when the DOM is fully loaded
-    document.addEventListener("DOMContentLoaded", testing);
+    public class LocationGroup
+    {
+        public string State { get; set; } = string.Empty;
+        public List<Location> Locations { get; set; } = new();
+    }
 
-    // Run testing when the page is loaded (initial load)
-    window.addEventListener("load", testing);
+    List<LocationGroup> GroupedLocations => CSVLoader.Locations
+        .GroupBy(loc => loc.State)
+        .OrderBy(g => g.Key)
+        .Select(g => new LocationGroup
+            {
+                State = g.Key,
+                Locations = g.OrderBy(loc => loc.Name).ToList()
+            }).ToList();
 
-    // Handle changes in the URL hash (anchor links)
-    window.addEventListener("hashchange", testing);
+    private string _selectedLocationId = string.Empty;
+    public string SelectedLocationId
+    {
+        get => _selectedLocationId;
+        set
+        {
+            if (_selectedLocationId != value)
+            {
+                _selectedLocationId = value;
+                SearchEmployee();
+            }
+        }
+    }
 
-    // Ensure proper state update when navigating between pages in a single-page app (SPA)
-    window.addEventListener("popstate", testing);
+    private string _searchQuery = string.Empty;
+    public string SearchQuery
+    {
+        get => _searchQuery;
+        set
+        {
+            if (_searchQuery != value)
+            {
+                _searchQuery = value;
+                SearchEmployee();
+            }
+        }
+    }
 
-    setTimeout(() => { new ResizeObserver(testing).observe(document.querySelector(".container")) },100)
+    protected override void OnInitialized()
+    {
+        SelectedLocationId = LocID;
+        SearchEmployee();
+    }
+
+    private void RadioSelection(ChangeEventArgs e)
+    {
+        searchType = e.Value?.ToString() ?? "Name";
+        SearchEmployee();
+    }
+
+    private void SearchEmployee()
+    {
+        visibleCount = 100;
+        searchResults = string.IsNullOrEmpty(SelectedLocationId)
+            ? CSVLoader.EmployeeList.Where(employee =>
+                (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                .ToList()
+            : CSVLoader.GetTrimmedEmployeeList(SelectedLocationId).Where(employee =>
+                (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+        if (string.IsNullOrEmpty(SearchQuery))
+            visibleCount = 0;
+    }
 
 
-</script> *@
 
-@code {
-    [Parameter] public RenderFragment? ChildContent { get; set; }
+    private async Task GoToSelectedEmployee()
+    {
+        if (CSVLoader.SelectedEmployee != null)
+        {
+            // Assume Employee has a LocationID property.
+            if (LocID != CSVLoader.SelectedEmployee.LocationID)
+            {
+                // Update the URL and component state without a full-page refresh.
+                // Navigating to the same component with a new parameter will re-render the Tree.
+                NavManager.NavigateTo($"/tree/{CSVLoader.SelectedEmployee.LocationID}", forceLoad: false);
+            }
+            // If already on the correct tree, call JS to highlight the employee.
+            await Task.Delay(100); // Small delay to ensure re-rendering
+            await HoverEmployee(CSVLoader.SelectedEmployee.ID);
+        }
+    }
+
+    private async Task HoverEmployee(string ID)
+    {
+        if (jsModule != null)
+        {
+            await jsModule.InvokeVoidAsync("highlightEmployee", ID);
+        }
+    }
+
+
+
+
+    // private Employee? cutEmployee = null;
+
+    private async Task CutEmployee()
+    {
+        if (CSVLoader.SelectedEmployee != null)
+        {
+            CSVLoader.CutEmployee = CSVLoader.SelectedEmployee;
+            if (jsModule != null)
+            {
+                await jsModule.InvokeVoidAsync("grayOutEmployee", CSVLoader.SelectedEmployee.ID);
+            }
+        }
+    }
+
+
+    private async Task PasteEmployee()
+    {
+        if (CSVLoader.CutEmployee != null && CSVLoader.SelectedEmployee != null && CSVLoader.CutEmployee != CSVLoader.SelectedEmployee)
+        {
+            CSVLoader.EmployeeRemap.Add((CSVLoader.CutEmployee, CSVLoader.SelectedEmployee));
+            CSVLoader.ApplyEmployeeRemap(CSVLoader.EmployeeList, CSVLoader.EmployeeRemap);
+            CSVLoader.CutEmployee = null; // Reset after pasting
+            NavManager.NavigateTo($"/tree/{CSVLoader.SelectedEmployee.LocationID}", forceLoad: false);
+            await Task.Delay(100);
+            await HoverEmployee(CSVLoader.SelectedEmployee.ID);
+        }
+    }
 }

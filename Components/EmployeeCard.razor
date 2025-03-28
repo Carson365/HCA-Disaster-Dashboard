@@ -1,0 +1,7 @@
+﻿<b style="font-size:0.8em;">@employee.Name</b> <span style="font-size:0.6em;"> (@employee.ID) </span>
+<br />
+<text style="font-size:0.7em; margin-bottom:0.5em;">@employee.Position</text> @if(showLoc) { <span style="font-size:0.7em;">, @CSVLoader.Locations.First(l => l.ID == employee.LocationID).Name</span> }
+@code {
+    [Parameter] public Employee employee { get; set; } = default!;
+    [Parameter] public bool showLoc { get; set; } = false;
+}

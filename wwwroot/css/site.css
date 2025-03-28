@@ -9,20 +9,15 @@
 html, body {
     font-family: 'Atkinson';
     --background: #EAECEC;
-/*  --primary: #B6E2B6;
-    --secondary: #94AFDB;*/
     --primary: #A6D2A6;
     --secondary: #849FCB;
     --accent: #a970ff;
     --text: #000;
-/*    color: var(--text);
-    background-color: var(--background);*/
+    height: 100% !important;
+    min-height: 100% !important;
 }
 
-::selection {
-    background: black;
-    color: white;
-}
+
 
 h1:focus {
     outline: none;
@@ -64,11 +59,6 @@ a, .btn-link {
     background-color: var(--text);
     color: var(--background);
 }
-
-
-    /*.underline:visited{
-	color: var(--accent);
-} */
 
     .underline:hover {
         color: var(--secondary);
@@ -115,25 +105,6 @@ a, .btn-link {
     color: red;
 }
 
-.table {
-    width: 100%;
-    margin-bottom: 1rem;
-    border: 3px solid transparent;
-    color: var(--text);
-    vertical-align: top;
-}
-
-table tr {
-    border: 2px solid var(--primary);
-}
-
-/*.container-fluid-2 {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    border: 3px solid green;
-}*/
-
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -170,4 +141,74 @@ table tr {
 
 .hexagon, .tether {
     pointer-events: auto;
+}
+
+
+
+
+
+
+
+
+
+.table {
+/*    width: 100%;*/
+    margin: 0px;
+    /*border-collapse: collapse;
+    border-radius: 1.5em;
+    border: none !important;*/
+}
+
+#header {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+#subheader {
+    background-color: #555 !important;
+    color: #fff !important;
+}
+
+
+
+tbody tr:first-child th:first-child {
+    border-top-left-radius: 1.5em;
+}
+
+tbody tr:first-child th:last-child {
+    border-top-right-radius: 1.5em;
+}
+
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 1.5em;
+}
+
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 1.5em;
+}
+
+/* Remove bottom border from the last row in <tbody> */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#dateNoWrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: right;
+}
+
+#descCenter{
+    text-align: center;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+
+circle.highlight {
+    stroke-width: 2;
+    stroke: black;
+    r: 7;
 }

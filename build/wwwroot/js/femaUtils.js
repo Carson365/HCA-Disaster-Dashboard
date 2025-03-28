@@ -39,7 +39,7 @@ export function displayFemaPoints(mapInstance, svg) {
     if (!femaGroup) {
         femaGroup = svg.insert("g", ":first-child")
             .attr("class", "fema-layer")
-            .style("pointer-events", "none")
+            .style("pointer-events", "auto")
             .style("display", "none");
     }
 
@@ -62,19 +62,23 @@ export function displayFemaPoints(mapInstance, svg) {
             let pt = mapInstance.latLngToLayerPoint([d.Latitude, d.Longitude]);
             return pt.y - topLeft.y;
         })
-        .on("mouseover", function (event, d) {
-            L.popup({ closeButton: false })
-                .setLatLng([d.Latitude, d.Longitude])
-                .setContent(`
-                  <b>${d.Name}</b><br>
-                  ${d.Address}<br>
-                  ${d.City}, ${d.State} ${d.Zip}<br>
-                  <br>
-                  <b>Status:</b> <i>${d.Status}</i>
-                `)
-                .openOn(mapInstance);
-        })
+        .on("mouseover", (e,d) => showPopup(e, d, mapInstance))
+        .on("click", (e, d) => showPopup(e, d, mapInstance))
         .on("mouseout", () => { mapInstance.closePopup(); });
+}
+
+function showPopup(event, d, mapInstance) {
+    event.stopPropagation();
+    L.popup({ closeButton: false })
+        .setLatLng([d.Latitude, d.Longitude])
+        .setContent(`
+            <b>${d.Name}</b><br>
+            ${d.Address}<br>
+            ${d.City}, ${d.State} ${d.Zip}<br>
+            <br>
+            <b>Status:</b> <i>${d.Status}</i>
+        `)
+        .openOn(mapInstance);
 }
 
 // Function to assign colors based on status
