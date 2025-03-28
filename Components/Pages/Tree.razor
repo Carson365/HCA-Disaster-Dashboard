@@ -1,73 +1,104 @@
-﻿@page "/tree/{LocID}"
-@using AISComp.Tools
-@inject IJSRuntime jsRuntime
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
+﻿@inject IJSRuntime jsRuntime
+@inject NavigationManager NavManager
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @using System.Collections.Concurrent
 
-
-<PageTitle>Tree</PageTitle>
-
-
-<OrgMainLayout CurrentLocID="@LocID">
-	<div class="top-row">
-		<a class="branding oi oi-home" href=""></a>
-		<a class="branding"><b>@($"{CSVLoader.Locations.First(x => x.ID==LocID).Name}")</b></a>
-	</div>
-	<body>
-		<div class="treeContainer">
-		</div>
-	</body>
-</OrgMainLayout>
-
+<div class="top-row">
+    <a class="branding oi oi-home" href=""></a>
+    <a class="branding"><b>@(CSVLoader.Locations.FirstOrDefault(x => x.ID == LocID)?.Name ?? "Unknown")</b></a>
+</div>
+<div class="treeContainer"></div>
 
 @code {
     [Parameter] public required string LocID { get; set; }
 
     private List<Employee>? SearchResults;
-
-    protected override void OnInitialized()
-    {
-        CSVLoader.OnLoaded += () => StateHasChanged();
-        SearchResults = CSVLoader.GetLocationOrgTree(LocID);
-    }
-
-    private JsonSerializerOptions options = new JsonSerializerOptions
+    private JsonSerializerOptions options = new()
         {
             PropertyNamingPolicy = null,
-            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
         };
 
-    protected override async Task OnAfterRenderAsync(bool first)
+    private IJSObjectReference? jsModule;
+    private bool isFirstRender = true;
+
+    protected override async Task OnInitializedAsync()
     {
-        if (first && SearchResults != null)
+        CSVLoader.OnLoaded += () => StateHasChanged();
+        await LoadTreeData();
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await LoadTreeData(); // Ensure new data loads before re-rendering
+    }
+
+
+    private async Task LoadTreeData()
+    {
+        SearchResults = null; // Clear previous tree immediately
+        StateHasChanged(); // Force UI update
+
+        await Task.Delay(10); // Allow UI to reflect the change before loading new data
+
+        SearchResults = CSVLoader.GetLocationOrgTree(LocID);
+
+        if (SearchResults != null && SearchResults.Any() && !isFirstRender)
         {
-            Dictionary<string, Employee> trimmedCache = new();
-            Employee startingEmployee = SearchResults[0];
-            Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID, trimmedCache);
-
-            Dictionary<string, Employee> allTopUps = new();
-            foreach (Employee emp in SearchResults)
-            {
-                var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID, trimmedCache);
-                allTopUps.TryAdd(e.ID, e);
-            }
-
-            Employee dummyEmployee = new Employee
-                {
-                    ID = "Connected employees have no supervisor",
-                    Name = "Organization Root",
-                    Position = "",
-                    LocationID = LocID,
-                    HireDate = "",
-                    Up = null,
-                    Downs = new ConcurrentBag<Employee>(allTopUps.Values)
-                };
-
-            var emps = JsonSerializer.Serialize(dummyEmployee, options);
-            IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
-            await jsModule.InvokeVoidAsync("runTree", emps);
+            await RefreshTree();
         }
     }
-}
 
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isFirstRender = false;
+            jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            await RefreshTree();
+        }
+    }
+
+    private async Task RefreshTree()
+    {
+        if (SearchResults == null || !SearchResults.Any() || jsModule == null) return;
+
+        if (!NavManager.Uri.Contains("tree")) 
+        {
+            return;
+        }
+
+        Dictionary<string, Employee> trimmedCache = new();
+        Employee startingEmployee = SearchResults[0];
+        Employee trimmedSelectedEmployee = CSVLoader.GetTrimmedSelectedEmployee(startingEmployee, LocID, trimmedCache);
+
+        Dictionary<string, Employee> allTopUps = new();
+        foreach (Employee emp in SearchResults)
+        {
+            var e = CSVLoader.GetTrimmedSelectedEmployee(emp, LocID, trimmedCache);
+            allTopUps.TryAdd(e.ID, e);
+        }
+
+        Employee dummyEmployee = new Employee
+            {
+                ID = "Connected employees have no supervisor",
+                Name = "Organization Root",
+                Position = "",
+                LocationID = LocID,
+                HireDate = "",
+                Up = null,
+                Downs = new ConcurrentBag<Employee>(allTopUps.Values)
+            };
+
+        var emps = JsonSerializer.Serialize(dummyEmployee, options);
+        await jsModule.InvokeVoidAsync("runTree", emps); //////////// An exception of type 'Microsoft.JSInterop.JSException' occurred in System.Private.CoreLib.dll but was not handled in user code Cannot read properties of null(reading 'offsetWidth')
+    }
+
+    // public void Dispose()
+    // {
+    //     NavManager.LocationChanged -= OnLocationChanged;
+    // }
+}

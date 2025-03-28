@@ -1,6 +1,7 @@
 ﻿using Sylvan.Data.Csv;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Globalization;
 
 namespace AISComp.Tools
 {
@@ -15,16 +16,16 @@ namespace AISComp.Tools
 			IsLoading = false;
 		}
 
-		public static IReadOnlyList<Employee> EmployeeList { get; private set; } = InitializeEmployees();
+		// These static properties are initialized via helper methods.
+		public static List<Employee> EmployeeList { get; private set; } = InitializeEmployees();
 		public static IReadOnlyList<Location> Locations { get; private set; } = InitializeLocations();
 		public static IReadOnlyList<Department> Departments { get; private set; } = InitializeDepartments();
 		public static IReadOnlyList<Disaster> Disasters { get; private set; } = InitializeDisasters();
 
+		// Employee remaps loaded from CSV.
+		public static List<(Employee, Employee)> EmployeeRemap { get; private set; } = new();
 
-		public static List<Employee> GetLocationOrgTree(string ID) =>
-			string.IsNullOrEmpty(ID) ? [] : [.. EmployeeList.Where(e => e.LocationID == ID)];
-
-
+		// Build the employee list, then load and apply any remaps.
 		private static List<Employee> InitializeEmployees()
 		{
 			using var reader = File.OpenText(Path.Combine("Data", "employees.csv"));
@@ -42,9 +43,11 @@ namespace AISComp.Tools
 					LocationID = csv.GetString(3),
 					HireDate = csv.IsDBNull(7) ? "Null" : csv.GetString(7),
 					ManagerID = csv.IsDBNull(6) ? null : csv.GetString(6),
+					Downs = new ConcurrentBag<Employee>()
 				};
 			}
 
+			// Build the hierarchy.
 			Parallel.ForEach(employeeDict.Values, employee =>
 			{
 				if (employee.ManagerID != null && employeeDict.TryGetValue(employee.ManagerID, out var manager))
@@ -54,7 +57,15 @@ namespace AISComp.Tools
 				}
 			});
 
-			return [.. employeeDict.Values];
+			// Build a local list of employees.
+			var employees = employeeDict.Values.ToList();
+
+			// Now load remaps from file using the built employee list.
+			var remapList = LoadEmployeeRemap(employees);
+			EmployeeRemap = remapList;
+			ApplyEmployeeRemap(employees, remapList);
+
+			return employees;
 		}
 
 		private static List<Location> InitializeLocations()
@@ -117,11 +128,11 @@ namespace AISComp.Tools
 			{
 				var dn = int.TryParse(csv.GetString("disasterNumber"), out int disasterNumber) ? disasterNumber : 0;
 
-				if (!disasterDict.ContainsKey(dn)) disasterDict[dn] = [];
+				if (!disasterDict.ContainsKey(dn))
+					disasterDict[dn] = new List<Disaster>();
 
 				disasterDict[dn].Add(new Disaster
 				{
-					// Directly clean data while creating the Disaster object
 					ID = string.IsNullOrEmpty(csv.GetString("id")) ? "N/A" : csv.GetString("id"),
 					State = csv.GetString("state"),
 					FIPSStateCode = string.IsNullOrEmpty(csv.GetString("fipsStateCode")) ? "Unknown" : csv.GetString("fipsStateCode"),
@@ -131,11 +142,11 @@ namespace AISComp.Tools
 					IncidentType = string.IsNullOrEmpty(csv.GetString("incidentType"))
 						? "Unknown"
 						: csv.GetString("incidentType").Trim(),
-					Year = int.TryParse(csv.GetString("fyDeclared"), out int year) ? year : 0, // Defaults to 0 if parsing fails
+					Year = int.TryParse(csv.GetString("fyDeclared"), out int year) ? year : 0,
 					DesignatedArea = string.IsNullOrEmpty(csv.GetString("designatedArea"))
 						? "Unknown"
 						: csv.GetString("designatedArea").Trim(),
-					DisasterNumber = dn, // Defaults to 0 if parsing fails
+					DisasterNumber = dn,
 					DeclarationDate = string.IsNullOrEmpty(csv.GetString("declarationDate"))
 						? "Not Listed"
 						: DateTime.TryParse(csv.GetString("declarationDate"), out DateTime declarationDate)
@@ -150,14 +161,11 @@ namespace AISComp.Tools
 						? "Unknown"
 						: csv.GetString("declarationTitle").Replace(",", ", ").Replace(",  ", ", ").Trim()
 				});
-
 			}
 
-			// HazardMitigationAssistanceMitigatedProperties
+			// Process HazardMitigationAssistanceMitigatedProperties.
 			using var reader2 = File.OpenText(Path.Combine("Data", "HazardMitigationAssistanceMitigatedProperties.csv"));
 			using var csv2 = CsvDataReader.Create(reader2, new CsvDataReaderOptions { HasHeaders = true });
-
-			var time = DateTime.Now;
 
 			while (csv2.Read())
 			{
@@ -172,7 +180,8 @@ namespace AISComp.Tools
 						DamageCategory = string.IsNullOrEmpty(csv2.GetString("damageCategory")) ? "Unknown" : csv2.GetString("damageCategory")
 					};
 
-					foreach (var disaster in disasters) disaster.Damages.Add(damage);
+					foreach (var disaster in disasters)
+						disaster.Damages.Add(damage);
 				}
 			}
 
@@ -181,101 +190,15 @@ namespace AISComp.Tools
 			return disasterList;
 		}
 
+		// Retrieves the organization tree for a location.
+		public static List<Employee> GetLocationOrgTree(string ID) =>
+			string.IsNullOrEmpty(ID) ? new List<Employee>() : EmployeeList.Where(e => e.LocationID == ID).ToList();
 
-
-
-
-		//public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId, Dictionary<string, Employee> cache)
-		//{
-		//	// Climb upward as long as the manager is in the same location.
-		//	Employee topEmployee = startingEmployee;
-		//	while (topEmployee.Up != null && topEmployee.Up.LocationID == locationId)
-		//	{
-		//		topEmployee = topEmployee.Up;
-		//	}
-		//	return TrimTreeToLocation(topEmployee, locationId, cache);
-		//}
-
-		//private static Employee TrimTreeToLocation(Employee employee, string locationId, Dictionary<string, Employee> cache)
-		//{
-		//	// Return the cached result if it exists.
-		//	if (cache.TryGetValue(employee.ID, out var cached))
-		//	{
-		//		return cached;
-		//	}
-
-		//	// Create a trimmed copy of the current employee.
-		//	Employee trimmed = new()
-		//	{
-		//		ID = employee.ID,
-		//		Name = employee.Name,
-		//		Position = employee.Position,
-		//		LocationID = employee.LocationID,
-		//		HireDate = employee.HireDate,
-		//		Up = null,
-		//		Downs = []
-		//	};
-
-		//	// Cache this trimmed employee before processing children to handle cycles.
-		//	cache[employee.ID] = trimmed;
-
-		//	// Process subordinates recursively.
-		//	if (employee.Downs != null)
-		//	{
-		//		foreach (var subordinate in employee.Downs)
-		//		{
-		//			if (subordinate.LocationID == locationId)
-		//			{
-		//				var trimmedSub = TrimTreeToLocation(subordinate, locationId, cache);
-		//				trimmed.Downs.Add(trimmedSub);
-		//			}
-		//		}
-		//	}
-		//	return trimmed;
-		//}
-
-
-
-
-		//public static List<Employee> GetTrimmedEmployeeList(string locationId)
-		//{
-		//	// Get the starting tree (list of employees in the location).
-		//	List<Employee> orgTree = GetLocationOrgTree(locationId);
-		//	if (orgTree == null || orgTree.Count == 0)
-		//		return [];
-
-		//	Dictionary<string, Employee> trimmedCache = [];
-		//	List<Employee> flattenedList = [];
-
-		//	// Process each top-level employee from the tree.
-		//	foreach (var employee in orgTree)
-		//	{
-		//		// Get the trimmed version of the employee tree.
-		//		Employee trimmed = GetTrimmedSelectedEmployee(employee, locationId, trimmedCache);
-		//		FlattenTree(trimmed, flattenedList);
-		//	}
-		//	return flattenedList;
-		//}
-
-		//// Helper method to flatten a trimmed tree into a list.
-		//private static void FlattenTree(Employee employee, List<Employee> list)
-		//{
-		//	list.Add(employee);
-		//	if (employee.Downs != null)
-		//	{
-		//		foreach (var subordinate in employee.Downs)
-		//		{
-		//			FlattenTree(subordinate, list);
-		//		}
-		//	}
-		//}
-
-
-		// Instead of processing every employee, get only the top-level employees in the given location.
+		// Returns a trimmed list of employees for a location.
 		public static List<Employee> GetTrimmedEmployeeList(string locationId)
 		{
 			if (string.IsNullOrEmpty(locationId))
-				return [];
+				return new List<Employee>();
 
 			// Get all employees for the location.
 			var orgEmployees = EmployeeList.Where(e => e.LocationID == locationId).ToList();
@@ -285,8 +208,8 @@ namespace AISComp.Tools
 				.Where(e => e.Up == null || e.Up.LocationID != locationId)
 				.ToList();
 
-			Dictionary<string, Employee> trimmedCache = [];
-			List<Employee> flattenedList = [];
+			Dictionary<string, Employee> trimmedCache = new();
+			List<Employee> flattenedList = new();
 
 			foreach (var top in topEmployees)
 			{
@@ -298,7 +221,7 @@ namespace AISComp.Tools
 			return flattenedList;
 		}
 
-		// This helper is kept for cases where you start from a known employee and need the trimmed tree.
+		// Returns a trimmed employee tree from a starting employee.
 		public static Employee GetTrimmedSelectedEmployee(Employee startingEmployee, string locationId, Dictionary<string, Employee> cache)
 		{
 			Employee topEmployee = startingEmployee;
@@ -312,13 +235,11 @@ namespace AISComp.Tools
 		// Recursively clone the tree for employees at the given location.
 		private static Employee TrimTreeToLocation(Employee employee, string locationId, Dictionary<string, Employee> cache)
 		{
-			// Return the cached result if it exists.
 			if (cache.TryGetValue(employee.ID, out var cached))
 			{
 				return cached;
 			}
 
-			// Create a trimmed copy of the current employee.
 			Employee trimmed = new()
 			{
 				ID = employee.ID,
@@ -326,16 +247,12 @@ namespace AISComp.Tools
 				Position = employee.Position,
 				LocationID = employee.LocationID,
 				HireDate = employee.HireDate,
-				// The upward link is not needed in the trimmed tree.
 				Up = null,
-				// Assume Downs is always initialized (or could be set to new List<Employee>() here).
-				Downs = []
+				Downs = new ConcurrentBag<Employee>()
 			};
 
-			// Cache this trimmed employee before processing children.
 			cache[employee.ID] = trimmed;
 
-			// Process subordinates recursively.
 			foreach (var subordinate in employee.Downs)
 			{
 				if (subordinate.LocationID == locationId)
@@ -347,7 +264,7 @@ namespace AISComp.Tools
 			return trimmed;
 		}
 
-		// Helper method to flatten a trimmed tree into a list.
+		// Flattens a trimmed employee tree into a list.
 		private static void FlattenTree(Employee employee, List<Employee> list)
 		{
 			list.Add(employee);
@@ -357,7 +274,89 @@ namespace AISComp.Tools
 			}
 		}
 
+		// Loads employee remaps from EmployeeRemap.csv using the provided employee list.
+		private static List<(Employee, Employee)> LoadEmployeeRemap(List<Employee> employees)
+		{
+			var remapList = new List<(Employee, Employee)>();
+			string filePath = Path.Combine("Data", "EmployeeRemap.csv");
 
+			if (!File.Exists(filePath))
+				return remapList;
 
+			using var reader = File.OpenText(filePath);
+			using var csv = CsvDataReader.Create(reader, new CsvDataReaderOptions { HasHeaders = true });
+
+			// Build a lookup using the provided employees.
+			var employeeDict = employees.ToDictionary(e => e.ID);
+
+			while (csv.Read())
+			{
+				string oldId = csv.GetString(0);
+				string newId = csv.GetString(1);
+
+				if (employeeDict.TryGetValue(oldId, out var oldEmployee) &&
+					employeeDict.TryGetValue(newId, out var newEmployee))
+				{
+					remapList.Add((oldEmployee, newEmployee));
+				}
+			}
+
+			return remapList;
+		}
+
+		// Applies employee remaps to the provided employee list and writes changes to EmployeeRemap.csv.
+		public static void ApplyEmployeeRemap(List<Employee> employees, List<(Employee, Employee)> remaps)
+		{
+			if (remaps.Count == 0)
+				return;
+
+			var employeeDict = employees.ToDictionary(e => e.ID);
+			string filePath = Path.Combine("Data", "EmployeeRemap.csv");
+
+			// Overwrite the file with current remaps.
+			using var writer = new StreamWriter(filePath, false);
+			writer.WriteLine("OldID,NewID");
+
+			foreach (var (oldEmployee, newEmployee) in remaps)
+			{
+				if (!employeeDict.ContainsKey(oldEmployee.ID) || !employeeDict.ContainsKey(newEmployee.ID))
+					continue;
+
+				// Remove oldEmployee from its previous manager's Downs.
+				if (oldEmployee.Up != null)
+				{
+					var oldManager = oldEmployee.Up;
+					var filteredDowns = oldManager.Downs.Where(e => e.ID != oldEmployee.ID);
+					oldManager.Downs = new ConcurrentBag<Employee>(filteredDowns);
+				}
+
+				// Update the old employee’s Up reference.
+				oldEmployee.Up = newEmployee;
+
+				// Ensure newEmployee has oldEmployee in its Downs.
+				newEmployee.Downs.Add(oldEmployee);
+
+				// Recursively update the LocationID for oldEmployee and its subordinates.
+				UpdateLocationRecursively(oldEmployee, newEmployee.LocationID);
+
+				// Write the remap to CSV.
+				writer.WriteLine($"{oldEmployee.ID},{newEmployee.ID}");
+			}
+
+			// Optionally, update the employees list if needed.
+		}
+
+		// Recursively updates the LocationID for an employee and its subordinates.
+		private static void UpdateLocationRecursively(Employee employee, string newLocationID)
+		{
+			employee.LocationID = newLocationID;
+			foreach (var subordinate in employee.Downs)
+			{
+				UpdateLocationRecursively(subordinate, newLocationID);
+			}
+		}
+
+		public static Employee? CutEmployee { get; set; }
+		public static Employee? SelectedEmployee;
 	}
 }

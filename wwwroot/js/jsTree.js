@@ -121,7 +121,7 @@ export function runTree(employeeJson) {
         .force("charge", d3.forceManyBody().strength(-8))
         .force("collide", d3.forceCollide().radius(3.01).strength(0.45))
         .force("toParent", forceToParent(0.1))
-        .force("border", borderForce(width - 50, height - 50, 50))
+        .force("border", borderForce(width - 50, height - 50, 80))
         .force("radialBand", radialBandForce(35, 20, 80))
         .force("radial", d3.forceRadial(
             d => (d.depth ** 0.4 - (0.2 * d3.max(nodes, d => d.depth))) * 50,
@@ -244,4 +244,34 @@ export function runTree(employeeJson) {
 
 
 
+}
+
+
+
+export function highlightEmployee(empID) {
+    // Remove highlight from all nodes
+    d3.selectAll("circle").classed("highlight", false);
+    // Find and highlight the node with the matching employee ID
+    if (empID != null) {
+        d3.selectAll("circle")
+            .filter(d => d.data.ID === empID)
+            .classed("highlight", true)
+            .raise();
+    }
+}
+
+
+
+export function grayOutEmployee(empID) {
+    if (!empID) return;
+
+    d3.selectAll("circle")
+        .filter(d => d.data.ID === empID || isDescendant(d, empID))
+        .attr("fill", "#888");  // Gray color
+
+    function isDescendant(node, targetID) {
+        if (!node.parent) return false;
+        if (node.parent.data.ID === targetID) return true;
+        return isDescendant(node.parent, targetID);
+    }
 }

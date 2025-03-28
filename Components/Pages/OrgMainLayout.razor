@@ -1,15 +1,19 @@
-﻿@inherits LayoutComponentBase
+﻿@page "/tree/{LocID}"
+@inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
+@inject NavigationManager NavManager
+
 
 <PageTitle>HCA Healthcare</PageTitle>
 
 <div class="page">
     <main>
-        @ChildContent
+        <!-- Render the Tree component -->
+        <Tree LocID="@LocID" />
+
         @if (searchEnabled)
         {
             <div class="left-sidebar sidebar">
-                "needs an "X" button"
                 <form>
                     <input type="text" placeholder="Search..." @bind="SearchQuery" @bind:event="oninput" />
                 </form>
@@ -27,8 +31,6 @@
                     }
                 </div>
 
-
-                <!-- Permanent dropdown for location selection -->
                 <select @bind="SelectedLocationId">
                     <option value="">All locations</option>
                     @foreach (var group in GroupedLocations)
@@ -42,40 +44,47 @@
                     }
                 </select>
 
-
                 @if (searchResults != null && visibleCount != 0)
                 {
                     @foreach (Employee item in searchResults.Take(visibleCount))
                     {
-                        <div class="box" @onclick="() => SelectEmployee(item.ID)">
+                        <div class="box" @onclick="() => SelectEmployee(item.ID)" @onmouseover="() => HoverEmployee(item.ID)" @onmouseout="() => HoverEmployee(String.Empty)">
                             <EmployeeCard Employee="@item" showLoc="@(SelectedLocationId == "")"></EmployeeCard>
                         </div>
                     }
                 }
             </div>
         }
-        @if(selectedEmployee != null)
+
+        @if (CSVLoader.SelectedEmployee != null)
         {
             <div class="right-sidebar sidebar">
-				<EmployeeCard Employee="@selectedEmployee" showLoc="true"></EmployeeCard>
-                <p> </p>
-                <p>"Go to them (highlight, and go to their tree if not the current one)"</p>
-                <p>"Move them (copy)"</p>
-                <p>"Move someone to them (paste)"</p>
+                <div >
+                <EmployeeCard Employee="@CSVLoader.SelectedEmployee" showLoc="true"></EmployeeCard>
+                </div>
+                <!-- Button to go to the selected employee -->
+                <div >
+                    <button class="goto-button" @onclick="GoToSelectedEmployee">Go To Employee</button>
+                </div>
+                <div >
+                    <button class="cut-button" @onclick="CutEmployee">Cut Employee</button>
+                    <button class="paste-button" @onclick="PasteEmployee">Paste Employee</button>
+                </div>
             </div>
         }
     </main>
 </div>
 
 @code {
-
-    private Employee? selectedEmployee;
+    [Parameter] public string LocID { get; set; } = string.Empty;
+    // private Employee? selectedEmployee;
+    IJSObjectReference? jsModule;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender || jsModule == null)
         {
-            IJSObjectReference jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
+            jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsTree.js");
             await jsModule.InvokeVoidAsync("setDNCallback", DotNetObjectReference.Create(this));
         }
     }
@@ -83,37 +92,22 @@
     [JSInvokable]
     public async Task SelectEmployee(string empID)
     {
-		if (empID == null)
-		{
-			selectedEmployee = null;
-		}
-		else
-		{
-			selectedEmployee = CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == empID);
-		}
-        StateHasChanged(); // Update UI
+        CSVLoader.SelectedEmployee = empID == null ? null : CSVLoader.EmployeeList.FirstOrDefault(e => e.ID == empID);
+        if (CSVLoader.SelectedEmployee != null) await HoverEmployee(CSVLoader.SelectedEmployee.ID);
+        StateHasChanged();
     }
 
-
-
-
-    [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public required string CurrentLocID { get; set; }
-
     bool searchEnabled = true;
-    // Employee? selectedEmployee;
     string searchType = "Name";
     private int visibleCount;
     private List<Employee> searchResults = new();
 
-    // Helper class for grouping locations by state.
     public class LocationGroup
     {
         public string State { get; set; } = string.Empty;
         public List<Location> Locations { get; set; } = new();
     }
 
-    // Build the grouped and sorted list of locations.
     List<LocationGroup> GroupedLocations => CSVLoader.Locations
         .GroupBy(loc => loc.State)
         .OrderBy(g => g.Key)
@@ -123,7 +117,6 @@
                 Locations = g.OrderBy(loc => loc.Name).ToList()
             }).ToList();
 
-    // Custom property for the selected location.
     private string _selectedLocationId = string.Empty;
     public string SelectedLocationId
     {
@@ -138,7 +131,6 @@
         }
     }
 
-    // Custom property for the search query to update on every keystroke.
     private string _searchQuery = string.Empty;
     public string SearchQuery
     {
@@ -155,8 +147,7 @@
 
     protected override void OnInitialized()
     {
-        // Set the default selected location to the current one.
-        SelectedLocationId = CurrentLocID;
+        SelectedLocationId = LocID;
         SearchEmployee();
     }
 
@@ -169,30 +160,77 @@
     private void SearchEmployee()
     {
         visibleCount = 100;
-
-        // If "All locations" is selected (empty value), search the full tree.
-        if (string.IsNullOrEmpty(SelectedLocationId))
-        {
-            searchResults = CSVLoader.EmployeeList
-                .Where(employee =>
-                    (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                    (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                    (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
+        searchResults = string.IsNullOrEmpty(SelectedLocationId)
+            ? CSVLoader.EmployeeList.Where(employee =>
+                (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                .ToList()
+            : CSVLoader.GetTrimmedEmployeeList(SelectedLocationId).Where(employee =>
+                (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
-        }
-        else
-        {
-            // Otherwise, search the trimmed tree for the selected location.
-            var trimmedList = CSVLoader.GetTrimmedEmployeeList(SelectedLocationId);
-            searchResults = trimmedList
-                .Where(employee =>
-                    (searchType == "ID" && employee.ID.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                    (searchType == "Name" && employee.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                    (searchType == "Role" && employee.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
-        }
 
         if (string.IsNullOrEmpty(SearchQuery))
             visibleCount = 0;
+    }
+
+
+
+    private async Task GoToSelectedEmployee()
+    {
+        if (CSVLoader.SelectedEmployee != null)
+        {
+            // Assume Employee has a LocationID property.
+            if (LocID != CSVLoader.SelectedEmployee.LocationID)
+            {
+                // Update the URL and component state without a full-page refresh.
+                // Navigating to the same component with a new parameter will re-render the Tree.
+                NavManager.NavigateTo($"/tree/{CSVLoader.SelectedEmployee.LocationID}", forceLoad: false);
+            }
+            // If already on the correct tree, call JS to highlight the employee.
+            await Task.Delay(100); // Small delay to ensure re-rendering
+            await HoverEmployee(CSVLoader.SelectedEmployee.ID);
+        }
+    }
+
+    private async Task HoverEmployee(string ID)
+    {
+        if (jsModule != null)
+        {
+            await jsModule.InvokeVoidAsync("highlightEmployee", ID);
+        }
+    }
+
+
+
+
+    // private Employee? cutEmployee = null;
+
+    private async Task CutEmployee()
+    {
+        if (CSVLoader.SelectedEmployee != null)
+        {
+            CSVLoader.CutEmployee = CSVLoader.SelectedEmployee;
+            if (jsModule != null)
+            {
+                await jsModule.InvokeVoidAsync("grayOutEmployee", CSVLoader.SelectedEmployee.ID);
+            }
+        }
+    }
+
+
+    private async Task PasteEmployee()
+    {
+        if (CSVLoader.CutEmployee != null && CSVLoader.SelectedEmployee != null && CSVLoader.CutEmployee != CSVLoader.SelectedEmployee)
+        {
+            CSVLoader.EmployeeRemap.Add((CSVLoader.CutEmployee, CSVLoader.SelectedEmployee));
+            CSVLoader.ApplyEmployeeRemap(CSVLoader.EmployeeList, CSVLoader.EmployeeRemap);
+            CSVLoader.CutEmployee = null; // Reset after pasting
+            NavManager.NavigateTo($"/tree/{CSVLoader.SelectedEmployee.LocationID}", forceLoad: false);
+            await Task.Delay(100);
+            await HoverEmployee(CSVLoader.SelectedEmployee.ID);
+        }
     }
 }

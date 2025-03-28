@@ -205,3 +205,10 @@ tbody tr:last-child td {
 .clickable-row {
     cursor: pointer;
 }
+
+
+circle.highlight {
+    stroke-width: 2;
+    stroke: black;
+    r: 7;
+}
